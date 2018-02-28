@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="hms_ds" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="agent_status" target="1.8" />
+      <module name="differ" target="1.8" />
+      <module name="hms" target="1.8" />
+      <module name="hms_ds" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
