@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>[%-5level] %d{HH:mm:ss.SSS} [%thread][%logger{36}] - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+<!-- 		<file>/Users/hoya/Documents/logs/hms-snap-manager-info-collector.log</file> -->
+		<file>/home/hms/Applications/snap/logs/hms-snap-manager-info-collector.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 파일이 하루에 한개씩 생성된다 -->
+			<fileNamePattern>/home/hms/Applications/snap/logs/hms-snap-manger-info-collector.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+			<!-- maxHIstory 설정은 위 부분에 롤링 정책에 따라 적용되 된다고 보면된다. 위 설정데로 라면 30일이 지난 파일은 
+				삭제가 된다. -->
+			<maxHistory>5</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>[%-5level] %d{HH:mm:ss.SSS} [%thread][%logger{36}] - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.skt.metatron" level="DEBUG" />
+	<logger name="org.apache" level="DEBUG" />
+	<logger name="hms_manager_info" level="INFO"/>
+
+
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+
+</configuration>

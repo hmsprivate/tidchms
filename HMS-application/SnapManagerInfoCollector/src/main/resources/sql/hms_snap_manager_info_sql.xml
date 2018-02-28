@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hms_manager_info">
+
+	<insert id="insert_manager_plugin_info" parameterType="java.util.HashMap">
+		<if test="plugin_file_list.size != 0">
+			insert into cm_manager_plugin_info (
+				file_name,
+				last_up_time,
+				alter_check_flag
+			) values
+			<foreach collection="plugin_file_list" item="item" separator=",">
+				(
+					#{item.file_name},
+					#{item.last_up_time},
+					#{item.alter_check_flag}
+				)
+			</foreach>
+			ON DUPLICATE KEY UPDATE
+				last_up_time = VALUES(last_up_time),
+				alter_check_flag = VALUES(alter_check_flag)
+		</if>
+	</insert>
+	
+	<insert id="insert_manager_task_info" parameterType="java.util.HashMap">
+		<if test="insert_value_list.size != 0">
+			insert into cm_manager_task_info (
+				task_file_name,
+				task_file_contents,
+				last_up_time	
+			) values
+			<foreach collection="insert_value_list" item="item" separator=",">
+				(
+					#{item.file_name},
+					#{item.file_contents},
+					#{last_up_time}
+				)
+			</foreach>
+			ON DUPLICATE KEY UPDATE
+				task_file_contents = VALUES(task_file_contents),
+				last_up_time = VALUES(last_up_time)
+		</if>
+	</insert>
+	
+	
+	<update id="update_manager_plugin_init">
+		update cm_manager_plugin_info 
+			<set>
+				alter_check_flag = 0
+			</set>
+	</update>
+	
+	<delete id="delete_manager_plugin_info" parameterType="String">
+		delete from cm_manager_plugin_info
+		where
+			alter_check_flag = 0
+	</delete>
+	
+	<delete id="delete_manager_task_info" parameterType="String">
+		delete from cm_manager_task_info
+		where
+			last_up_time != #{last_up_time}
+	</delete>	
+	
+</mapper>

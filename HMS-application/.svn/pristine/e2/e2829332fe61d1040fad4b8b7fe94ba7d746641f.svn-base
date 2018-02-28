@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hms_synchronize">
+
+	<select id="get_conncet_info_of_agreement" parameterType="String" resultType="hashMap">
+		select
+			member_name,
+			member_host,
+			rest_api_port
+		from
+			cm_member_info
+		where
+			agreement_seq = #{agreement_seq}
+	</select>
+
+	<select id="get_agreement_seq_info" resultType="String">
+		select  agreement_seq from cm_member_info GROUP BY agreement_seq
+	</select>
+	
+	<update id="update_agreement_task_info" parameterType="java.util.HashMap">
+		update cm_task_info
+			<set>
+				agreement_seq = (select agreement_seq from cm_agreement_info where agreement_name = #{agreement_name}),
+				alter_agreement_flag = 1
+			</set> 
+			<where>
+				task_id = #{id}
+			</where>
+	</update>
+	
+	<update id="update_init_task_agreement">
+		update cm_task_info 
+			<set>
+				agreement_seq = (select agreement_seq from cm_agreement_info where agreement_name = 'No Group')
+			</set>
+			<where>
+				agreement_seq = (select agreement_seq from cm_agreement_info where agreement_name = #{agreement_name}) 
+			</where>
+	</update>
+
+	<delete id="delete_task_synchronization" parameterType="String">
+		delete from cm_task_info
+		<where>
+			last_up_time != #{last_up_time}
+		</where>
+	</delete>
+	
+	<insert id="insert_task_info" parameterType="java.util.HashMap">
+		<if test="task_list_info.size != 0">
+			insert into cm_task_info (
+				task_id,
+				task_name,
+				task_deadline,
+				task_creation_timestamp,
+				task_last_run_timestamp,
+				task_hit_count,
+				task_state,
+				task_href,
+				last_up_time
+			) values
+			<foreach collection="task_list_info" item="item" separator=",">
+				(
+					#{item.id},
+					#{item.name},
+					#{item.deadline},
+					#{item.creation_timestamp},
+					#{item.last_run_timestamp},
+					#{item.hit_count},
+					#{item.task_state},
+					#{item.href},
+					#{item.last_up_time}
+				)
+			</foreach>
+			ON DUPLICATE KEY UPDATE
+				task_creation_timestamp = VALUES(task_creation_timestamp),
+				task_last_run_timestamp = VALUES(task_last_run_timestamp),
+				task_hit_count = VALUES(task_hit_count),
+				task_state = VALUES(task_state),
+				last_up_time = VALUES(last_up_time)
+		</if>
+	</insert>
+	
+	<update id="update_agreement_plugin_info" parameterType="java.util.HashMap">
+		update cm_plugin_info
+			<set>
+				agreement_seq = (select agreement_seq from cm_agreement_info where agreement_name = #{agreement_name}),
+				alter_agreement_flag = 1
+			</set> 
+			<where>
+				plugin_name = #{name} and
+				plugin_version = #{version} and
+				plugin_type = #{type}
+			</where>
+	</update>
+	
+	<update id="update_init_plugin_agreement" parameterType="String">
+		update cm_plugin_info 
+			<set>
+				agreement_seq = (select agreement_seq from cm_agreement_info where agreement_name = 'No Group')
+			</set>
+			<where>
+				agreement_seq = (select agreement_seq from cm_agreement_info where agreement_name = #{agreement_name}) 
+			</where>
+	</update>
+
+<!-- 	<delete id="delete_plugin_synchronization" parameterType="String"> -->
+<!-- 		delete from cm_plugin_info -->
+<!-- 		<where> -->
+<!-- 			last_up_time != #{last_up_time} -->
+<!-- 		</where> -->
+<!-- 	</delete> -->
+	
+	<delete id="delete_plugin_synchronization">
+		delete from cm_plugin_info
+		<where>
+			agreement_seq = '1'
+		</where>
+	</delete>
+
+	<insert id="insert_plugin_info" parameterType="java.util.HashMap">
+	<if test="plugin_list_info.size != 0">
+		insert into cm_plugin_info (
+		plugin_name,
+		plugin_version,
+		plugin_type,
+		plugin_signed,
+		plugin_status,
+		plugin_loaded_timestamp,
+		plugin_href,
+		agreement_seq,
+		last_up_time
+		) values
+		<foreach collection="plugin_list_info" item="item" separator=",">
+			(
+			#{item.name},
+			#{item.version},
+			#{item.type},
+			#{item.signed},
+			#{item.status},
+			#{item.loaded_timestamp},
+			#{item.href},
+			#{item.agreement_seq},
+			#{item.last_up_time}
+			)
+		</foreach>
+		ON DUPLICATE KEY UPDATE
+		plugin_signed = VALUES(plugin_signed),
+		plugin_status = VALUES(plugin_status),
+		plugin_loaded_timestamp = VALUES(plugin_loaded_timestamp),
+<!-- 		plugin_href = VALUES(plugin_href), -->
+		last_up_time = VALUES(last_up_time)
+	</if>
+</insert>
+	
+	<update id="update_member_agreement" parameterType="java.util.HashMap">
+		<if test="update_data_list.size != 0">
+			update cm_member_info
+				<set>
+					agreement_seq = #{agreement_seq}
+				</set>
+				<where>
+					member_name in 
+					<foreach collection="update_data_list" item="item" separator="," open="(" close=")">
+						#{item}
+					</foreach>
+				</where>
+		</if>
+	</update>
+
+	<update id="update_init_member_agreement" parameterType="int">
+		update cm_member_info
+			<set>
+				agreement_seq = (select agreement_seq from cm_agreement_info where agreement_name = 'No Group')
+			</set>
+			<where>
+				agreement_seq = #{agreement_seq}
+			</where>
+	</update>
+
+	<select id="get_agreement_seq" parameterType="String" resultType="String">
+		select 
+			agreement_seq
+		from
+			cm_agreement_info
+		where
+			agreement_name = #{agreement_name}
+	</select>
+
+	<insert id="insert_agreement_info" parameterType="java.util.HashMap">
+		<if test="agreement_name_list.size != 0">
+			INSERT INTO cm_agreement_info (
+			agreement_name,
+			alter_agreement_flag
+			) values
+			<foreach collection="agreement_name_list" item="item" separator=",">
+				(
+				#{item},
+				1
+				)
+			</foreach>
+			ON DUPLICATE KEY UPDATE
+			alter_agreement_flag = VALUES(alter_agreement_flag)
+		</if>
+	</insert>
+
+	<delete id="delete_agreement_synchronization">
+		delete from cm_agreement_info
+		<where>
+			agreement_name != 'No Group'
+			and
+			alter_agreement_flag = 0
+		</where>
+	</delete>
+
+	<update id="update_init_agreement_flag">
+		update cm_agreement_info
+		<set>
+			alter_agreement_flag = 0
+		</set>
+	</update>
+
+	<select id="get_conncet_info" parameterType="String" resultType="hashmap">
+		select
+		member_host,
+		rest_api_port
+		from
+		cm_member_info
+		where
+		member_name = #{node_name}
+	</select>
+
+	<delete id="delete_manager_task_info" parameterType="String">
+		delete from
+		cm_manager_task_info
+		where
+		last_up_time != #{last_up_time}
+	</delete>
+
+	<insert id="insert_manager_task_info" parameterType="java.util.HashMap">
+		<if test="insert_value_list.size != 0">
+			insert into cm_manager_task_info (
+			task_file_name,
+			task_file_contents,
+			last_up_time
+			) values
+			<foreach collection="insert_value_list" item="item"
+				separator=",">
+				(
+				#{item.file_name},
+				#{item.file_contents},
+				#{last_up_time}
+				)
+			</foreach>
+			ON DUPLICATE KEY UPDATE
+			task_file_contents =
+			VALUES(task_file_contents),
+			last_up_time = VALUES(last_up_time)
+		</if>
+	</insert>
+
+
+
+	<update id="update_manager_plugin_init">
+		update cm_manager_plugin_info
+		<set>
+			alter_check_flag = 0
+		</set>
+	</update>
+
+	<insert id="insert_manager_plugin_info" parameterType="java.util.HashMap">
+		<if test="plugin_file_list.size != 0">
+			insert into cm_manager_plugin_info (
+			file_name,
+			last_up_time,
+			alter_check_flag
+			) values
+			<foreach collection="plugin_file_list" item="item" separator=",">
+				(
+				#{item.file_name},
+				#{item.last_up_time},
+				#{item.alter_check_flag}
+				)
+			</foreach>
+			ON DUPLICATE KEY UPDATE
+			last_up_time = VALUES(last_up_time),
+			alter_check_flag = VALUES(alter_check_flag)
+		</if>
+	</insert>
+
+	<delete id="delete_manager_plugin_info" parameterType="String">
+		delete
+		from cm_manager_plugin_info
+		where
+		alter_check_flag = 0
+	</delete>
+
+</mapper>

@@ -1,0 +1,41 @@
+package com.skt.mobigen.hms.snapmanagerinfocollector.util;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class HttpRequestUtil {
+	private static Logger logger = LoggerFactory.getLogger(HttpRequestUtil.class);
+
+	public static String sendRequest(String m_url) throws Exception {
+		URL url = new URL(m_url);
+		StringBuilder output = new StringBuilder();
+		logger.debug("Try " + url + " Connect");
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+		if (conn == null)
+			return null;
+		conn.setConnectTimeout(1000);
+		conn.setReadTimeout(20000);
+		conn.setRequestMethod("GET");
+
+		int resCode = conn.getResponseCode();
+		if (resCode == HttpURLConnection.HTTP_OK) {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String line;
+			while (true) {
+				line = reader.readLine();
+				if (line == null)
+					break;
+				output.append(line);
+			}
+			reader.close();
+		}
+		conn.disconnect();
+		return output.toString();
+	}
+}

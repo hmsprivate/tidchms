@@ -1,0 +1,68 @@
+package com.skt.mobigen.hms.snapsynchronize.service;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.skt.mobigen.hms.snapsynchronize.context.Context;
+import com.skt.mobigen.hms.snapsynchronize.service.IFSnapSynchronizeService;
+
+public class SnapManagerPluginSyncService implements IFSnapSynchronizeService {
+	private Logger logger = LoggerFactory.getLogger(SnapManagerPluginSyncService.class);
+	private Context context;
+
+	public SnapManagerPluginSyncService(Context context) {
+		this.context = context;
+	}
+
+	@Override
+	public Object synchronizeService() {
+		logger.debug("Snap Manager plugin Synchonize start");
+		SqlSession session = null;
+		try {
+			session = context.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+
+			File directory = new File(context.getSnap_manager_plugin_dir().trim());
+			File[] file_array = directory.listFiles();
+
+			Map<String, Object> insert_data_map = new HashMap<>();
+			List<Map<String, Object>> insert_list = new ArrayList<>();
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+			if (file_array != null) {
+				for (File plugin_file : file_array) {
+					Map<String, Object> plugin_file_info_map = new HashMap<>();
+					plugin_file_info_map.put("file_name", plugin_file.getName().trim());
+					plugin_file_info_map.put("last_up_time", sdf.format(plugin_file.lastModified()));
+					plugin_file_info_map.put("alter_check_flag", 1);
+
+					insert_list.add(plugin_file_info_map);
+				}
+				insert_data_map.put("plugin_file_list", insert_list);
+			}
+			session.update("update_manager_plugin_init");
+			if (!insert_data_map.isEmpty()) session.insert("insert_manager_plugin_info", insert_data_map);
+			session.delete("delete_manager_plugin_info");
+			session.commit();
+
+			return "completed";
+		} catch (Exception e) {
+			logger.error(ExceptionUtils.getStackTrace(e));
+			return e.getMessage();
+		} finally {
+			if (session != null) session.close();
+		}
+	}
+
+}

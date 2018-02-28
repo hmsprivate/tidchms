@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hms_connect_info">
+	
+	<insert id="insert_connect_info" parameterType="java.util.HashMap">
+		<if test="insert_data_list.size != 0">
+			insert into cm_member_info (
+				member_name,
+				member_host,
+				rest_api_port
+			) values
+			<foreach collection="insert_data_list" item="item" separator=",">
+				(
+					#{item.source},
+					#{item.value},
+					${item.node_port}
+				)
+			</foreach>
+			ON DUPLICATE KEY UPDATE
+					member_host = VALUES(member_host),
+					rest_api_port = VALUES(rest_api_port)
+		</if>
+	</insert>
+
+</mapper>

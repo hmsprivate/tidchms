@@ -1,0 +1,25 @@
+# for JDBC
+jdbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.host=120.168.10.121
+jdbc.port=3306
+jdbc.dbname=hms
+jdbc.username=hms
+jdbc.password=afnas123
+jdbc.initialSize=20
+jdbc.maxTotal=50
+jdbc.maxIdle=5
+jdbc.minIdle=5
+jdbc.validationQuery=select 1 from dual
+
+snap_manager_plugin_dir=/home/hms/Applications/snap/plugins
+snap_manager_task_dir=/home/hms/Applications/snap/tasks
+snap_manager_port=8181
+
+
+
+# for test
+#jdbc.host=211.214.168.102
+#jdbc.port=13306
+#snap_manager_host=211.214.168.102
+#snap_manager_task_dir=/Users/hoya/Downloads/HMS/tasks
+#snap_manager_plugin_dir=/Users/hoya/Downloads/HMS/plugins

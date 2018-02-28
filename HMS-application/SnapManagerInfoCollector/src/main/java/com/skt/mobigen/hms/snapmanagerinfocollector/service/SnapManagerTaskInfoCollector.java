@@ -1,0 +1,89 @@
+package com.skt.mobigen.hms.snapmanagerinfocollector.service;
+
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.concurrent.Callable;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.skt.mobigen.hms.snapmanagerinfocollector.context.Context;
+
+public class SnapManagerTaskInfoCollector implements Callable<String> {
+	private Logger logger = LoggerFactory.getLogger(SnapManagerTaskInfoCollector.class);
+	private Context context;
+
+	public SnapManagerTaskInfoCollector(Context context) {
+		this.context = context;
+	}
+
+	@Override
+	public String call() throws Exception {
+		logger.debug("snap manager task info collector start");
+		SqlSession session = null;
+		RandomAccessFile raf = null;
+		try {
+			long snap_manager_task_info_collecte_starttime = System.nanoTime();
+			session = context.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+
+			File directory = new File(context.getSnap_manager_task_dir());
+			File[] file_array = directory.listFiles();
+
+			Map<String, Object> insert_map = new HashMap<>();
+			List<Map<String, Object>> insert_list = new ArrayList<>();
+			for (File file : file_array) {
+				Map<String, Object> task_file_map = new HashMap<>();
+				task_file_map.put("file_name", file.getName().trim());
+
+				raf = new RandomAccessFile(file, "r");
+				StringBuilder sb = new StringBuilder();
+				String line = null;
+				while ((line = raf.readLine()) != null) {
+					sb.append(line);
+					sb.append(System.getProperty("line.separator"));
+				}
+				task_file_map.put("file_contents", sb.toString());
+
+				insert_list.add(task_file_map);
+			}
+			
+			Object last_up_time = getInsertTime();
+			insert_map.put("insert_value_list", insert_list);
+			insert_map.put("last_up_time", last_up_time);
+
+			session.insert("insert_manager_task_info", insert_map);
+			session.delete("delete_manager_task_info", last_up_time);
+			session.commit();
+			session.close();
+			raf.close();
+			long snap_manager_task_info_collecte_endtime = System.nanoTime();
+			logger.debug("snap manger task collect time : {}",
+					(snap_manager_task_info_collecte_endtime - snap_manager_task_info_collecte_starttime) / 1000000);
+			return "completed";
+		} catch (Exception e) {
+			if (session != null)
+				session.close();
+			if (raf != null)
+				raf.close();
+			return ExceptionUtils.getMessage(e);
+		}
+	}
+	
+	private Object getInsertTime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		return sdf.format(new Date().getTime());
+	}
+
+}

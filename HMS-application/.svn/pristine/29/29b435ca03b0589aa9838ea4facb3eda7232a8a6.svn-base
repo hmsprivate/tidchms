@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hms_connect_info">
+
+	<insert id="insert_connect_info" parameterType="java.util.HashMap">
+		<if test="insert_data_list.size != 0">
+			insert into cm_member_info (
+				member_name,
+				member_host,
+				rest_api_port,
+				alter_agreement_flag
+			) values
+			<foreach collection="insert_data_list" item="item" separator=",">
+				(
+					#{item.source},
+					#{item.value},
+					${item.node_port},
+					${item.alter_agreement_flag}
+				)
+			</foreach>
+			ON DUPLICATE KEY UPDATE
+					member_host = VALUES(member_host),
+					rest_api_port = VALUES(rest_api_port),
+					alter_agreement_flag = VALUES(alter_agreement_flag)
+		</if>
+	</insert>
+	
+	<update id="update_init_member_flag">
+		update cm_member_info
+			<set>
+				alter_agreement_flag = 0
+			</set>
+	</update>
+	
+	<delete id="delete_member_synchronization">
+		delete from cm_member_info
+			<where>
+				alter_agreement_flag != 1
+			</where>
+	</delete>
+	
+	<delete id="delete_node_info_synch">
+		DELETE FROM cm_node_info
+		WHERE
+			node_seq in ((select member_seq from cm_member_info where alter_agreement_flag != 1))
+	</delete>
+	
+	<delete id="delete_node_info_detail_synch">
+		DELETE FROM cm_node_info_detail
+		WHERE
+			node_seq in ((select member_seq from cm_member_info where alter_agreement_flag != 1))
+	</delete>
+	
+	<delete id="delete_node_info_history_synch">
+		DELETE FROM cm_node_info_history
+		WHERE
+			node_seq in ((select member_seq from cm_member_info where alter_agreement_flag != 1))
+	</delete>
+
+</mapper>

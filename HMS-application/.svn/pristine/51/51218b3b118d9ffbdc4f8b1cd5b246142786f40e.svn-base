@@ -1,0 +1,98 @@
+package com.skt.mobigen.snapconnectinfo.collector.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDB.LogLevel;
+import org.influxdb.dto.Pong;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import org.influxdb.dto.QueryResult.Series;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.skt.mobigen.snapconnectinfo.collector.context.Context;
+
+public class SnapConnectInfoCollectorService implements Runnable {
+	private Logger logger= LoggerFactory.getLogger(SnapConnectInfoCollectorService.class);
+	private Context context;
+	private InfluxDB influxDB = null;
+	private final String REST_PROTO="http";
+
+	public SnapConnectInfoCollectorService(Context context) {
+		this.context = context;
+	}
+
+	@Override
+	public void run() {
+		SqlSession session = null;
+		try {
+			long snap_connect_info_collector_starttime = System.nanoTime();
+			getInfluxDBSession();
+			session = context.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+
+			QueryResult queryresult = this.influxDB.query(new Query("select * from \"intel/facter/networking/ip\" group by source order by time desc limit 1", context.getInflux_DB().trim()));
+			List<Series> influx_member_result = queryresult.getResults().get(0).getSeries();
+			
+			
+			
+			List<Map<String, Object>> insert_data_list = new ArrayList<>();
+			for (Series series : influx_member_result) {
+				Map<String, Object> node_info_map = new HashMap<>();
+				
+				if (!series.getTags().isEmpty()) {
+					node_info_map.put("source", series.getTags().get("source"));
+				}
+				
+				for (int i = 0; i < series.getColumns().size(); i++) {
+					node_info_map.put("node_port", 8181);
+					node_info_map.put( series.getColumns().get(i), series.getValues().get(0).get(i));
+				}
+				insert_data_list.add(node_info_map);
+			}
+			
+			Map<String, Object> insert_data_map = new HashMap<>();
+			insert_data_map.put("insert_data_list", insert_data_list);
+			
+//			logger.debug("------------------------------------------");
+//			logger.debug("{}", new Gson().toJson(insert_data_map));
+//			logger.debug("------------------------------------------");
+			
+			session.insert("insert_connect_info", insert_data_map);
+			session.commit();
+			session.close();
+			influxDB.close();
+			long snap_connect_info_collector_endtime = System.nanoTime();
+			logger.debug("snap connect info collector time  : {}" , (snap_connect_info_collector_endtime - snap_connect_info_collector_starttime) / 1000000);
+		} catch (Exception e) {
+			if (session != null) session.close();
+			if (influxDB != null) influxDB.close();
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
+	private void getInfluxDBSession() throws Exception {
+		String influx_url = REST_PROTO.concat("://").concat(context.getInflux_connect_ip()).concat(":") + context.getInflux_connect_port();
+		
+		logger.debug("influx connection url : {}", influx_url);
+		
+		this.influxDB = InfluxDBFactory.connect(influx_url, context.getInflux_user(), context.getInflux_password());
+		Pong response;
+		response = this.influxDB.ping();
+		if (response.getVersion().equalsIgnoreCase("unknown")) throw new Exception("fail influxDB connect");
+		this.influxDB.setLogLevel(LogLevel.NONE);
+
+		logger.debug("##################################################################################");
+		logger.debug("#  Connected to InfluxDB Version: " + this.influxDB.version() + " #");
+		logger.debug("##################################################################################");
+	}
+
+}

@@ -1,0 +1,183 @@
+package com.skt.mobigen.snapconnectinfo.collector.service;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDB.LogLevel;
+import org.influxdb.dto.Pong;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import org.influxdb.dto.QueryResult.Series;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.skt.mobigen.snapconnectinfo.collector.context.Context;
+
+public class SnapConnectInfoCollectorService implements Runnable {
+    private Logger logger= LoggerFactory.getLogger(SnapConnectInfoCollectorService.class);
+    private Context context;
+    private InfluxDB influxDB = null;
+    private final String REST_PROTO="http";
+
+    public SnapConnectInfoCollectorService(Context context) {
+        this.context = context;
+    }
+
+    @Override
+    public void run() {
+        SqlSession session = null;
+        try {
+            long snap_connect_info_collector_starttime = System.nanoTime();
+            getInfluxDBSession();
+            session = context.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+
+            long start_time, end_time;
+            Calendar cld = Calendar.getInstance();
+            cld.add(Calendar.SECOND, -10);
+            end_time = cld.getTimeInMillis() * 1000000;
+            cld.add(Calendar.DAY_OF_WEEK, -7);
+            start_time = cld.getTimeInMillis() * 1000000;
+
+			/*
+			 * test
+			 */
+//			end_time = 1506478433560859863L;
+//			start_time = 1505447960210165007L;
+
+            String ip_query = String.format("select * from \"intel/facter/networking/ip\" group by source order by time desc limit 1");
+//			String ip_query = String.format("select * from \"intel/facter/networking/ip\" where time > %d and time < %d group by source order by time desc limit 1", start_time, end_time);
+            String hostname_query = String.format("select distinct(value) as hostname from \"intel/facter/networking/hostname\" order by time desc");
+//			String hostname_query = String.format("select distinct(value) as hostname from \"intel/facter/networking/hostname\" where time > %d and time < %d order by time desc", start_time, end_time);
+
+            logger.debug("select host_name from influx");
+            logger.debug("host_name query : {}", hostname_query);
+            QueryResult hostname_query_result = this.influxDB.query(new Query(hostname_query, context.getInflux_DB().trim()));
+            List<Series> influx_hostname_result = hostname_query_result.getResults().get(0).getSeries();
+
+//			logger.debug("host_name result : {}", new Gson().toJson(influx_hostname_result));
+
+            List<String> hostname_list = new ArrayList<>();
+            if (influx_hostname_result != null) {
+                for (Series host_series : influx_hostname_result) {
+                    for (int i = 0; i < host_series.getValues().size(); i++) {
+                        hostname_list.add(String.valueOf(host_series.getValues().get(i).get(1)).trim());
+                    }
+                }
+            }
+
+            logger.debug("host_name precess result : {}", new Gson().toJson(hostname_list));
+
+            logger.debug("select ip info from influx");
+            logger.debug("ip query : {}", ip_query);
+            QueryResult ip_query_result = this.influxDB.query(new Query(ip_query, context.getInflux_DB().trim()));
+            List<Series> influx_member_result = ip_query_result.getResults().get(0).getSeries();
+
+            logger.debug("ip query result : {}\n", new Gson().toJson(influx_member_result));
+
+            // 기존 cm_member_info 의 정보 ..
+            List<Map<String, Object>> before_member_info_from_db = session.selectList("get_member_info");
+
+            List<Map<String, Object>> insert_data_list = new ArrayList<>();
+            if (influx_member_result != null && !influx_member_result.isEmpty()) {
+                for (Series series : influx_member_result) {
+                    Map<String, Object> node_info_map = new HashMap<>();
+
+                    if (!series.getTags().isEmpty()) {
+                        if (hostname_list.contains(series.getTags().get("source"))) {
+                            node_info_map.put("source", series.getTags().get("source").trim());
+                        }
+                    }
+
+                    for (int i = 0; i < series.getColumns().size(); i++) {
+                        node_info_map.put("node_port", 8181);
+                        node_info_map.put(series.getColumns().get(i), series.getValues().get(0).get(i));
+                        node_info_map.put("alter_agreement_flag", 1);
+                    }
+                    if (hostname_list.contains(node_info_map.get("source"))) {
+                        insert_data_list.add(node_info_map);
+                    }
+
+                    logger.debug("get-list|"+node_info_map.get("source")+"|"+node_info_map.get("value")+"|");
+                }
+
+                if (!insert_data_list.isEmpty()) {
+                    Map<String, Object> insert_data_map = new HashMap<>();
+                    insert_data_map.put("insert_data_list", insert_data_list);
+
+                    session.update("update_init_member_flag");
+                    session.insert("insert_connect_info", insert_data_map);
+                    session.commit();
+
+                    session.delete("delete_node_info_synch");
+                    session.delete("delete_node_info_detail_synch");
+                    session.delete("delete_node_info_history_synch");
+                    session.delete("delete_member_synchronization");
+                    session.commit();
+                }
+            }
+
+            // logic 완료 후 member_info.
+            session.clearCache();
+            List<Map<String, Object>> after_member_info_from_db = session.selectList("get_member_info");
+            List<String> after_member_seq_list = new ArrayList<>();
+            for (Map<String, Object> after_member_info : after_member_info_from_db) {
+                after_member_seq_list.add(after_member_info.get("member_seq").toString().trim());
+            }
+
+            for (Map<String, Object> before_member_info : before_member_info_from_db) {
+                String before_member_seq = before_member_info.get("member_seq").toString().trim();
+                for (Iterator<String> it = after_member_seq_list.iterator(); it.hasNext();) {
+                    String after_seq = it.next();
+                    if (before_member_seq.equals(after_seq)) it.remove();
+                }
+            }
+
+            logger.debug("change seq : {}", after_member_seq_list);
+
+            if (!after_member_seq_list.isEmpty()) {
+                logger.debug("------------------------------------------");
+                logger.debug("before : {}", before_member_info_from_db);
+                logger.debug("insert :{}", new Gson().toJson(insert_data_list));
+                logger.debug("after : {}", after_member_info_from_db);
+                logger.debug("------------------------------------------");
+            }
+
+            long snap_connect_info_collector_endtime = System.nanoTime();
+            logger.debug("snap connect info collector time  : {}" , (snap_connect_info_collector_endtime - snap_connect_info_collector_starttime) / 1000000);
+
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
+
+        } finally {
+            if (session != null) session.close();
+            if (influxDB != null) influxDB.close();
+        }
+    }
+
+    private void getInfluxDBSession() throws Exception {
+        String influx_url = REST_PROTO.concat("://").concat(context.getInflux_connect_ip()).concat(":") + context.getInflux_connect_port();
+
+        logger.debug("influx connection url : {}", influx_url);
+
+        this.influxDB = InfluxDBFactory.connect(influx_url, context.getInflux_user(), context.getInflux_password());
+        Pong response;
+        response = this.influxDB.ping();
+        if (response.getVersion().equalsIgnoreCase("unknown")) throw new Exception("fail influxDB connect");
+        this.influxDB.setLogLevel(LogLevel.NONE);
+
+        logger.debug("##################################################################################");
+        logger.debug("#  Connected to InfluxDB Version: " + this.influxDB.version() + " #");
+        logger.debug("##################################################################################");
+    }
+
+}

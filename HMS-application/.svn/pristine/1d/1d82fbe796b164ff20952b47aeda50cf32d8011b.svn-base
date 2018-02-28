@@ -1,0 +1,348 @@
+package com.skt.mobigen.hms.snapinfocollector.service;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.concurrent.Callable;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.InfluxDB.LogLevel;
+import org.influxdb.dto.Pong;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import org.influxdb.dto.QueryResult.Result;
+import org.influxdb.dto.QueryResult.Series;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.skt.mobigen.hms.snapinfocollector.context.Context;
+import com.skt.mobigen.hms.snapinfocollector.entity.FacterNodeInfoMetric;
+
+public class SnapFacterInfoCollectorService implements Callable<String> {
+	private Logger logger = LoggerFactory.getLogger(SnapFacterInfoCollectorService.class);
+	private Context context;
+	private InfluxDB influxDB;
+
+	public SnapFacterInfoCollectorService(Context context) {
+		this.context = context;
+	}
+	
+	private final static String BASE_DATABASE = "hms";
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public String call() {
+		logger.debug("snap facter data collector start");
+		SqlSession session = null;
+		try {
+			long get_facter_info_starttime = System.nanoTime();
+			
+			getInfluxDBSession();
+			session = context.getSqlSessionFactory().openSession(ExecutorType.BATCH,false);
+			List<FacterNodeInfoMetric> node_info_metircs = Arrays.asList(FacterNodeInfoMetric.values());
+			
+			List<String> facter_measurement_list = new ArrayList<>();
+			QueryResult queryresult = this.influxDB.query(new Query("show measurements", context.getInflux_DB()));
+			
+			List<Series> series_list = getSeriesOfResponse(queryresult.getResults());
+			for (Series series : series_list) {
+				List<List<Object>> values_list = series.getValues();
+				for (List<Object> value_list : values_list) {
+					for (Object obj : value_list) {
+						String namespace = obj.toString();
+						if (namespace.contains("/facter/")) facter_measurement_list.add(namespace);
+					}
+				}
+			}
+			
+			List<Map<String, Object>> member_list = session.selectList("get_member_list");
+			
+			if (member_list != null && member_list.size() > 0) {
+				Map<String, Object> total_facter_data_map = new HashMap<>();
+				
+				for (Map<String, Object> node_info : member_list) {
+					
+//					logger.debug("node info : {}", node_info);
+					
+//					long get_facter_data_starttime = System.nanoTime();
+					Object influx_time = null;
+					Map<String, Object> member_facter_info = new HashMap<>();
+					member_facter_info.put("member_seq", node_info.get("member_seq"));
+					member_facter_info.put("agreement_seq", node_info.get("agreement_seq"));
+					
+					for (String facter_measurement : facter_measurement_list) {
+						String query = String.format("select * from \"%s\" where source=\'%s\' order by time desc limit 1",	facter_measurement, node_info.get("member_name"));
+						Query influx_query = new Query(query, BASE_DATABASE);
+						QueryResult each_queryresult = this.influxDB.query(influx_query);
+
+						List<Series> each_series_list = getSeriesOfResponse(each_queryresult.getResults());
+						
+						if (each_series_list != null) {
+							for (Series series : each_series_list) {
+								Map<String, Object> member_facter_data = new HashMap<>(); 
+
+								member_facter_data.put(series.getColumns().get(0), series.getValues().get(0).get(0));
+								if (member_facter_data.containsKey("time")) {
+									if (influx_time == null) {
+										influx_time = convertTime(member_facter_data.get("time"));
+										member_facter_data.put("time", influx_time);
+									} else {
+										member_facter_data.put("time", influx_time);
+									}
+								}
+								member_facter_data.put(series.getColumns().get(2), series.getValues().get(0).get(2));
+								member_facter_info.put(series.getName().replace("intel/facter", "").trim(), member_facter_data);
+							}
+						}
+					}
+					total_facter_data_map.put(node_info.get("member_name").toString(), member_facter_info);
+					
+//					long get_facter_data_endtime = System.nanoTime();
+//					logger.debug("get_node_facter_data_time: {}", (get_facter_data_endtime - get_facter_data_starttime) / 1000000);
+				}
+				
+//				logger.debug("facter get : {}", new Gson().toJson(total_facter_data_map));
+				
+				Map<String, Object> node_info_insert_data = new HashMap<>();
+				List<Map<String, Object>> node_info_data = new ArrayList<>();
+				for (String hostname : total_facter_data_map.keySet()) {
+					Map<String, Object> node_data = (Map<String, Object>) total_facter_data_map.get(hostname);
+					
+					if (node_data.size() <= 2) continue;
+					
+					//disk 총용량 게산.
+					Double disk_total_size = 0.0;
+					for (String key : node_data.keySet()) {
+						if (key.startsWith("/disks")) {
+							if (key.endsWith("size_bytes")) {
+								Map<String, Object> disks_value_map = (Map<String, Object>) node_data.get(key);
+								if (disk_total_size == 0) {
+									disk_total_size = Double.parseDouble(disks_value_map.get("value").toString());
+								} else {
+									disk_total_size = disk_total_size + Double.parseDouble(disks_value_map.get("value").toString());
+								}
+							}
+						}
+					}
+					
+					//TODO
+					// Math.round -> check
+					node_data.put("disks_total_size", String.valueOf(Math.round(disk_total_size/1024/1024/1024)).concat("G"));
+					
+					// node_info data만 가져오기..
+					Map<String, Object> insert_node_info_data = new HashMap<>();
+					for (FacterNodeInfoMetric node_info_metric : node_info_metircs) {
+
+//						logger.debug("{}", node_info_metric.namespace);
+
+						if (node_data.containsKey(node_info_metric.namespace)) {
+
+							if (node_data.get(node_info_metric.namespace) instanceof Map) {
+								Map<String, Object> node_info_value_map = (Map<String, Object>) node_data.get(node_info_metric.namespace);
+								insert_node_info_data.put(node_info_metric.toString().toLowerCase(), node_info_value_map.get("value"));
+								insert_node_info_data.put("influx_collect_time", node_info_value_map.get("time"));
+								
+							} else {
+								insert_node_info_data.put(node_info_metric.toString().toLowerCase(), node_data.get(node_info_metric.namespace));
+							}
+						}
+					}
+					
+					insert_node_info_data.put("cpu_cnt", ((Double)insert_node_info_data.get("cpu_cnt")).intValue());
+					insert_node_info_data.put("node_type",Boolean.parseBoolean(insert_node_info_data.get("node_type").toString()) ? "VM" : "PM" );
+					
+					String osversion = null;
+					if (insert_node_info_data.get("os_version_major") != null) {
+						osversion = insert_node_info_data.get("os_version_major").toString();
+						if (insert_node_info_data.get("os_version_minor") != null) {
+							if (osversion != null) {
+								osversion = osversion.concat(".".concat(insert_node_info_data.get("os_version_minor").toString()));
+							}
+						}
+					}
+//					logger.debug("os version: {}", osversion);
+					insert_node_info_data.put("os_version", osversion);
+					
+					insert_node_info_data.put("memory",
+							String.format("%.2f", Double.parseDouble(insert_node_info_data.get("memory").toString())/1024/1024/1024).concat("G"));
+//							String.valueOf(Math.round(Double.parseDouble(insert_node_info_data.get("memory").toString())/1024/1024/1024)).concat("Gb"));
+					insert_node_info_data.put("node_Seq", node_data.get("member_seq"));
+					insert_node_info_data.put("agreement_seq", node_data.get("agreement_seq"));
+					node_info_data.add(insert_node_info_data);
+				}
+				node_info_insert_data.put("node_info_list", node_info_data);
+				
+//				logger.debug("node_info_insert_data: {}", new Gson().toJson(node_info_insert_data));
+				
+				session.insert("insert_node_info", node_info_insert_data);
+				session.commit();
+				
+				
+				// node_detail_info
+				List<Map<String, Object>> node_detail_info_list = new ArrayList<>();
+				Map<String, Object> insert_node_detail_info_map = new HashMap<>();
+				
+				for (String hostname : total_facter_data_map.keySet()) {
+					Object last_chg_time = null;
+					Map<String, Object> node_data = (Map<String, Object>) total_facter_data_map.get(hostname);
+					if (node_data.size() > 2) {
+						List<String> target_metric_name_list = session.selectList("get_target_metric_name", node_data.get("member_seq").toString().trim());
+						
+						
+						//TEST
+//						Map<String, String> temp = new HashMap<>();
+//						temp.put("time", "test");
+//						temp.put("value", "test_value");
+//						Map<String, Object> temp_test = new HashMap<>();
+//						temp_test.putAll(temp);
+//						node_data.put("/test",temp_test);
+//						logger.debug("{}", new Gson().toJson(node_data));
+						
+						Map<String, Object> target_value_map = new HashMap<>();
+						List<Map<String, Object>> target_temp_list = session.selectList("get_change_management_value", node_data.get("member_seq").toString().trim());
+						if (target_temp_list != null && !target_temp_list.isEmpty()) {
+							for (Map<String, Object> value_map : target_temp_list) {
+								target_value_map.put(value_map.get("metric_name").toString().trim(), value_map.get("metric_value"));
+							}
+						}
+						
+						for (String metric_name : node_data.keySet()) {
+							Map<String, Object> node_detail_info_map = new HashMap<>();
+							if (node_data.get(metric_name) instanceof Map) {
+								Map<String, Object> value_map = (Map<String, Object>) node_data.get(metric_name);
+								node_detail_info_map.put("metric_name", metric_name);
+								node_detail_info_map.put("influx_collect_time", value_map.get("time"));
+								node_detail_info_map.put("metric_value", value_map.get("value"));
+								node_detail_info_map.put("node_seq", node_data.get("member_seq"));
+								node_detail_info_map.put("metric_group_seq", node_data.get("agreement_seq"));
+								
+								if (!target_metric_name_list.contains(metric_name)) {
+									node_detail_info_map.put("change_flag", 1);
+									
+									//TODO
+									// insert cm_node_info -> last_chg_time
+									logger.debug("-------------------------------------");
+									logger.debug("new metric_name : {} \t{}", metric_name, value_map.get("time"));
+									logger.debug("-------------------------------------");
+									last_chg_time = value_map.get("time");
+								}
+								
+								if (target_value_map.containsKey(metric_name)) {
+									
+									if (value_map.get("value") instanceof Boolean) {
+										value_map.put("value", Boolean.parseBoolean(value_map.get("value").toString()) ? 1 : 0);
+									}
+									
+									//TEST
+//									if (metric_name.equals("/dmi/board/serial_number")) {
+//										value_map.put("value", Integer.parseInt(value_map.get("value").toString())+1);
+//										node_detail_info_map.put("metric_value", value_map.get("value"));
+//									}
+									
+									if (!target_value_map.get(metric_name).toString().equals(value_map.get("value").toString())) {
+										node_detail_info_map.put("change_flag", 1);
+										node_detail_info_map.put("before_value", target_value_map.get(metric_name));
+										
+										logger.debug("-------------------------------------");
+										logger.debug("change value metric_name : {}\t {} ", metric_name, value_map.get("time"));
+										logger.debug("-------------------------------------");
+										
+										last_chg_time = value_map.get("time");
+
+									}
+								}
+								
+							}
+							if (node_detail_info_map.size() > 0)
+								node_detail_info_list.add(node_detail_info_map);
+						}
+					}
+					
+					if (last_chg_time != null){
+						Map<String, Object> update_last_chg_time = new HashMap<>();
+						update_last_chg_time.put("last_chg_time", last_chg_time);
+						update_last_chg_time.put("node_seq", node_data.get("member_seq"));
+						session.update("update_node_info_last_chg_time", update_last_chg_time);
+					}
+				}
+				
+				insert_node_detail_info_map.put("node_detail_info_list", node_detail_info_list);
+				
+//				logger.debug("node_detail_info_map : {}", new Gson().toJson(insert_node_detail_info_map));
+				session.insert("insert_node_detail_info", insert_node_detail_info_map);
+				session.insert("insert_node_history", insert_node_detail_info_map);
+				session.commit();
+			}
+			
+			return "completed";
+		} catch (Exception e) {
+			logger.error(ExceptionUtils.getStackTrace(e));
+			return "Facter Info Collector ".concat(ExceptionUtils.getMessage(e));
+		} finally {
+			if (session != null) session.close();
+			if (influxDB != null) influxDB.close();
+		}
+	}
+	
+	private Object convertTime(Object time) throws ParseException {
+		SimpleDateFormat t_sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		
+		Date parseDate = t_sdf.parse(convertTimeReplace(time.toString()));
+		long milliseconds = parseDate.getTime();
+		
+		return sdf.format(milliseconds);
+		
+//		TimeZone tz = TimeZone.getDefault();
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+//		Date parseDate = sdf.parse(convertTimeReplace(time.toString()));
+//		long milliseconds = parseDate.getTime();
+//		int offset = tz.getOffset(milliseconds);
+//		return sdf.format(milliseconds + offset);
+	}
+
+	private String convertTimeReplace(String time) {
+		time = time.trim().replaceAll("[a-zA-Z]", " ");
+		return time.substring(0,time.lastIndexOf(".")+4);
+	}
+
+	private List<Series> getSeriesOfResponse(List<Result> results) {
+		Result result = results.get(0);
+		return result.getSeries();
+	}
+	
+//	private Object getInsertTime() {
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+//		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//		
+//		return sdf.format(new Date().getTime());
+//	}
+
+	private void getInfluxDBSession() throws Exception {
+		
+		String influx_url = "http://".concat(context.getInflux_connect_ip()).concat(":") + context.getInflux_connect_port();
+		this.influxDB = InfluxDBFactory.connect(influx_url, context.getInflux_user().trim(), context.getInflux_password().trim());
+		Pong response;
+		response = this.influxDB.ping();
+		
+		if (response.getVersion().equalsIgnoreCase("unknown")) throw new Exception("fail influxDB connect"); 
+		this.influxDB.setLogLevel(LogLevel.NONE);
+		
+		logger.debug("##################################################################################");
+		logger.debug("#  Connected to InfluxDB Version: " + this.influxDB.version() + " #");
+		logger.debug("##################################################################################");
+		
+	}
+	
+}

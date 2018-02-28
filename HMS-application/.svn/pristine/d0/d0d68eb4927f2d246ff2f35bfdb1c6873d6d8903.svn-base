@@ -1,0 +1,94 @@
+package com.skt.mobigen.hms.snapinfocollector.jobfactory;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.skt.mobigen.hms.snapinfocollector.context.Context;
+import com.skt.mobigen.hms.snapinfocollector.service.SnapAgreementInfoCollectorService;
+import com.skt.mobigen.hms.snapinfocollector.service.SnapFacterInfoCollectorService;
+import com.skt.mobigen.hms.snapinfocollector.service.SnapMemberInfoCollectorService;
+import com.skt.mobigen.hms.snapinfocollector.service.SnapMetricInfoCollectorService;
+import com.skt.mobigen.hms.snapinfocollector.service.SnapPluginInfoCollectorService;
+import com.skt.mobigen.hms.snapinfocollector.service.SnapTaskInfoCollectorService;
+
+public class SnapInfoCollectorJonFactory {
+	private Logger logger = LoggerFactory.getLogger(SnapInfoCollectorJonFactory.class);
+	private Context context;
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
+
+	public void jobFactory() {
+		try {
+			ExecutorService job_pool = Executors.newCachedThreadPool();
+			while (true) {
+				try {
+					
+					long snap_agreement_collect_starttime = System.nanoTime();
+					Future<String> agreement_future = job_pool.submit(new SnapAgreementInfoCollectorService(context));
+					try {
+						if (!agreement_future.get(5, TimeUnit.MINUTES).equals("completed"))
+							throw new TimeoutException(agreement_future.get());
+					} catch (TimeoutException te) {
+						logger.error(ExceptionUtils.getStackTrace(te));
+						Thread.sleep(30000);
+						continue;
+					}
+					long snap_agreement_collect_endtime = System.nanoTime();
+					logger.debug("get snap agreement info time: {}ms", (snap_agreement_collect_endtime - snap_agreement_collect_starttime) / 1000000);
+					
+					long get_snap_info_starttime = System.nanoTime();
+					Future<String> member_future = job_pool.submit(new SnapMemberInfoCollectorService(context));
+					Future<String> plugin_future = job_pool.submit(new SnapPluginInfoCollectorService(context));
+					Future<String> task_future = job_pool.submit(new SnapTaskInfoCollectorService(context));
+//					 Future<String> metric_future = job_pool.submit(new SnapMetricInfoCollectorService(context));
+
+					try {
+						if (!member_future.get(5, TimeUnit.MINUTES).equals("completed")) throw new TimeoutException(member_future.get());
+						if (!plugin_future.get(5, TimeUnit.MINUTES).equals("completed")) throw new TimeoutException(plugin_future.get());
+						if (!task_future.get(5, TimeUnit.MINUTES).equals("completed")) throw new TimeoutException(task_future.get());
+//						 if (!metric_future.get(5, TimeUnit.MINUTES).equals("completed")) throw new TimeoutException(metric_future.get());
+
+					} catch (TimeoutException te) {
+						logger.error(ExceptionUtils.getStackTrace(te));
+						Thread.sleep(30000);
+						continue;
+					}
+					long get_snap_info_endtime = System.nanoTime();
+					logger.debug("get snap info time: {}", (get_snap_info_endtime - get_snap_info_starttime) / 1000000);
+
+						
+					long get_facture_collect_starttime = System.nanoTime();
+					Future<String> facter_future = job_pool.submit(new SnapFacterInfoCollectorService(context));
+					try {
+						if (!facter_future.get(55, TimeUnit.MINUTES).equals("completed"))
+							throw new TimeoutException(facter_future.get());
+
+					} catch (TimeoutException te) {
+						logger.error(ExceptionUtils.getStackTrace(te));
+						Thread.sleep(30000);
+						continue;
+					}
+					long get_facture_collect_endtime = System.nanoTime();
+					logger.debug("get facture info collect time: {}ms", (get_facture_collect_endtime - get_facture_collect_starttime) / 1000000);
+					
+					Thread.sleep(Long.parseLong(context.getProcess_interval_time().trim()) * 1000);
+				} catch (Exception e) {
+					logger.error(ExceptionUtils.getStackTrace(e));
+					throw e;
+				}
+			}
+
+		} catch (Exception e) {
+		}
+	}
+}

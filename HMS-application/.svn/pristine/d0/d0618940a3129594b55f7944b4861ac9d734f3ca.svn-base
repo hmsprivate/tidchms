@@ -1,0 +1,43 @@
+package com.skt.mobigen.snapconnectinfo.collector.jobfactory;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.skt.mobigen.snapconnectinfo.collector.context.Context;
+import com.skt.mobigen.snapconnectinfo.collector.service.SnapConnectInfoCollectorService;
+
+public class SnapConnectInfoCollectorJobfactory {
+	private Logger logger = LoggerFactory.getLogger(SnapConnectInfoCollectorJobfactory.class);
+	private Context context;
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
+
+	public void jobfactory() {
+		while (true) {
+			try {
+				ExecutorService pool = Executors.newSingleThreadExecutor();
+				pool.execute(new SnapConnectInfoCollectorService(context));
+				pool.shutdown();
+				if (!pool.isTerminated()) {
+					Thread.sleep(10000);
+				}
+				Thread.sleep(Long.parseLong(context.getProcess_interval()) * 1000);
+
+			} catch (Exception e) {
+				logger.error(ExceptionUtils.getStackTrace(e));
+				try {
+					Thread.sleep(60000);
+				} catch (InterruptedException e1) {
+				}
+			}
+		}
+
+	}
+
+}

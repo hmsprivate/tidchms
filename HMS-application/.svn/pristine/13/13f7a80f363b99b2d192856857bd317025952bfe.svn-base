@@ -1,0 +1,255 @@
+package com.skt.mobigen.hms.snapsynchronize.service;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.skt.mobigen.hms.snapsynchronize.context.Context;
+import com.skt.mobigen.hms.snapsynchronize.service.IFSnapSynchronizeService;
+import com.skt.mobigen.hms.snapsynchronize.utils.HttpRequestUtil;
+import com.skt.mobigen.hms.snapsynchronize.utils.JsonParserUtil;
+
+public class SnapPluginSyncService implements IFSnapSynchronizeService {
+	private Logger logger = LoggerFactory.getLogger(SnapPluginSyncService.class);
+	private Context context;
+	private Map<String, Object> receive_data_map;
+
+	public SnapPluginSyncService(Context context, Map<String, Object> receive_data_map) {
+		this.context = context;
+		this.receive_data_map = receive_data_map;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object synchronizeService() {
+		SqlSession session = null;
+		try {
+			session = context.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+			
+			if (!receive_data_map.containsKey("node_name") && receive_data_map.get("node_name").toString().trim().isEmpty()) 
+				return null;
+			
+			String node_name = receive_data_map.get("node_name").toString();
+			Map<String, Object> connect_info = session.selectOne("get_conncet_info", node_name);
+			
+			if (connect_info == null)  return null;
+			
+			Map<String, Object> insert_data_map = new HashMap<>();
+			List<Map<String, Object>> insert_data_list = new ArrayList<>();
+			
+//			//TEST
+//			connect_info.put("member_host", "211.214.168.102");
+//			connect_info.put("rest_api_port", "3811");
+			
+			
+//			String p_url = "http://".concat("127.0.0.1".concat(":")).concat("8181");
+			String p_url = "http://".concat(connect_info.get("member_host").toString().trim().concat(":")).concat(connect_info.get("rest_api_port").toString().trim());
+			String member_detail_info_url = p_url.concat("/v1/tribe/member/").concat(node_name); 
+			String plugin_url = p_url.concat("/v1/plugins");
+			
+			
+			Map<String, Object> member_detail_reponse_map = JsonParserUtil.jsontoMap(HttpRequestUtil.sendRequest(member_detail_info_url));
+			Map<String, Object> member_detail_reponse_body = (Map<String, Object>) member_detail_reponse_map.get("body");
+			Map<String, Object> plugin_response_map = JsonParserUtil.jsontoMap(HttpRequestUtil.sendRequest(plugin_url));
+			Map<String, Object> plugin_response_body = (Map<String, Object>) plugin_response_map.get("body");
+			if (!member_detail_reponse_body.isEmpty()) {
+				if (!member_detail_reponse_body.get("plugin_agreement").toString().isEmpty()) {
+					
+					String agreement_seq = session.selectOne("get_agreement_seq", member_detail_reponse_body.get("plugin_agreement").toString());
+
+					if (!plugin_response_body.isEmpty()) {
+						Object last_up_time = getInsertTime();
+						List<Map<String, Object>> plugin_list = (List<Map<String, Object>>) plugin_response_body.get("loaded_plugins");
+
+						if (plugin_list.size() > 0) {
+							for (Map<String, Object> plugin_info : plugin_list) {
+								plugin_info.put("loaded_timestamp",
+										covertTimeformat(plugin_info.get("loaded_timestamp")));
+								plugin_info.put("last_up_time", last_up_time);
+								plugin_info.put("agreement_seq", agreement_seq);
+								
+								insert_data_list.add(plugin_info);
+							}
+						}
+					}
+					
+					
+					session.update("update_init_plugin_agreement", member_detail_reponse_body.get("plugin_agreement").toString());
+					if (!insert_data_list.isEmpty()) {
+						insert_data_map.put("plugin_list_info", insert_data_list);
+						session.insert("insert_plugin_info", insert_data_map);
+					}
+					session.delete("delete_plugin_synchronization");
+					
+					session.commit();
+				}
+			}
+			
+			
+//			if (!response_body.isEmpty()) {
+			
+//				List<Map<String, Object>> plugin_list = (List<Map<String, Object>>) response_body.get("loaded_plugins");
+
+				
+
+//				
+				
+//				Map<String, Object> total_data_map = new HashMap<>();
+//				for (Map<String, Object> plugin_info: plugin_list) {
+//					total_data_map.put(plugin_info.get("name").toString().trim().concat(plugin_info.get("version").toString().trim()).concat(plugin_info.get("type").toString().trim()), plugin_info);
+//				}
+//				
+//				logger.debug("{}", new Gson().toJson(total_data_map));
+				
+				
+//				insert_data_map.put("plugin_list_info", plugin_list);
+//				logger.debug("{}", new Gson().toJson(insert_data_map));
+
+//				session.insert("insert_plugin_info", insert_data_map);
+				
+				//check 
+//				session.delete("delete_plugin_synchronization", last_up_time);
+//				session.commit();
+
+//				response_map.clear();
+//				response_body.clear();
+				
+//				logger.debug("connect_info {}", connect_info);
+				
+				//Test
+//				connect_info.put("member_host", "211.214.168.102");
+//				connect_info.put("rest_api_port", "3811");
+				
+				
+//				p_url = "http://".concat(connect_info.get("member_host").toString().trim().concat(":")).concat(connect_info.get("rest_api_port").toString().trim());
+//				String agreement_url = p_url.concat("/v1/tribe/agreements");
+//				response_map = JsonParserUtil.jsontoMap(HttpRequestUtil.sendRequest(agreement_url));
+//				response_body = (Map<String, Object>) response_map.get("body");
+//				Map<String, Object> agreement_map = (Map<String, Object>) response_body.get("agreements");
+//				
+//				for (String agreement_name : agreement_map.keySet()) {
+//					Map<String, Object> agreement_info_map = (Map<String, Object>) agreement_map.get(agreement_name);
+//					Map<String, Object> plugin_agreement_map = (Map<String, Object>) agreement_info_map.get("plugin_agreement");
+//					String agreement_seq = session.selectOne("get_agreement_seq", agreement_name);
+//
+//					if (!plugin_agreement_map.isEmpty()) {
+//						List<Map<String, Object>> plugin_info_list = (List<Map<String, Object>>) plugin_agreement_map.get("plugins");
+//						
+////						session.update("update_init_plugin_agreement", agreement_name);
+//						
+//						for (Map<String, Object> plugin_info : plugin_info_list) {
+//							
+//							plugin_info.put("agreement_seq", agreement_seq);
+//
+//							int plugin_type = Integer.parseInt(plugin_info.get("type").toString().trim());
+//							if (plugin_type == 0) {
+//								plugin_info.put("type", "collector".trim());
+//
+//							} else if (plugin_type == 1) {
+//								plugin_info.put("type", "processor".trim());
+//
+//							} else if (plugin_type == 2) {
+//								plugin_info.put("type", "publisher".trim());
+//							}
+//							
+//							
+//							Map<String, Object> insert_data = new HashMap<>();
+//							String key = plugin_info.get("name").toString().trim().concat(plugin_info.get("version").toString().trim()).concat(plugin_info.get("type").toString().trim());
+//							insert_data = new HashMap<>((Map<String, Object>) total_data_map.get(key));
+//							
+////							logger.debug("insert_data : {}" , insert_data);
+//							
+//							insert_data.put("agreement_seq", agreement_seq);
+//							insert_data_list.add(insert_data);
+//							
+////							logger.debug("==>{}",insert_data_list);
+////							session.update("update_agreement_plugin_info", plugin_info);
+//							
+//							
+//						}
+////						session.commit();
+//					}
+//				}
+//				
+////				logger.debug("insert_data_list : {}", insert_data_list);
+////				logger.debug("total_data_map : {}", total_data_map);
+//				
+//				for (Map<String, Object> temp_map :  insert_data_list) {
+//					String key = temp_map.get("name").toString().trim().concat(temp_map.get("version").toString().trim()).concat(temp_map.get("type").toString().trim());
+//					
+//					if (total_data_map.containsKey(key)) {
+//						total_data_map.remove(key);
+//					}
+//				}
+//				
+//				if (!total_data_map.isEmpty()) {
+//					for (String key : total_data_map.keySet()) {
+//						Map<String, Object> data_info = (Map<String, Object>) total_data_map.get(key);
+//						data_info.put("agreement_seq", "1");
+//						
+//						insert_data_list.add(data_info);
+//					}
+//				}
+//				
+////				logger.debug("insert_data_list : {}", insert_data_list);
+//				
+//				insert_data_map.put("plugin_list_info", insert_data_list);
+//				
+////				logger.debug("{}", new Gson().toJson(insert_data_map));
+//				
+//				session.insert("insert_plugin_info", insert_data_map);
+//				
+//				session.delete("delete_plugin_synchronization", last_up_time);
+//		
+//				
+//				session.commit();
+				
+//			} 
+//			else {
+//				Object last_up_time = getInsertTime();
+//				session.delete("delete_plugin_synchronization", last_up_time);
+//				session.commit();
+//			}
+			
+			return "completed";
+		} catch (Exception e) {
+			
+			logger.debug(ExceptionUtils.getStackTrace(e));
+			
+			return ExceptionUtils.getMessage(e);
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
+	
+	private Object covertTimeformat(Object loadedTimestamp) {
+		if (loadedTimestamp != null) {
+			SimpleDateFormat sdfCurrent = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+			Timestamp currentTime = new Timestamp(Long.parseLong(String.valueOf(loadedTimestamp)) * 1000);
+
+			return sdfCurrent.format(currentTime);
+		}
+		return null;
+	}
+
+	private Object getInsertTime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+		return sdf.format(new Date().getTime());
+	}
+
+}

@@ -1,0 +1,143 @@
+package com.skt.mobigen.hms.snapinfocollector.service;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.concurrent.Callable;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.skt.mobigen.hms.snapinfocollector.context.Context;
+import com.skt.mobigen.hms.snapinfocollector.util.HttpRequestUtil;
+import com.skt.mobigen.hms.snapinfocollector.util.JsonParserUtil;
+
+public class SnapPluginInfoCollectorService implements Callable<String> {
+	private Logger logger = LoggerFactory.getLogger(SnapPluginInfoCollectorService.class);
+	private Context context;
+
+	public SnapPluginInfoCollectorService(Context context) {
+		this.context = context;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public String call() {
+		logger.debug("snap plugin info collector start");
+		SqlSession session = null;
+		try {
+			session = context.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+
+			List<String> agreement_seq_list = session.selectList("get_agreement_seq_info");
+			List<Map<String, Object>> insert_plugin_list = new ArrayList<>();
+			Object last_up_time = getInsertTime();
+
+			if (!agreement_seq_list.isEmpty()) {
+				for (String agreement_seq : agreement_seq_list) {
+					
+					if(agreement_seq.equals("1")) continue; 
+					
+					List<Map<String, Object>> connect_info_list = session.selectList("get_conncet_info_of_agreement", agreement_seq);
+					Map<String, Object> connect_info_map = new HashMap<>();
+					for (Map<String, Object> connect_info : connect_info_list) {
+						connect_info_map.put(connect_info.get("member_name").toString().trim(), connect_info);
+					}
+					for (String host_name : connect_info_map.keySet()) {
+						Map<String, Object> info_map = (Map<String, Object>) connect_info_map.get(host_name);
+						
+						// Test
+//						info_map.put("member_host", "211.214.168.102");
+//						if (host_name.equals("secure02")) {
+//							info_map.put("rest_api_port", "3811");
+//						} else if (host_name.equals("secure03")) {
+//							info_map.put("rest_api_port", "3812");
+//						} else if (host_name.equals("secure04")) {
+//							info_map.put("rest_api_port", "3813");
+//						} else {
+//							info_map.put("rest_api_port", "3814");
+//						}
+						
+						String p_url = "http://" + String.valueOf(info_map.get("member_host")).trim().concat(":").concat(String.valueOf(info_map.get("rest_api_port")));
+						String plugin_url = p_url.concat("/v1/plugins");
+						
+						Map<String, Object> response_map = null;
+						try {
+							response_map = JsonParserUtil.jsontoMap(HttpRequestUtil.sendRequest(plugin_url));
+						} catch (Exception e) {
+							continue;
+						}
+						
+						if (response_map != null) {
+							Map<String, Object> response_body = (Map<String, Object>) response_map.get("body");
+							if (!response_body.isEmpty()) {
+								List<Map<String, Object>> plugin_list = (List<Map<String, Object>>) response_body
+										.get("loaded_plugins");
+								if (!plugin_list.isEmpty()) {
+									for (Map<String, Object> plugin_info : plugin_list) {
+										plugin_info.put("loaded_timestamp",
+												covertTimeformat(plugin_info.get("loaded_timestamp")));
+										plugin_info.put("last_up_time", last_up_time);
+										plugin_info.put("agreement_seq", agreement_seq);
+
+										insert_plugin_list.add(plugin_info);
+
+									}
+
+								}
+							}
+						}
+						break;
+					}
+				}
+//				logger.debug("insert list : {}", insert_plugin_list);
+				
+				if (!insert_plugin_list.isEmpty()) {
+					Map<String, Object> insert_data_map = new HashMap<>();
+					insert_data_map.put("plugin_list_info", insert_plugin_list);
+					session.insert("insert_plugin_info", insert_data_map);
+				}
+				
+				session.delete("delete_plugin_synchronization", last_up_time);
+				session.commit();
+			}
+			
+			return "completed";
+		} catch (Exception e) {
+			
+			logger.error(ExceptionUtils.getStackTrace(e));
+			
+			return "Plugin Collector ".concat(ExceptionUtils.getMessage(e));
+		} finally {
+			if (session != null) session.close();
+		}
+
+	}
+	
+	private Object covertTimeformat(Object loadedTimestamp) {
+		if (loadedTimestamp != null) {
+			SimpleDateFormat sdfCurrent = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
+			Timestamp currentTime = new Timestamp(Long.parseLong(String.valueOf(loadedTimestamp)) * 1000);
+
+			return sdfCurrent.format(currentTime);
+		}
+		return null;
+	}
+	
+	private Object getInsertTime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		
+		return sdf.format(new Date().getTime());
+	}
+
+}

@@ -1,0 +1,8 @@
+/Users/hoya/Documents/workspace-hms/HMS-application/SnapManagerInfoCollector/src/main/java/com/skt/mobigen/hms/snapmanagerinfocollector/service/SnapManagerPluginInfoCollector.java
+/Users/hoya/Documents/workspace-hms/HMS-application/SnapManagerInfoCollector/src/main/java/com/skt/mobigen/hms/snapmanagerinfocollector/main/SnapManagerInfoCollectorMain.java
+/Users/hoya/Documents/workspace-hms/HMS-application/SnapManagerInfoCollector/src/main/java/com/skt/mobigen/hms/snapmanagerinfocollector/util/HttpRequestUtil.java
+/Users/hoya/Documents/workspace-hms/HMS-application/SnapManagerInfoCollector/src/main/java/com/skt/mobigen/hms/snapmanagerinfocollector/service/SnapManagerTaskInfoCollector.java
+/Users/hoya/Documents/workspace-hms/HMS-application/SnapManagerInfoCollector/src/main/java/com/skt/mobigen/hms/snapmanagerinfocollector/context/Context.java
+/Users/hoya/Documents/workspace-hms/HMS-application/SnapManagerInfoCollector/src/main/java/com/skt/mobigen/hms/snapmanagerinfocollector/jobfactory/SnapManagerInfoCollectorJobFactory.java
+/Users/hoya/Documents/workspace-hms/HMS-application/SnapManagerInfoCollector/src/main/java/com/skt/mobigen/hms/snapmanagerinfocollector/service/SnapManagerPluginInfoCollectorSnapAPI.java
+/Users/hoya/Documents/workspace-hms/HMS-application/SnapManagerInfoCollector/src/main/java/com/skt/mobigen/hms/snapmanagerinfocollector/util/JsonParserUtil.java

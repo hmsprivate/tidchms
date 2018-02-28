@@ -1,0 +1,77 @@
+package com.skt.mobigen.hms.snapmanagerinfocollector.service;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.concurrent.Callable;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.skt.mobigen.hms.snapmanagerinfocollector.context.Context;
+
+public class SnapManagerPluginInfoCollector implements Callable<String> {
+	private Logger logger = LoggerFactory.getLogger(SnapManagerPluginInfoCollector.class);
+	private Context context;
+
+	public SnapManagerPluginInfoCollector(Context context) {
+		this.context = context;
+	}
+
+	@Override
+	public String call() {
+		logger.debug("snap manager plugin info collector start");
+		SqlSession session = null;
+		try {
+			long snap_manager_plugin_info_collecte_starttime = System.nanoTime();
+			session = context.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+			
+			File directory = new File(context.getSnap_manager_plugin_dir().trim());
+			File[] file_array = directory.listFiles();
+			
+			Map<String, Object> insert_data_map = new HashMap<>();
+			List<Map<String, Object>> insert_list = new ArrayList<>();
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+			
+			for (File plugin_file : file_array) {
+				Map<String, Object> plugin_file_info_map = new HashMap<>();
+				plugin_file_info_map.put("file_name", plugin_file.getName().trim());
+				plugin_file_info_map.put("last_up_time", sdf.format(plugin_file.lastModified()));
+				plugin_file_info_map.put("alter_check_flag", 1);
+				
+				insert_list.add(plugin_file_info_map);
+			}
+			insert_data_map.put("plugin_file_list", insert_list);
+			
+			session.update("update_manager_plugin_init");
+			session.insert("insert_manager_plugin_info", insert_data_map);
+			session.delete("delete_manager_plugin_info");
+			
+			session.commit();
+			session.close();
+			
+			long snap_manager_plugin_info_collecte_endtime = System.nanoTime();
+			logger.debug("snap manger plugin collect time : {}", (snap_manager_plugin_info_collecte_endtime - snap_manager_plugin_info_collecte_starttime) / 1000000);
+			return "completed";
+		} catch (Exception e) {
+			if (session != null) session.close();
+			logger.error(ExceptionUtils.getStackTrace(e));
+			return ExceptionUtils.getMessage(e);
+		}
+
+	}
+	
+	
+
+}

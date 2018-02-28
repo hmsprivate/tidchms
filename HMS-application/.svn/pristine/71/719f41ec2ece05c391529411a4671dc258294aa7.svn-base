@@ -1,0 +1,228 @@
+package com.skt.mobigen.hms.snapinfocollector.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.skt.mobigen.hms.snapinfocollector.context.Context;
+import com.skt.mobigen.hms.snapinfocollector.util.HttpRequestUtil;
+import com.skt.mobigen.hms.snapinfocollector.util.JsonParserUtil;
+
+public class SnapMemberInfoCollectorService implements Callable<String> {
+	private Logger logger = LoggerFactory.getLogger(SnapMemberInfoCollectorService.class);
+	private Context context;
+
+	public SnapMemberInfoCollectorService(Context context) {
+		this.context = context;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public String call() {
+		logger.debug("snap member info collector start");
+		SqlSession session = null;
+		try {
+			session = context.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+
+			List<Map<String, Object>> connect_info_list = session.selectList("get_conncet_info");
+			Map<String, Object> connect_info_map = new HashMap<>();
+			for (Map<String, Object> connect_info : connect_info_list) {
+				connect_info_map.put(connect_info.get("member_name").toString().trim(), connect_info);
+			}
+
+			logger.debug("connect_info from db: {}", connect_info_map);
+			
+			Map<String, Object> connect_map = new HashMap<>();
+			Iterator<String> it = null;
+			do {
+				if (!connect_info_map.isEmpty()) {
+					it = connect_info_map.keySet().iterator();
+				} else {
+					break;
+				}
+				String host_name = it.next();
+
+				Map<String, Object> info_map = (Map<String, Object>) connect_info_map.get(host_name);
+
+				/*
+				 * Test
+				 */
+//				info_map.put("member_host", "211.214.168.102");
+//				info_map.put("rest_api_port", "8181");
+//				info_map.put("member_host", "211.214.168.102");
+//				if (host_name.equals("secure02")) {
+//					info_map.put("rest_api_port", "3811");
+//				} else if (host_name.equals("secure03")) {
+//					info_map.put("rest_api_port", "3812");
+//				} else if (host_name.equals("secure04")) {
+//					info_map.put("rest_api_port", "3813");
+//				} else if (host_name.equals("secure05")){
+//					info_map.put("rest_api_port", "3814");
+//				} else {
+//					info_map.put("member_host", "211.214.168.102");
+//					info_map.put("rest_api_port", "8181");
+//				}
+
+				String p_url = "http://" + String.valueOf(info_map.get("member_host")).trim().concat(":")
+						.concat(String.valueOf(info_map.get("rest_api_port")));
+				String seed_member_url = p_url.concat("/v1/tribe/members");
+
+				String response_str = null;
+				try {
+					response_str = HttpRequestUtil.sendRequest(seed_member_url);
+					if (response_str.isEmpty() || response_str == null) throw new Exception(seed_member_url+ ": response is ".concat(response_str));
+
+				} catch (Exception e) {
+					logger.error(seed_member_url + " " + ExceptionUtils.getMessage(e));
+					connect_info_map.remove(info_map.get("member_name").toString().trim());
+					continue;
+				}
+
+				Map<String, Object> response_map = JsonParserUtil.jsontoMap(response_str);
+				Map<String, Object> response_body = (Map<String, Object>) response_map.get("body");
+				List<String> seed_member_list = (List<String>) response_body.get("members");
+				for (String seed_member : seed_member_list) {
+					connect_info_map.remove(seed_member);
+				}
+
+				connect_map.put(info_map.get("member_host").toString().trim(),
+						info_map.get("rest_api_port").toString().trim());
+
+			} while (it.hasNext());
+
+			logger.debug("member : connect process info : {} ", connect_map);
+
+			if (!connect_map.isEmpty()) {
+				List<Map<String, Object>> member_info_list = new ArrayList<>();
+				for (String host_ip : connect_map.keySet()) {
+
+					context.setSnap_connect_ip(host_ip.trim());
+					context.setSnap_connect_port(connect_map.get(host_ip).toString().trim());
+
+					if (context.getSnap_connect_ip() == null)
+						throw new Exception("connect fail");
+
+					String p_url = context.getRest_proto().concat("://")
+							.concat(context.getSnap_connect_ip().concat(":"))
+							.concat(String.valueOf(context.getSnap_connect_port()));
+					String members_url = p_url.concat("/v1/tribe/members");
+
+					String response_str = null;
+					try {
+//						logger.debug("try " + members_url + " Connect");
+						response_str = HttpRequestUtil.sendRequest(members_url);
+						if (response_str.isEmpty() || response_str == null || response_str.startsWith("404"))
+							throw new Exception("response is ".concat(response_str));
+
+					} catch (Exception e) {
+						logger.debug(ExceptionUtils.getMessage(e));
+						continue;
+					}
+
+					Map<String, Object> member_response_map = JsonParserUtil.jsontoMap(response_str);
+					Map<String, Object> member_response_body = (Map<String, Object>) member_response_map.get("body");
+					List<String> member_list = (List<String>) member_response_body.get("members");
+
+					if (member_list.size() > 0) {
+
+						for (String member_name : member_list) {
+							String member_detail_info_url = p_url.concat("/v1/tribe/member/").concat(member_name);
+							Map<String, Object> member_detail_info_result_map = JsonParserUtil.jsontoMap(HttpRequestUtil.sendRequest(member_detail_info_url));
+							Map<String, Object> member_detail_info_result_body = (Map<String, Object>) member_detail_info_result_map.get("body");
+							Map<String, Object> member_info_map = (Map<String, Object>) member_detail_info_result_body.get("tags");
+
+							member_info_map.put("name", member_detail_info_result_body.get("name"));
+							member_info_map.put("alter_agreement_flag", "1");
+							member_info_list.add(member_info_map);
+						}
+					}
+				}
+
+				if (!member_info_list.isEmpty()) {
+					Map<String, Object> insert_data_map = new HashMap<>();
+					insert_data_map.put("member_info_list", member_info_list);
+					session.insert("insert_member_info", insert_data_map);
+					session.commit();
+				} 
+				
+				if (!connect_map.isEmpty()) {
+					session.update("update_init_member_agreement_all");
+					for (String host_ip : connect_map.keySet()) {
+						String connect_ip = host_ip.trim();
+						String connect_port = connect_map.get(host_ip).toString().trim();
+
+						if (connect_ip == null) throw new Exception(String.format("worng connect info %s:%s", connect_ip, connect_port));
+						
+						String p_url = context.getRest_proto().concat("://").concat(connect_ip.concat(":"))
+								.concat(connect_port);
+						String agreement_url = p_url.concat("/v1/tribe/agreements");
+						
+						String response_str = null;
+						try {
+							logger.debug("try " + agreement_url + " Connect");
+							response_str = HttpRequestUtil.sendRequest(agreement_url);
+							if (response_str.isEmpty() || response_str == null || response_str.startsWith("404"))
+								throw new Exception("response is ".concat(response_str));
+
+						} catch (Exception e) {
+							logger.debug(ExceptionUtils.getMessage(e));
+							continue;
+						}
+						
+						Map<String, Object> response_map = JsonParserUtil.jsontoMap(response_str);
+						Map<String, Object> response_body = (Map<String, Object>) response_map.get("body");
+						Map<String, Object> agreement_map = (Map<String, Object>) response_body.get("agreements");
+						
+						if (!agreement_map.isEmpty()) {
+							for (String agreement_name : agreement_map.keySet()) {
+								List<String> member_name_list = new ArrayList<>();
+								Map<String, Object> agreement_info = (Map<String, Object>) agreement_map.get(agreement_name);
+
+								if (agreement_info.containsKey("members")) {
+									if (!agreement_info.get("members").toString().isEmpty()) {
+										Map<String, Object> member_info_of_agreement = (Map<String, Object>) agreement_info.get("members");
+										for (String member_name : member_info_of_agreement.keySet()) {
+											member_name_list.add(member_name);
+										}
+									}
+
+									Map<String, Object> update_data_map = new HashMap<>();
+									update_data_map.put("update_data_list", member_name_list);
+									update_data_map.put("agreement_name", agreement_name);
+									
+									logger.debug("agreement seq update start agreement_name : {}\t {}", agreement_name, update_data_map.get("update_data_list"));
+									
+//									session.update("update_init_member_agreement_seq", agreement_name);
+									session.update("update_member_agreement", update_data_map);
+								} 
+							}
+							
+						} 
+					}// for end
+					session.commit();
+				}
+			}
+
+			return "completed";
+		} catch (Exception e) {
+			logger.error(ExceptionUtils.getStackTrace(e));
+
+			return "Member Collector ".concat(ExceptionUtils.getMessage(e));
+		} finally {
+			if (session != null)
+				session.close();
+		}
+
+	}
+
+}
