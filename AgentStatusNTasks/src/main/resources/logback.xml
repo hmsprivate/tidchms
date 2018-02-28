@@ -1,0 +1,52 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+<!--
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>../logs/smbcollector.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>mylog-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+-->
+
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>hms_ds.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+                <fileNamePattern>$HOME/log/agent_tasks.%i.log</fileNamePattern>
+                <minIndex>1</minIndex>
+                <maxIndex>5</maxIndex>
+            </rollingPolicy>
+                <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                    <maxFileSize>10MB</maxFileSize>
+                </triggeringPolicy>
+             <encoder>
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        <prudent>false</prudent>
+    </appender>
+
+    <!--
+    <logger name="example.logback.level.grandparents" level="TRACE"/>
+    <logger name="example.logback.level.grandparents.parents.children" level="INFO"/>
+    -->
+    <logger name="org.apache.zookeeper.ClientCnxn" level="ERROR"/>
+    <logger name="org.apache.zookeeper.ZooKeeper" level="ERROR"/>
+    <logger name="org.eclipse.jetty" level="ERROR"/>
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+        <!-- <appender-ref ref="ROLLING" /> -->
+    </root>
+
+</configuration>

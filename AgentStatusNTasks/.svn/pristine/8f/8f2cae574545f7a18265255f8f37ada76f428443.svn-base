@@ -1,0 +1,403 @@
+package com.skt.hms.worker;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.skt.hms.DAO.Member;
+import com.skt.hms.DAO.snapTask;
+import com.skt.hms.utils.Configure;
+import com.skt.hms.utils.PropertiesLoader;
+import com.skt.hms.utils.Tools;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class OperateWork {
+
+    private static final Logger logger = LoggerFactory.getLogger(OperateWork.class);
+    PropertiesLoader prop = null;
+    HashMap<String, Member> memberMap = new HashMap<String, Member>();
+    ArrayList<snapTask> taskList = new ArrayList<snapTask>();
+
+    private static OperateWork instance;
+    private OperateWork() {
+        if (prop == null) {
+
+            Configure cf = Configure.getInstance();
+            prop = cf.getProperties();
+        }
+    }
+    public static OperateWork getInstance () {
+        if ( instance == null ) instance = new OperateWork();
+        return instance;
+    }
+
+    public int LoadMembers(String IpAddr) {
+        Connection connection = null;
+        Statement st = null;
+        try {
+            Class.forName(prop.getString("db_driver"));
+            connection = DriverManager.getConnection(prop.getString("db_url") , prop.getString("db_username"), prop.getString("db_password"));
+            st = connection.createStatement();
+
+            String sql;
+            ResultSet rs;
+
+            memberMap.clear();
+            if (StringUtils.isEmpty(IpAddr)) {
+                sql = "SELECT member_seq,member_name,member_host,rest_api_port,agreement_seq FROM CM_MEMBER_INFO";
+            }
+            else {
+                sql = "SELECT member_seq,member_name,member_host,rest_api_port,agreement_seq FROM CM_MEMBER_INFO WHERE member_host='"+IpAddr.trim()+"'";
+
+            }
+
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+                int mem_seq = rs.getInt(1);
+                String mem_name = rs.getString(2);
+                String mem_host = rs.getString(3);
+                int rest_api_port = rs.getInt(4);
+                int agreement_seq = rs.getInt(5);
+
+                //System.out.println(mem_seq+","+mem_name+","+mem_host+","+agreement_seq);
+                Member mb = new Member();
+                mb.setMember_seq(mem_seq);
+                mb.setMember_name(mem_name);
+                mb.setMember_host(mem_host);
+                mb.setRest_api_port(rest_api_port);
+                mb.setAgreement_seq(agreement_seq);
+                memberMap.put(mem_name,mb);
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (st != null) st.close();
+            } catch (Exception e) {
+                logger.error(Tools.getPrintStackTrace(e));
+            }
+            try {
+                if (connection != null) connection.close();
+            } catch (Exception se) {
+                logger.error(Tools.getPrintStackTrace(se));
+            }
+        }
+
+        return memberMap.size();
+    }
+
+    public void SelectTime() {
+        if (memberMap.size() == 0) return;
+
+        InfluxDB influxDB = InfluxDBFactory.connect(prop.getString("influx_url"), prop.getString("influx_user"), prop.getString("influx_password"));
+        try {
+            for(String key : memberMap.keySet()) {
+                String qy = "select last(value),time from \"intel/facter/dmi/product/uuid\" where source='"+key.trim()+"'";
+                //System.out.println("qy="+qy);
+                Query query = new Query(qy,prop.getString("influx_db"));
+                QueryResult queryResult = influxDB.query(query);
+                for (QueryResult.Result rslt: queryResult.getResults()) {
+                    if(rslt.getSeries() == null) continue;
+
+                    for(QueryResult.Series series : rslt.getSeries()) {
+                        List<List<Object>> lt = series.getValues();
+                        String rt = String.valueOf(lt.get(0).get(0));
+                        int pos = rt.lastIndexOf(".");
+
+                        String lastUpTime = rt.substring(0,pos)+"Z";
+                        //logger.debug(key+"->"+"lastUpTime="+lastUpTime);
+                        Member mb = memberMap.get(key);
+                        mb.setLastUptime(lastUpTime);
+                    }
+                }
+            }
+        }catch (Exception e) {
+            logger.error(Tools.getPrintStackTrace(e));
+        }
+        finally {
+            influxDB.close();
+        }
+    }
+
+    public int GetNodeStatus() {
+
+        int rslt = 0;
+
+        for(String key : memberMap.keySet()) {
+            Member mb = memberMap.get(key);
+            String status = "";
+            //String reqUrl = "http://"+mb.getMember_host()+":"+mb.getRest_api_port()+"/v1/tribe/members";
+            String reqUrl = "http://"+mb.getMember_host()+":"+mb.getRest_api_port()+"/v1/tasks";
+
+            int rnt = ChkConnectionStatus(reqUrl, mb);
+            if(rnt == -1) {
+                mb.setNodeStatus("Abnormal");
+                rslt = rnt;
+            }
+            else mb.setNodeStatus("Normal");
+            String st = reqUrl+"->"+Integer.toString(rnt);
+            logger.debug(st);
+
+        }
+
+        return rslt;
+    }
+
+    public int ChkConnectionStatus(String url, Member mb) {
+        System.out.println("ChkConnectionStatus start->"+url);
+        int rtn = -1;
+        CloseableHttpClient httpClient = null;
+        CloseableHttpResponse response = null;
+        try {
+            int timeout = 5;
+            RequestConfig config = RequestConfig.custom()
+                    .setConnectTimeout(timeout * 1000)
+                    .setConnectionRequestTimeout(timeout * 1000)
+                    .setSocketTimeout(timeout * 1000).build();
+
+            httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
+            HttpGet getRequest = new HttpGet(url);
+            // Add additional header to getRequest which accepts application/xml data
+            //getRequest.addHeader("accept", "application/xml");\
+            response = httpClient.execute(getRequest);
+
+            // Check for HTTP response code: 200 = success
+            if (response.getStatusLine().getStatusCode() != 200) {
+                //throw new RuntimeException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
+                //System.out.println("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
+            }
+            else {
+                rtn = 1;
+
+                BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
+                String output ;
+                String msg = "";
+                System.out.println("============Output:============");
+
+                // Simply iterate through XML response and show on console.
+                while ((output = br.readLine()) != null) {
+                    //System.out.println(output);
+                    msg += output;
+                }
+
+                if (! StringUtils.isEmpty(msg) ) {
+                    JsonObject root = new JsonParser().parse(msg).getAsJsonObject();
+                    JsonObject body = root.get("body").getAsJsonObject();
+                    JsonArray sctArray = body.get("ScheduledTasks").getAsJsonArray();
+
+                    Gson gson = new Gson();
+
+                    for(int i=0; i<sctArray.size();i++) {
+                        snapTask task = gson.fromJson(sctArray.get(i), snapTask.class);
+                        task.setHostNmae(mb.getMember_name());
+                        task.setHostIp(mb.getMember_host());
+                        task.setAgreement_seq(mb.getAgreement_seq());
+                        task.setMember_seq(mb.getMember_seq());
+
+                        taskList.add(task);
+                        //System.out.println(task.toString());
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        finally {
+            if (response != null) try { response.close(); } catch(Exception e) {}
+            if (httpClient != null) try {  httpClient.close(); } catch(Exception e) {}
+        }
+        return rtn;
+    }
+
+
+    public void UpdateStatusFromRequest() {
+        Connection connection = null;
+        Statement st = null;
+        try {
+            Class.forName(prop.getString("db_driver"));
+            connection = DriverManager.getConnection(prop.getString("db_url") , prop.getString("db_username"), prop.getString("db_password"));
+            st = connection.createStatement();
+
+            String sql;
+            ResultSet rs;
+
+            sql = "UPDATE agent_status SET alter_agreement_flag=9";
+            st.executeUpdate(sql);
+
+            for(String key : memberMap.keySet()) {
+                Member mb = memberMap.get(key);
+
+                sql = "INSERT INTO agent_status(insert_time,agreement_seq,host_name,ip,status,last_up_time,alter_agreement_flag)" +
+                        "VALUES (" +
+                        "now()" +
+                        ","  + mb.getAgreement_seq()+
+                        ",'" + mb.getMember_name() +"'" +
+                        ",'" + mb.getMember_host() +"'" +
+                        ",'" + mb.getNodeStatus() +"'" +
+                        ",'" + mb.getLastUptime() +"'" +
+                        ", 1" +
+                        ") ON DUPLICATE KEY UPDATE " +
+                        "insert_time=now()" +
+                        ",agreement_seq=" +mb.getAgreement_seq()+
+                        ",ip='" +mb.getMember_host() +"'" +
+                        ",status='" + mb.getNodeStatus() +"'" +
+                        ",last_up_time='" + mb.getLastUptime() +"'" +
+                        ",alter_agreement_flag=1"
+                ;
+
+                logger.debug(sql);
+                st.executeUpdate(sql);
+            }
+
+            sql = "DELETE FROM agent_status WHERE alter_agreement_flag=9";
+            st.executeUpdate(sql);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (st != null) st.close();
+            } catch (Exception e) {
+                logger.error(Tools.getPrintStackTrace(e));
+            }
+            try {
+                if (connection != null) connection.close();
+            } catch (Exception se) {
+                logger.error(Tools.getPrintStackTrace(se));
+            }
+        }
+
+    }
+
+    public void UpdateStatusTasks() {
+        Connection connection = null;
+        Statement st = null;
+        try {
+            Class.forName(prop.getString("db_driver"));
+            connection = DriverManager.getConnection(prop.getString("db_url") , prop.getString("db_username"), prop.getString("db_password"));
+            st = connection.createStatement();
+
+            String sql;
+            ResultSet rs;
+
+            sql = "UPDATE task_status SET alter_agreement_flag=9";
+            st.executeUpdate(sql);
+
+            for (int i=0; i<taskList.size(); i++)  {
+                snapTask task = taskList.get(i);
+
+                sql = "INSERT INTO task_status(insert_time,agreement_seq,node_seq,host_name,ip,task_id,task_name,task_status,task_deadline,alter_agreement_flag)" +
+                        " VALUES (" +
+                        "now()" +
+                        ","  + task.getAgreement_seq()+
+                        ","  + task.getMember_seq()+
+                        ",'" + task.getHostNmae() +"'" +
+                        ",'" + task.getHostIp() +"'" +
+                        ",'" + task.getId() +"'" +          //task_id
+                        ",'" + task.getName() +"'" +        //task_name
+                        ",'" + task.getTask_state() +"'" +  //task_status
+                        ",'" + task.getDeadline() +"'" +    //task_deadline
+                        ", 1" +
+                        ") ON DUPLICATE KEY UPDATE " +
+                        "insert_time=now()" +
+                        ",agreement_seq=" +task.getAgreement_seq()+
+                        ",ip='" +task.getHostIp() +"'" +
+                        ",task_name ='" +task.getName() +"'" +
+                        ",task_status='" + task.getTask_state() +"'" +
+                        ",alter_agreement_flag=1"
+                ;
+
+                logger.debug(sql);
+                st.executeUpdate(sql);
+            }
+
+            sql = "DELETE FROM task_status WHERE alter_agreement_flag=9";
+            st.executeUpdate(sql);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+
+            taskList.clear();
+
+            try {
+                if (st != null) st.close();
+            } catch (Exception e) {
+                logger.error(Tools.getPrintStackTrace(e));
+            }
+            try {
+                if (connection != null) connection.close();
+            } catch (Exception se) {
+                logger.error(Tools.getPrintStackTrace(se));
+            }
+        }
+
+    }
+
+    public int UpdateStatusTasksFromSync() {
+
+        int rslt = 0;
+        Connection connection = null;
+        Statement st = null;
+        try {
+            Class.forName(prop.getString("db_driver"));
+            connection = DriverManager.getConnection(prop.getString("db_url") , prop.getString("db_username"), prop.getString("db_password"));
+            st = connection.createStatement();
+
+            String sql;
+
+            for (int i=0; i<taskList.size(); i++)  {
+                snapTask task = taskList.get(i);
+                sql = "update task_status set task_status='"+ task.getTask_state() +"', task_deadline='"+ task.getDeadline()+"' WHERE ip='"+task.getHostIp()+"' and task_id='"+task.getId()+"' ";
+                logger.debug(sql);
+                st.executeUpdate(sql);
+            }
+
+        }catch (Exception e) {
+            rslt = -1;
+            e.printStackTrace();
+        }
+        finally {
+
+            taskList.clear();
+
+            try {
+                if (st != null) st.close();
+            } catch (Exception e) {
+                logger.error(Tools.getPrintStackTrace(e));
+            }
+            try {
+                if (connection != null) connection.close();
+            } catch (Exception se) {
+                logger.error(Tools.getPrintStackTrace(se));
+            }
+        }
+
+        return -1;
+    }
+
+}

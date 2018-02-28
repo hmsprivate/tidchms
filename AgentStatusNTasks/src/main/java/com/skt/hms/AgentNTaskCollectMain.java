@@ -1,0 +1,23 @@
+package com.skt.hms;
+
+import com.skt.hms.worker.StatusWorker;
+import com.skt.hms.worker.SyncWorker;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class AgentNTaskCollectMain {
+
+    public static void main(String [] args) {
+
+        ExecutorService execService = Executors.newSingleThreadExecutor();
+        execService.execute(new SyncWorker());
+
+        ExecutorService execService2 = Executors.newSingleThreadExecutor();
+        execService2.execute(new StatusWorker());
+
+        execService.shutdown();
+        execService2.shutdown();
+
+    }
+}

@@ -1,0 +1,57 @@
+package com.skt.hms.worker;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+@Path("/snapTasks")
+public class snapTasks {
+    SyncVar syncer = SyncVar.getInstance();
+
+    @GET
+    @Path("reflesh/{reqip}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResultMsg test( @PathParam("reqip") String IpAddr) {
+
+        ResultMsg rm = new ResultMsg();
+
+        if(syncer.getStep() == syncer.SCHEULE_WORK_STEP) {
+
+            rm.setResultStatus("Completed");
+            rm.setResultMessage("Shedule Syncker work !!");
+
+        } else {
+
+            syncer.setStep(syncer.SYNC_WORK_STEP);
+
+            OperateWork op = OperateWork.getInstance();
+            if (op.LoadMembers(IpAddr.trim()) == 0) {
+
+                rm.setResultStatus("Failed");
+                rm.setResultMessage(IpAddr+": Sync Fail Not Found Member Info !!");
+            }
+            else {
+                if (op.GetNodeStatus() == -1) {
+                    rm.setResultStatus("Failed");
+                    rm.setResultMessage(IpAddr+": Sync Fail SNAP Tasks List !!");
+                } else {
+                    if (op.UpdateStatusTasksFromSync() == -1 ) {
+                        rm.setResultStatus("Failed");
+                        rm.setResultMessage(IpAddr+": DB Update Fail !!");
+                    }
+                    else {
+                        rm.setResultStatus("Completed");
+                        rm.setResultMessage(IpAddr+": Sync Success SNAP Tasks List !!");
+                    }
+                }
+            }
+
+            syncer.setStep(syncer.NONE_WORK_STEP);
+        }
+
+        return rm;
+    }
+
+}
