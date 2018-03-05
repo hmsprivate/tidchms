@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Main | HMS</title>
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+
+</head>
+
+
+<body>
+<!-- wrap -->
+<div id="wrap">
+	<!-- header -->
+	<header>
+		<div class="header-wrap">
+			<h1 class="logo"><a href="#none">HMS</a></h1>
+			<!-- gnb -->
+			<nav id="gnb">
+				<h2 class="blind">주요 메뉴</h2>
+				<ul>
+					<li><a href="#none">Group management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Plug In</a></li>
+							<li><a href="#none">Task</a></li>
+							<li><a href="#none">Node</a></li>
+						</ul>
+					</li>
+					<li><a href="#none">Plugin management</a></li> 
+					<li><a href="#none">Task management</a></li>
+					<li><a href="#none">Agent status</a></li>
+					<li><a href="#none">Modification management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Hold list modification</a></li>
+							<li><a href="#none">Modification history</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<!-- //gnb -->
+		</div>
+	</header>
+	<!-- //header -->
+
+	<!-- container -->
+	<div id="container">
+		<!-- content -->		
+		<div id="content" class="main">
+		 
+			<!-- 현황판 -->
+			<div class="status-board">
+				<div class="panel-wrap">
+					<div class="panel-header">
+						<h3 class="title"><i class="ico-md i-tasks"></i>Node Count</h3>
+					</div>
+					<div class="panel-content">
+						<ul class="status-list fl-col3">
+							<li>
+								<strong class="txt-point">9999/9999</strong>
+								<span>TOTAL</span>
+							</li>
+							<li>
+								<strong>127889</strong>
+								<span>PM</span>
+							</li>
+							<li>
+								<strong>123456</strong>
+								<span>VM</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="panel-wrap">
+					<div class="panel-header">
+						<h3 class="title"><i class="ico-md i-desktop"></i>Agent Status</h3>
+					</div>
+					<div class="panel-content">							
+						<ul class="status-list fl-col2">
+							<li>
+								<strong class="txt-point">0000</strong>
+								<span>CMDB</span>
+							</li>
+							<li>
+								<strong class="txt-point">235</strong>
+								<span>PM</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="panel-wrap">
+					<div class="panel-header">
+						<h3 class="title"><i class="ico-md i-upload"></i>Last Update</h3>
+					</div>
+					<div class="panel-content">
+						<div class="status-list time">
+							<strong>2017/07/11</strong>
+							<strong>12:00:34</strong>
+						</div>
+					</div>
+				</div>
+				<div class="panel-wrap">
+					<div class="panel-header">
+						<h3 class="title"><i class="ico-md i-random"></i>Change Status</h3>
+					</div>
+					<div class="panel-content">
+						<ul class="status-list fl-col2">
+							<li>
+								<strong class="txt-point">0000</strong>
+								<span>TOTAL</span>
+							</li>
+							<li>
+								<strong>0000</strong>
+								<span>Modification</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- //현황판 -->
+
+			<!-- 검색 + Grid -->
+			<div class="cont-wrap">
+				<!-- data-tbl 2017-12-13 DEL
+				<div class="data-tbl wide">
+					<table>
+						<tbody>
+						<tr>
+							<th>Host Name</th>
+							<td>
+								<input type="text" class="w155" value="">
+							</td>
+							<th>Serial Number</th>
+							<td>
+								<input type="text" class="w155" value="">
+							</td>
+							<th>Type</th>
+							<td>
+								<!--<div class="selectbox w84">
+									<a class="current" href="javascript:;">VM</a>
+									<ul class="selectbox-sm-ul">
+										<li><a href="#">100px</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+									</ul>
+								</div>  2017-07-13 DEL   
+									<!-- 2017-07-13 ADD 
+									<select class="selectbox w84">
+                                        <option value="0">VM</option>
+                                        <option value="1">TEST1</option>
+                                        <option value="2">TEST2</option>
+                                    </select>
+									<!-- //2017-07-13 ADD 
+							</td>
+							<th>IP</th>
+							<td>
+								<input type="text" class="w145" value="">
+							</td>
+							<th>OS Name</th>
+							<td>
+								<input type="text" class="w145" value="">
+							</td>
+							<th>제조사</th>
+							<td>
+								<input type="text" class="w145" value="">
+								<button type="button" class="btn-cr i-search ml05">Search</button>
+								<button type="button" class="btn-cr i-refresh">Reset</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>-->
+
+				<!-- search-group-area 2017-12-13 ADD -->
+				<div class="search-group-area">
+					<div class="search-group2">
+						<button type="submit" class="btn-search-plus" title="More Search"></button>	
+						<div class="input-srh-cr"><!-- 2017-08-29 MOD : search-group-area에 상속시킴 -->
+							<span class="icon-group">
+								<a href="#none" class="ico-md i-close-sm" title="Close"></a>
+							</span>
+							<input type="text" placeholder="Search for...">
+						</div>
+						<button type="submit" class="btn-search" title="Search"></button>	
+					</div>
+				</div>
+				<!-- //search-group-area -->
+				<!-- tab-cont-group -->
+				<div class="tab-cont-group">
+					<ul class="tab-menu"> 
+						<li class="on"><a href="#none">No group</a></li>
+						<li><a href="#none">Group 1</a></li>
+						<li><a href="#none">아주길게 쓸경우에는 한줄 말줄임</a></li>
+					</ul>
+					<div class="tab-cont">
+						<div class="grid-area hcalc01" style="border:1px dotted blue">grid-area 실제 영역 style="border:1px dotted blue" 는 영역확인용 입니다. 실제는 없어요 빼주세요</div>
+						<!-- pagination-area-total -->
+						<div class="pagination-area-total">
+							<!-- pagination-area -->									
+							<div class="pagination-area">
+								<ul class="pagination">
+									<li class="pagination-first"><a href="#none" title="First">First</a></li>
+									<li class="pagination-prev"><a href="#none" title="Previous">Previous</a></li>
+									<li class="active"><a href="#none">1</a></li>
+									<li class="disabled"><a href="#none">2</a></li>
+									<li><a href="#none">3</a></li>
+									<li><a href="#none">4</a></li>
+									<li><a href="#none">5</a></li>
+									<li class="pagination-next"><a href="#none" title="Next">Next</a></li>
+									<li class="pagination-last disabled"><a href="#none" title="Last">Last</a></li>
+								</ul>
+							</div>
+							<!-- //pagination-area -->
+						</div>
+						<!-- //pagination-area-total -->
+					</div>
+					<div class="tab-cont">
+						<div class="grid-area hcalc01">grid-area 2</div>
+					</div>
+					<div class="tab-cont">
+						<div class="grid-area hcalc01">grid-area 3</div>
+					</div>
+					<div class="tab-cont">
+						<div class="grid-area hcalc01">grid-area 4</div>
+					</div>
+				
+				</div>
+				<!-- //tab-cont-group -->
+
+			</div>
+			<!-- //검색 + Grid -->
+
+		</div>
+		<!-- //content -->
+	</div>
+	<!-- //container -->
+</div>
+<!-- //wrap -->
+
+</body>
+</html>
+

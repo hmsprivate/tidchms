@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Task management | HMS</title>
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+
+</head>
+
+
+<body>
+<!-- wrap -->
+<div id="wrap">
+	<!-- header -->
+	<header>
+		<div class="header-wrap">
+			<h1 class="logo"><a href="#none">HMS</a></h1>
+			<!-- gnb -->
+			<nav id="gnb">
+				<h2 class="blind">주요 메뉴</h2>
+				<ul>
+					<li><a href="#none">Group management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Plug In</a></li>
+							<li><a href="#none">Task</a></li>
+							<li><a href="#none">Node</a></li>
+						</ul>
+					</li>
+					<li><a href="#none">Plugin management</a></li> 
+					<li><a href="#none">Task management</a></li>
+					<li><a href="#none">Agent status</a></li>
+					<li><a href="#none">Modification management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Hold list modification</a></li>
+							<li><a href="#none">Modification history</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<!-- //gnb -->
+		</div>
+	</header>
+	<!-- //header -->
+
+	<!-- container -->
+	<div id="container">
+		<!-- content -->		
+		<div id="content">
+			<div class="row ph100 gap10">
+				<div class="col-3">
+					<!-- panel-wrap -->
+					<div class="panel-wrap">
+						<div class="panel-header">
+							<h3 class="title">Task list</h3>
+							<div class="hd-right">
+								<button type="button" class="btn-cr btn-sm i-plus">Create</button>
+								<button type="button" class="btn-cr btn-sm i-minus">Delete</button>
+							</div>
+						</div>
+						<div class="panel-content">
+							<div class="grid-area ph100" style="border:1px dotted blue">grid-area 실제 영역 style="border:1px dotted blue" 는 영역확인용 입니다. 실제는 없어요 빼주세요</div>
+						</div>
+					</div>
+					<!-- //panel-wrap -->
+				</div>
+				<div class="col-9">				
+					<!-- panel-wrap -->
+					<div class="panel-wrap">
+						<div class="panel-header">
+							<h3 class="title">Task definition</h3>
+						</div>
+						<div class="panel-content">
+							<!-- data-tbl -->
+							<div class="data-tbl round-border-type task-type">
+								<table>									
+									<colgroup>
+										<col style="width:100px">
+										<col style="width:auto">
+									</colgroup>
+
+									<tbody>
+									<tr>
+										<th>Name</th>
+										<td>
+											<input type="text" class="p100" value="">
+										</td>
+									</tr>
+									<tr>
+										<th>Detail</th>
+										<td>
+											<textarea rows="10" cols="50" class="text-box"></textarea>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- //data-tbl
+							<div class="data-box block-type hcalc04">
+								<div class="form-group">
+									<label for="Host" class="label w100">Name</label><input type="text" class="w1000" id="Host" value="">
+								</div>
+								<div class="form-group">
+									<label for="Host" class="label w100">Datail</label><textarea rows="10" cols="50" class="text-box w1000"></textarea>
+								</div>
+							</div>
+							<!-- btns-area -->
+							<div class="btns-area">
+								<button type="button" class="btn-cr">Apply</button>
+								<button type="button" class="btn-gy">Cancel</button>
+							</div>
+							<!-- //btns-area -->
+						</div>
+					</div>
+					<!-- //panel-wrap -->
+				</div>
+			</div>	
+		</div>
+		<!-- //content -->
+	</div>
+	<!-- //container -->
+</div>
+<!-- //wrap -->
+
+</body>
+</html>
+

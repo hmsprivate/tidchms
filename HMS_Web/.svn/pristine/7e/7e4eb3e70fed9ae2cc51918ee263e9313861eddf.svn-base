@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.skt.hms.plugin.PluginMgmtMapper">
+
+
+	<select id="getPluginList" parameterType="pluginMgmtSearchModel" resultType="pluginMgmtModel">
+		/*pluginMgmt-mapper.getPluginList*/
+		SELECT
+		    plugin_name
+		    ,plugin_version
+		    ,plugin_type
+		    ,plugin_loaded_timestamp
+		    ,DATE_FORMAT(CONVERT_TZ(last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) AS last_up_time
+		    ,file_name
+		FROM cm_manager_plugin_info
+		WHERE 1=1
+		<choose>
+			<when test="@com.mobigen.framework.utility.Comparator@notEmpty(pluginType) and pluginType.length > 0">
+				AND plugin_type IN (
+			<foreach collection="pluginType" item="item" separator=" , ">
+				#{item}
+			</foreach>
+				)
+			</when>
+<!-- 			<when test="pluginType != null and pluginType.length == 0">
+				AND plugin_type = ''
+			</when> -->
+			<otherwise>
+				AND 1=1
+			</otherwise>
+			
+		</choose>
+		<if test="@com.mobigen.framework.utility.Comparator@notEmpty(pluginName)">
+		AND plugin_name LIKE CONCAT('%',#{pluginName},'%')
+		</if>
+		ORDER BY plugin_type ASC
+	</select>
+
+	<update id="updatePluginInfo" parameterType="pluginMgmtModel">
+		/*pluginMgmt-mapper.updatePluginInfo*/
+		UPDATE cm_manager_plugin_info
+		SET
+		   plugin_name = #{pluginName}
+		  ,plugin_version = #{pluginVersion}
+		  ,plugin_type = #{pluginType}
+		  ,plugin_loaded_timestamp = DATE_FORMAT(FROM_UNIXTIME(#{pluginLoadedTimestamp}),'%Y-%m-%d %H:%i:%s' )
+		WHERE 1=1
+		AND  file_name = #{fileName}
+	</update>
+
+
+</mapper>

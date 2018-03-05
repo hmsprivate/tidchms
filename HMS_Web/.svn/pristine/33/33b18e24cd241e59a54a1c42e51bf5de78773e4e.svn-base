@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.skt.hms.common.CommonMapper">
+
+<!-- 
+	<resultMap id="datacenterMap" type="com.skt.hms.common.model.DatacenterModel">
+		<id property="datacenterId" column="DATACENTER_ID"/>
+		<result property="type" column="TYPE"/>
+		<result property="assetNumber" column="ASSET_NUMBER"/>
+		<result property="nickId" column="NICK_ID"/>
+		<result property="name" column="NAME"/>
+		<result property="gps_coordinate" column="GPS_COORDINATE"/>
+		<result property="address" column="ADDRESS"/>
+		<result property="rackUnit" column="RACK_UNIT"/>
+		<result property="resourceName" column="RESOURCE_NAME"/>
+		<result property="resourceSeq" column="RESOURCE_SEQ"/>
+		<result property="resourceParentSeq" column="RESOURCE_PARENT_SEQ"/>
+		<collection property="children" column="{datacenterId=DATACENTER_ID}" select="getFloorList" ofType="com.skt.hms.common.model.FloorModel"/>
+	</resultMap>
+	<resultMap id="floorMap" type="com.skt.hms.common.model.FloorModel">
+		<id property="floorPlanId" column="FLOOR_PLAN_ID"/>
+		<result property="type" column="TYPE"/>
+		<result property="datacenterId" column="DATACENTER_ID"/>
+		<result property="name" column="NAME"/>
+		<result property="floorNo" column="FLOOR_NO"/>
+		<result property="horizonType" column="HORIZON_TYPE"/>
+		<result property="verticalType" column="VERTICAL_TYPE"/>
+		<result property="resourceName" column="RESOURCE_NAME"/>
+		<result property="resourceSeq" column="RESOURCE_SEQ"/>
+		<result property="resourceParentSeq" column="RESOURCE_PARENT_SEQ"/>
+		<collection property="children" column="{floorPlanId=FLOOR_PLAN_ID}" select="getRoomList" ofType="com.skt.hms.common.model.RoomModel"/>
+	</resultMap>
+	<resultMap id="roomMap" type="com.skt.hms.common.model.RoomModel">
+		<id property="roomInfoId" column="ROOM_INFO_ID"/>
+		<result property="type" column="TYPE"/>
+		<result property="floorPlanId" column="FLOOR_PLAN_ID"/>
+		<result property="horizonSize" column="HORIZON_SIZE"/>
+		<result property="verticalSize" column="VERTICAL_SIZE"/>
+		<result property="ord" column="ORD"/>
+		<result property="resourceName" column="RESOURCE_NAME"/>
+		<result property="resourceSeq" column="RESOURCE_SEQ"/>
+		<result property="resourceParentSeq" column="RESOURCE_PARENT_SEQ"/>
+		<collection property="children" column="{roomInfoId=ROOM_INFO_ID}" select="getRackList" ofType="com.skt.hms.common.model.RackModel"/>
+	</resultMap>
+	<resultMap id="rackMap" type="com.skt.hms.common.model.RackModel">
+		<id property="rackId" column="RACK_ID"/>
+		<result property="type" column="TYPE"/>
+		<result property="roomInfoId" column="ROOM_INFO_ID"/>
+		<result property="unitCnt" column="UNIT_CNT"/>
+		<result property="maxServerCount" column="MAX_SERVER_COUNT"/>
+		<result property="positionX" column="POSITION_X"/>
+		<result property="positionY" column="POSITION_Y"/>
+		<result property="deadCoordinate" column="DEAD_COORDINATE"/>
+		<result property="resourceName" column="RESOURCE_NAME"/>
+		<result property="resourceSeq" column="RESOURCE_SEQ"/>
+		<result property="resourceParentSeq" column="RESOURCE_PARENT_SEQ"/>
+		<collection property="children" column="{rackId=RACK_ID}" select="getHardwareList" ofType="com.skt.hms.common.model.HardwareModel"/>
+	</resultMap>
+
+
+
+
+	<resultMap id="datacenterTotalMap" type="com.skt.hms.common.model.DatacenterModel">
+		<id property="datacenterId" column="DATACENTER_ID"/>
+		<result property="type" column="DATACENTER_TYPE"/>
+		<result property="assetNumber" column="ASSET_NUMBER"/>
+		<result property="nickId" column="NICK_ID"/>
+		<result property="name" column="NAME"/>
+		<result property="gps_coordinate" column="GPS_COORDINATE"/>
+		<result property="address" column="ADDRESS"/>
+		<result property="rackUnit" column="RACK_UNIT"/>
+		<result property="resourceName" column="DATACENTER_RESOURCE_NAME"/>
+		<result property="resourceSeq" column="DATACENTER_RESOURCE_SEQ"/>
+		<result property="resourceParentSeq" column="DATACENTER_RESOURCE_PARENT_SEQ"/>
+		<collection property="children" ofType="com.skt.hms.common.model.FloorModel">
+			<id property="floorPlanId" column="FLOOR_PLAN_ID"/>
+			<result property="type" column="FLOOR_TYPE"/>
+			<result property="datacenterId" column="DATACENTER_ID"/>
+			<result property="name" column="NAME"/>
+			<result property="floorNo" column="FLOOR_NO"/>
+			<result property="horizonType" column="HORIZON_TYPE"/>
+			<result property="verticalType" column="VERTICAL_TYPE"/>
+			<result property="resourceName" column="FLOOR_RESOURCE_NAME"/>
+			<result property="resourceSeq" column="FLOOR_RESOURCE_SEQ"/>
+			<result property="resourceParentSeq" column="FLOOR_RESOURCE_PARENT_SEQ"/>
+			<collection property="children" ofType="com.skt.hms.common.model.RoomModel">
+				<id property="roomInfoId" column="ROOM_INFO_ID"/>
+				<result property="type" column="ROOM_TYPE"/>
+				<result property="floorPlanId" column="FLOOR_PLAN_ID"/>
+				<result property="horizonSize" column="HORIZON_SIZE"/>
+				<result property="verticalSize" column="VERTICAL_SIZE"/>
+				<result property="ord" column="ORD"/>
+				<result property="resourceName" column="ROOM_RESOURCE_NAME"/>
+				<result property="resourceSeq" column="ROOM_RESOURCE_SEQ"/>
+				<result property="resourceParentSeq" column="ROOM_RESOURCE_PARENT_SEQ"/>
+				<collection property="children" ofType="com.skt.hms.common.model.RackModel">
+					<id property="rackId" column="RACK_ID"/>
+					<result property="type" column="RACK_TYPE"/>
+					<result property="roomInfoId" column="ROOM_INFO_ID"/>
+					<result property="unitCnt" column="UNIT_CNT"/>
+					<result property="maxServerCount" column="MAX_SERVER_COUNT"/>
+					<result property="positionX" column="POSITION_X"/>
+					<result property="positionY" column="POSITION_Y"/>
+					<result property="deadCoordinate" column="DEAD_COORDINATE"/>
+					<result property="resourceName" column="RACK_RESOURCE_NAME"/>
+					<result property="resourceSeq" column="RACK_RESOURCE_SEQ"/>
+					<result property="resourceParentSeq" column="RACK_RESOURCE_PARENT_SEQ"/>
+					<collection property="children" ofType="com.skt.hms.common.model.HardwareModel">
+						<id property="hardwareCommonId" column="HARDWARE_COMMON_ID"/>
+						<result property="rackId" column="RACK_ID"/>
+						<result property="type" column="HARDWARE_TYPE"/>
+						<result property="hwType" column="HW_TYPE"/>
+						<result property="vendor" column="VENDOR"/>
+						<result property="hwName" column="HW_NAME"/>
+						<result property="resourceName" column="HARDWARE_RESOURCE_NAME"/>
+						<result property="resourceSeq" column="HARDWARE_RESOURCE_SEQ"/>
+						<result property="resourceParentSeq" column="HARDWARE_RESOURCE_PARENT_SEQ"/>
+					</collection>
+				</collection>
+			</collection>
+		</collection>
+	</resultMap>
+
+	데이터센터 리스트 조회. 데이터센터만
+	<select id="getDatacenterList" parameterType="com.skt.hms.common.model.DatacenterModel" resultType="com.skt.hms.common.model.DatacenterModel">
+		SELECT
+			DATACENTER_ID,
+			'DATACENTER' AS TYPE,
+			ASSET_NUMBER,
+			NICK_ID,
+			NAME,
+			GPS_COORDINATE,
+			ADDRESS,
+			RACK_UNIT,
+			NAME AS 'RESOURCE_NAME',
+			DATACENTER_ID AS 'RESOURCE_SEQ',
+			'0' AS 'RESOURCE_PARENT_SEQ'
+		FROM TB_DC_DATACENTER
+		<if test="datacenterId != null">
+			WHERE DATACENTER_ID = #{datacenterId}
+		</if>
+	</select>
+
+
+	특정 데이터센터의 층, 방, 랙, 하드웨어 정보를 가져온다
+	<select id="getResourceTree" parameterType="com.skt.hms.common.model.DatacenterModel" resultMap="datacenterTotalMap">
+		SELECT
+			DC.DATACENTER_ID,
+			'DATACENTER' AS DATACENTER_TYPE,
+			DC.ASSET_NUMBER,
+			DC.NICK_ID,
+			DC.NAME,
+			DC.GPS_COORDINATE,
+			DC.ADDRESS,
+			DC.RACK_UNIT,
+			DC.NAME AS 'DATACENTER_RESOURCE_NAME',
+			DC.DATACENTER_ID AS 'DATACENTER_RESOURCE_SEQ',
+			'0' AS 'DATACENTER_RESOURCE_PARENT_SEQ'
+
+			,FL.DATACENTER_ID,
+			'FLOOR' AS FLOOR_TYPE,
+			FL.FLOOR_PLAN_ID,
+			FL.NAME,
+			FL.FLOOR_NO,
+			FL.HORIZON_TYPE,
+			FL.VERTICAL_TYPE,
+			FL.NAME AS 'FLOOR_RESOURCE_NAME',
+			FL.FLOOR_PLAN_ID AS 'FLOOR_RESOURCE_SEQ',
+			FL.DATACENTER_ID AS 'FLOOR_RESOURCE_PARENT_SEQ'
+
+			,RM.ROOM_INFO_ID,
+			'ROOM' AS ROOM_TYPE,
+			RM.FLOOR_PLAN_ID,
+			RM.HORIZON_SIZE,
+			RM.VERTICAL_SIZE,
+			RM.ORD,
+			CONCAT('ROOM_',RM.ORD) AS 'ROOM_RESOURCE_NAME',
+			RM.ROOM_INFO_ID AS 'ROOM_RESOURCE_SEQ',
+			RM.FLOOR_PLAN_ID AS 'ROOM_RESOURCE_PARENT_SEQ'
+
+			,RK.RACK_ID,
+			'RACK' AS RACK_TYPE,
+			RK.ROOM_INFO_ID,
+			RK.UNIT_CNT,
+			RK.MAX_SERVER_COUNT,
+			RK.POSITION_X,
+			RK.POSITION_Y,
+			RK.DEAD_COORDINATE,
+			CONCAT(RK.RACK_ID,' RACK') AS 'RACK_RESOURCE_NAME',
+			RK.RACK_ID AS 'RACK_RESOURCE_SEQ',
+			RK.ROOM_INFO_ID AS 'RACK_RESOURCE_PARENT_SEQ'
+
+			,HA.HARDWARE_COMMON_ID, HA.RACK_ID, 'HARDWARE' AS HARDWARE_TYPE, HA.RACK_COLUMN_NAME, HA.HOLE_NO,
+			HW.ASSET_NUMBER, HW.ASSET_CODE, HW.HW_TYPE, HW.STATUS, HW.HW_NAME,  HW.MANUFACTURER, HW.VENDOR, HW.MODEL_NO, HW.SERIAL_NUMBER, HW.DATACENTER_ID, HW.PROVIDER, HW.MAINTENANCE_COMPANY_NAME, HW.OWNER,
+			HW.REMARK, HW.POWER_TYPE,HW.LOCK_YN, HW.DELETE_YN,
+			HW.HW_NAME AS 'HARDWARE_RESOURCE_NAME',
+			HA.HARDWARE_COMMON_ID AS 'HARDWARE_RESOURCE_SEQ',
+			HA.RACK_ID AS 'HARDWARE_RESOURCE_PARENT_SEQ'
+
+		FROM TB_DC_DATACENTER DC, TB_DC_PLAN_FLOOR FL, TB_DC_PLAN_ROOM RM, TB_HW_RACK_INFO RK, TB_HW_HARDWARE_ADDITORY HA, TB_HW_HARDWARE_INFO HW
+
+		WHERE DC.DATACENTER_ID = FL.DATACENTER_ID
+		AND FL.FLOOR_PLAN_ID = RM.FLOOR_PLAN_ID
+		AND RM.ROOM_INFO_ID = RK.ROOM_INFO_ID
+		AND RK.RACK_ID = HA.RACK_ID
+		AND HA.HARDWARE_COMMON_ID = HW.HARDWARE_COMMON_ID
+		AND HW.DATACENTER_ID = DC.DATACENTER_ID
+		<if test="datacenterId != null">
+			AND DC.DATACENTER_ID = #{datacenterId}
+		</if>
+		<if test="param_roomInfoId != null and param_roomInfoId !=''">
+			AND RM.ROOM_INFO_ID = #{param_roomInfoId}
+		</if>
+		<if test="param_hwName != null and param_hwName != ''">
+			AND HW.HW_NAME LIKE CONCAT('%', #{param_hwName},'%')
+		</if>
+		<if test="param_hwStatus != null and param_hwStatus != ''">
+			AND HW.STATUS LIKE CONCAT('%', #{param_hwStatus},'%')
+		</if>
+		<if test="param_personName != null and param_personName != ''">
+			AND HW.OWNER LIKE CONCAT('%', #{param_personName},'%')
+		</if>
+	</select>
+	<select id="getResourceTree" parameterType="com.skt.hms.common.model.DatacenterModel" resultMap="datacenterMap">
+		SELECT
+			DATACENTER_ID,
+			ASSET_NUMBER,
+			NICK_ID,
+			NAME,
+			GPS_COORDINATE,
+			ADDRESS,
+			RACK_UNIT,
+			NAME AS 'RESOURCE_NAME',
+			DATACENTER_ID AS 'RESOURCE_SEQ',
+			'0' AS 'RESOURCE_PARENT_SEQ'
+		FROM TB_DC_DATACENTER
+		<if test="datacenterId != null">
+			WHERE DATACENTER_ID = #{datacenterId}
+		</if>
+	</select>
+
+	층 리스트 조회
+	<select id="getFloorList" parameterType="com.skt.hms.common.model.DatacenterModel" resultMap="floorMap">
+		SELECT
+			DATACENTER_ID,
+			'FLOOR' AS TYPE,
+			FLOOR_PLAN_ID,
+			NAME,
+			FLOOR_NO,
+			HORIZON_TYPE,
+			VERTICAL_TYPE,
+			NAME AS 'RESOURCE_NAME',
+			FLOOR_PLAN_ID AS 'RESOURCE_SEQ',
+			DATACENTER_ID AS 'RESOURCE_PARENT_SEQ'
+		FROM TB_DC_PLAN_FLOOR
+		<if test="datacenterId != null">
+			WHERE DATACENTER_ID = #{datacenterId}
+		</if>
+	</select>
+
+	방 리스트 조회
+	<select id="getRoomList" parameterType="com.skt.hms.common.model.FloorModel" resultMap="roomMap">
+		SELECT
+			ROOM_INFO_ID,
+			'ROOM' AS TYPE,
+			FLOOR_PLAN_ID,
+			HORIZON_SIZE,
+			VERTICAL_SIZE,
+			ORD,
+			CONCAT(ROOM_INFO_ID,' ROOM') AS 'RESOURCE_NAME',
+			ROOM_INFO_ID AS 'RESOURCE_SEQ',
+			FLOOR_PLAN_ID AS 'RESOURCE_PARENT_SEQ'
+		FROM TB_DC_PLAN_ROOM
+		<if test="floorPlanId != null">
+			WHERE FLOOR_PLAN_ID = #{floorPlanId}
+		</if>
+	</select>
+
+	<update id="updateRoomOrd"  parameterType="com.skt.hms.common.model.RoomModel">
+		UPDATE tb_dc_plan_room SET ord = #{ord} WHERE room_info_id = #{roomInfoId}
+	</update>
+
+
+	방 타일 정보 조회
+	<select id="getRoomSectionList" parameterType="com.skt.hms.common.model.RoomSectionModel" resultType="com.skt.hms.common.model.RoomSectionModel">
+		SELECT
+			ROOM_INFO_ID,
+			POSITION_X,
+			POSITION_Y,
+			TYPE,
+			RACK_ID
+		FROM
+			TB_DC_ROOM_SECTION_INFO
+		WHERE 1=1
+		<if test="type != null and type != ''">
+			AND TYPE = #{type}
+		</if>
+		<if test="roomInfoId != null and roomInfoId != ''">
+			AND ROOM_INFO_ID = #{roomInfoId}
+		</if>
+		<if test="rackId != null and rackId != ''">
+			AND RACK_ID = #{rackId}
+		</if>
+
+	</select>
+	
+	<insert id="setRoomSection" parameterType="com.skt.hms.common.model.RoomSectionModel">
+		INSERT
+		INTO tb_dc_room_section_info
+			(room_info_id, position_x, position_y, type, rack_id, user_id, save_type)
+			VALUES (#{roomInfoId}, #{positionX}, #{positionY}, #{type}, #{rackId}, #{userId}, #{saveType});
+	</insert>
+	
+	<delete id="deleteRoomSection" parameterType="com.skt.hms.common.model.RoomSectionModel">
+		DELETE FROM tb_dc_room_section_info WHERE room_info_id = #{roomInfoId}
+	</delete>
+
+	랙 리스트 조회
+	<select id="getRackList" parameterType="com.skt.hms.common.model.RoomModel" resultMap="rackMap">
+		SELECT
+			RACK_ID,
+			'RACK' AS TYPE,
+			ROOM_INFO_ID,
+			UNIT_CNT,
+			MAX_SERVER_COUNT,
+			POSITION_X,
+			POSITION_Y,
+			DEAD_COORDINATE,
+			CONCAT(RACK_ID,' RACK') AS 'RESOURCE_NAME',
+			RACK_ID AS 'RESOURCE_SEQ',
+			ROOM_INFO_ID AS 'RESOURCE_PARENT_SEQ'
+		FROM TB_HW_RACK_INFO
+		WHERE 1=1
+		<if test="roomInfoId != null">
+			AND ROOM_INFO_ID = #{roomInfoId}
+		</if>
+	</select>
+
+
+	<select id="getRackInfoById" parameterType="com.skt.hms.common.model.RackModel" resultMap="rackMap">
+		SELECT
+			RACK_ID,
+			'RACK' AS TYPE,
+			ROOM_INFO_ID,
+			UNIT_CNT,
+			MAX_SERVER_COUNT,
+			POSITION_X,
+			POSITION_Y,
+			DEAD_COORDINATE,
+			CONCAT(RACK_ID,' RACK') AS 'RESOURCE_NAME',
+			RACK_ID AS 'RESOURCE_SEQ',
+			ROOM_INFO_ID AS 'RESOURCE_PARENT_SEQ'
+		FROM TB_HW_RACK_INFO
+		WHERE 1=1
+		<if test="rackId != null">
+			AND RACK_ID = #{rackId}
+		</if>
+	</select>
+
+	장비 정보 조회 by hardware_common_id
+	<select id="getHardwareInfoByHardwareCommonId" parameterType="com.skt.hms.common.model.HardwareModel" resultType="com.skt.hms.common.model.HardwareModel">
+		SELECT * FROM TB_HW_HARDWARE_INFO
+		WHERE 1=1
+		<if test="hardwareCommonId != null and hardwareCommonId != ''">
+			AND HARDWARE_COMMON_ID = #{hardwareCommonId}
+		</if>
+	</select>
+
+
+	담당자 정보 조회
+	<select id="getHardwareStaff" parameterType="com.skt.hms.common.model.HardwareModel" resultType="com.skt.hms.common.model.HardwareStaffModel">
+		SELECT
+			H.HW_CHARGE_ID AS hwChargeId,
+			H.HARDWARE_COMMON_ID AS hardwareCommonId,
+			H.USER_ID AS userId,
+			U.SIGN_ID AS signId,
+			U.NAME AS name,
+			U.REAL_NAME AS realName,
+			U.TEAM AS team,
+			U.DEPARTMENT AS department,
+			U.PHONE1 AS phone,
+			U.EMAIL AS email,
+			U.ROLE_ID as roleId
+		FROM TB_HW_HARDWARE_CHARGE H, TB_AD_USER U
+		WHERE H.USER_ID = U.USER_ID
+		AND H.HARDWARE_COMMON_ID = #{hardwareCommonId}
+	</select>
+
+
+	하드웨어 리스트 조회
+	<select id="getHardwareList" parameterType="com.skt.hms.common.model.RackModel" resultType="com.skt.hms.common.model.HardwareModel">
+		SELECT
+			*,
+			HW.HW_NAME AS 'RESOURCE_NAME',
+			HA.HARDWARE_COMMON_ID AS 'RESOURCE_SEQ',
+			HA.RACK_ID AS 'RESOURCE_PARENT_SEQ'
+		FROM TB_HW_HARDWARE_ADDITORY HA, TB_HW_HARDWARE_INFO HW
+		WHERE HA.HARDWARE_COMMON_ID = HW.HARDWARE_COMMON_ID
+		<if test="rackId != null">
+			AND RACK_ID = #{rackId}
+		</if>
+	</select>
+
+	하드웨어 타입 리스트 조회
+	<select id="getHardwareTypeList" resultType="com.skt.hms.common.model.HardwareTypeModel">
+		SELECT
+			TOP_CODE,
+			SUB_CODE,
+			SUB_CODE AS VALUE,
+			CODE_NAME,
+			CODE_NAME AS LABEL,
+			CODE_VALUE,
+			COMMON_CODE.DESC,
+			COMMON_CODE.ORDER,
+			DELETE_YN
+		FROM COMMON_CODE
+		WHERE TOP_CODE = '013'
+	</select>
+
+	하드웨어 정보 삭제
+	<delete id="delHardwareAdditoryByRackId" parameterType="com.skt.hms.common.model.RackModel">
+		DELETE FROM TB_HW_HARDWARE_ADDITORY WHERE RACK_ID = #{rackId}
+	</delete>
+
+	하드웨어 정보 저장
+	<insert id="setHardwareAdditory" parameterType="map">
+		INSERT INTO TB_HW_HARDWARE_ADDITORY(HARDWARE_COMMON_ID, RACK_ID, RACK_COLUMN_NAME, HOLE_NO) VALUES 
+		<foreach collection="list" item="info" separator=",">
+			( #{info.hardwareCommonId}, #{info.rackId}, #{info.rackColumnName}, #{info.holeNo} )
+		</foreach>
+	</insert>
+
+
+	상면도 정보 조회
+	<select id="getSaveInfoList" parameterType="com.skt.hms.common.model.SaveInfoModel" resultType="com.skt.hms.common.model.SaveInfoModel">
+		SELECT
+			SAVE_INFO_ID,
+			VERSION,
+			TYPE,
+			LOCATION_ID,
+			USER_SEQ
+		FROM
+			TB_SAVE_INFO
+		WHERE 1=1
+		<if test="saveInfoId != null and saveInfoId != ''">
+			AND SAVE_INFO_ID = #{saveInfoId}
+		</if>
+		<if test="locationId != null and locationId != ''">
+			AND LOCATION_ID = #{locationId}
+		</if>
+		<if test="type != null and type != ''">
+			AND TYPE = #{type}
+		</if>
+		<if test="version != null and version != ''">
+			AND VERSION = #{version}
+		</if>
+		<if test="userSeq != null and userSeq != ''">
+			AND USER_SEQ = #{userSeq}
+		</if>
+	</select>
+	
+	상면도 정보 저장
+	<insert id="setSaveInfo" parameterType="com.skt.hms.common.model.SaveInfoModel" useGeneratedKeys="true" keyProperty="saveInfoId">
+		INSERT
+		INTO
+			TB_SAVE_INFO
+			(VERSION,TYPE,LOCATION_ID,USER_SEQ)
+		VALUES
+			(#{version}, #{type}, #{locationId}, #{userSeq})
+	</insert>
+
+
+	상면도 다이어그램 상태 정보 조회
+	<resultMap id="diagramInfoMap" type="com.skt.hms.common.model.DiagramInfoModel">
+		<result property="diagramInfoId" column="DIAGRAM_INFO_ID"/>
+		<result property="title" column="TITLE"/>
+		<result property="saveInfoId" column="SAVE_INFO_ID"/>
+		<result property="createDate" column="CREATE_DATE"/>
+		<result property="updateDate" column="UPDATE_DATE"/>
+		<result property="data" column="DATA" typeHandler="com.skt.hms.common.JSONTypeHandler"/>
+	</resultMap>
+	<select id="getDiagramInfoList" parameterType="com.skt.hms.common.model.DiagramInfoModel" resultMap="diagramInfoMap">
+		SELECT
+			DIAGRAM_INFO_ID,
+			TITLE,
+			SAVE_INFO_ID,
+			date_format(CREATE_DATE, '%Y-%m-%d %H:%i:%s') AS CREATE_DATE,
+			date_format(UPDATE_DATE, '%Y-%m-%d %H:%i:%s') AS UPDATE_DATE,
+			DATA
+		FROM
+			TB_DIAGRAM_INFO
+		WHERE 1=1
+		<if test="diagramInfoId != null and diagramInfoId != ''">
+			AND DIAGRAM_INFO_ID = #{diagramInfoId}
+		</if>
+		<if test="saveInfoId != null and saveInfoId != ''">
+			AND SAVE_INFO_ID = #{saveInfoId}
+		</if>
+	</select>
+
+
+	상면도 다이어그램 상태 정보 저장
+	<insert id="setDiagramInfo" parameterType="com.skt.hms.common.model.DiagramInfoModel" useGeneratedKeys="true" keyProperty="diagramInfoId">
+		INSERT
+		INTO
+			TB_DIAGRAM_INFO
+			(TITLE, SAVE_INFO_ID, DATA, CREATE_DATE, UPDATE_DATE)
+		VALUES
+			(#{title}, #{saveInfoId}, #{data, typeHandler=com.skt.hms.common.JSONTypeHandler}, sysdate(), sysdate())
+	</insert>
+	
+	상면도 다이어그램 상태 정보 업데이트
+	<update id="updateDiagramInfo" parameterType="com.skt.hms.common.model.DiagramInfoModel">
+		UPDATE
+			TB_DIAGRAM_INFO
+		SET
+			TITLE = #{title},
+			DATA = #{data, typeHandler=com.skt.hms.common.JSONTypeHandler},
+			UPDATE_DATE = sysdate()
+		WHERE
+			DIAGRAM_INFO_ID = #{diagramInfoId}
+		  AND SAVE_INFO_ID = #{saveInfoId}
+	</update>
+
+
+	상면도 저장 정보 + 상면도 다이어그램 정보 조회
+	<resultMap id="saveDiagramMap" type="com.skt.hms.common.model.SaveInfoModel">
+		<result property="saveInfoId" column="SAVE_INFO_ID"/>
+		<result property="type" column="TYPE"/>
+		<result property="version" column="VERSION"/>
+		<result property="locationId" column="LOCATION_ID"/>
+		<result property="userSeq" column="USER_SEQ"/>
+		<collection property="diagramList" ofType="com.skt.hms.common.model.DiagramInfoModel">
+			<result property="diagramInfoId" column="DIAGRAM_INFO_ID"/>
+			<result property="title" column="TITLE"/>
+			<result property="saveInfoId" column="SAVE_INFO_ID"/>
+			<result property="createDate" column="CREATE_DATE"/>
+			<result property="updateDate" column="UPDATE_DATE"/>
+			<result property="data" column="DATA" typeHandler="com.skt.hms.common.JSONTypeHandler"/>
+		</collection>
+	</resultMap>
+	<select id="getSaveDiagramInfoList" parameterType="com.skt.hms.common.model.SaveInfoModel" resultMap="saveDiagramMap">
+		
+		SELECT
+			S.SAVE_INFO_ID, S.VERSION, S.TYPE, S.LOCATION_ID, S.USER_SEQ,
+			D.DIAGRAM_INFO_ID, D.TITLE, D.SAVE_INFO_ID, D.CREATE_DATE, D.UPDATE_DATE, D.DATA
+		FROM
+			TB_SAVE_INFO S, TB_DIAGRAM_INFO D
+		WHERE S.SAVE_INFO_ID = D.SAVE_INFO_ID
+		
+		SELECT
+			S.SAVE_INFO_ID, S.VERSION, S.TYPE, S.LOCATION_ID, S.USER_SEQ,
+			D.DIAGRAM_INFO_ID, D.TITLE, D.SAVE_INFO_ID, date_format(D.CREATE_DATE, '%Y-%m-%d %H:%i:%s') AS CREATE_DATE  , date_format(D.UPDATE_DATE, '%Y-%m-%d %H:%i:%s') AS UPDATE_DATE, D.DATA
+		FROM
+			TB_SAVE_INFO S, TB_DIAGRAM_INFO D
+		WHERE S.SAVE_INFO_ID = D.SAVE_INFO_ID
+		<if test="saveInfoId != null and saveInfoId != ''">
+			AND S.SAVE_INFO_ID = #{saveInfoId}
+		</if>
+		<if test="version != null and version != ''">
+			AND S.VERSION = #{version}
+		</if>
+		<if test="locationId != null and locationId != ''">
+			AND S.LOCATION_ID = #{locationId}
+		</if>
+		<if test="type != null and type != ''">
+			AND S.TYPE = #{type}
+		</if>
+		<if test="userSeq != null and userSeq != ''">
+			AND S.USER_SEQ = #{userSeq}
+		</if>
+
+	</select>
+
+
+
+	미지정 장비 리스트 조회 : 상면도
+	<select id="getUnspecifiedInfoListForRoom" parameterType="com.skt.hms.common.model.SaveInfoModel" resultType="com.skt.hms.common.model.UnspecifiedInfoModel">
+		SELECT
+			U.UNSPECIFIED_INFO_ID,
+			U.LOCATION_ID,
+			U.EQUIPMENT_ID,
+			U.TYPE,
+			S.TYPE AS SECTION_TYPE,
+			C.DESC,
+			I.HW_TYPE
+		FROM TB_UNSPECIFIED_INFO U, TB_DC_ROOM_SECTION_INFO S, COMMON_CODE C, TB_HW_HARDWARE_INFO I
+		WHERE 1=1
+			AND C.TOP_CODE = '080'
+			AND U.EQUIPMENT_ID = S.RACK_ID
+			AND S.TYPE = C.CODE_VALUE
+			AND U.EQUIPMENT_ID = I.HARDWARE_COMMON_ID
+		<if test="locationId != null and locationId != ''">
+			AND U.LOCATION_ID = #{locationId}
+		</if>
+		<if test="type != null and type != ''">
+			AND U.TYPE = #{type}
+		</if>
+	</select>
+
+
+
+	미지정 장비 리스트 조회 : 실장도
+	<select id="getUnspecifiedInfoListForRack" parameterType="com.skt.hms.common.model.SaveInfoModel" resultType="com.skt.hms.common.model.RackDrawModel">
+		SELECT
+			RIF.ROOM_INFO_ID, RIF.UNIT_CNT,
+			HAD.RACK_ID, HAD.RACK_COLUMN_NAME, HAD.HOLE_NO, HAD.HARDWARE_COMMON_ID,
+			HOIF.UNIT_SIZE, '1' AS VERTICAL_SIZE, '1' AS HORIZONTAL_SIZE,
+			HWIF.HW_TYPE, HWIF.HW_NAME, (SELECT CODE_NAME FROM COMMON_CODE WHERE TOP_CODE='013' AND SUB_CODE=HWIF.HW_TYPE) AS HW_TYPE_NAME
+		FROM TB_HW_RACK_INFO RIF, TB_HW_HARDWARE_ADDITORY HAD, TB_HW_HOST_INFO HOIF, TB_HW_HARDWARE_INFO HWIF
+		WHERE RIF.RACK_ID = HAD.RACK_ID
+			AND HAD.HARDWARE_COMMON_ID = HOIF.HOST_INFO_ID
+			AND HAD.HARDWARE_COMMON_ID = HWIF.HARDWARE_COMMON_ID
+			<if test="locationId != null and locationId != ''">
+				AND RIF.RACK_ID = #{locationId}
+			</if>
+			AND HAD.HARDWARE_COMMON_ID IN
+		(SELECT EQUIPMENT_ID FROM TB_UNSPECIFIED_INFO U WHERE U.LOCATION_ID = #{locationId})
+	</select>
+
+
+	RACK 그리기 모델 조회
+	<select id="getRackDrawModelList" parameterType="com.skt.hms.common.model.RackModel" resultType="com.skt.hms.common.model.RackDrawModel">
+		SELECT
+			RIF.ROOM_INFO_ID, RIF.UNIT_CNT,
+			HAD.RACK_ID, HAD.RACK_COLUMN_NAME, HAD.HOLE_NO, HAD.HARDWARE_COMMON_ID,
+			HOIF.UNIT_SIZE, '1' AS VERTICAL_SIZE, '1' AS HORIZONTAL_SIZE,
+			HWIF.HW_TYPE, HWIF.HW_NAME, (SELECT CODE_NAME FROM COMMON_CODE WHERE TOP_CODE='013' AND SUB_CODE=HWIF.HW_TYPE) AS HW_TYPE_NAME
+		FROM TB_HW_RACK_INFO RIF, TB_HW_HARDWARE_ADDITORY HAD, TB_HW_HOST_INFO HOIF, TB_HW_HARDWARE_INFO HWIF
+		WHERE RIF.RACK_ID = HAD.RACK_ID
+		AND HAD.HARDWARE_COMMON_ID = HOIF.HOST_INFO_ID
+		AND HAD.HARDWARE_COMMON_ID = HWIF.HARDWARE_COMMON_ID
+		<if test="rackId != null and rackId != ''">
+			AND RIF.RACK_ID = #{rackId}
+		</if>
+	</select>
+	
+	데이터센터-Floor-room 계층 구조 데이터
+	<select id="getDatacenterTree" resultType="DataCenterTreeModel">
+		SELECT
+			DATACENTER_ID AS "RESOURCE_SEQ",
+			NAME AS "RESOURCE_NAME",
+			"0" AS "PARENT",
+			0 AS "LEVEL"
+		FROM TB_DC_DATACENTER UNION ALL
+		SELECT
+			FLOOR_PLAN_ID AS "RESOURCE_SEQ",
+			NAME AS "RESOURCE_NAME",
+			DATACENTER_ID AS "PARENT",
+			1 AS "LEVEL"
+		FROM TB_DC_PLAN_FLOOR UNION ALL
+		SELECT
+			ROOM_INFO_ID AS "RESOURCE_SEQ", 
+			CONCAT("ROOM-", ORD) AS "RESOURCE_NAME",
+			FLOOR_PLAN_ID AS "PARENT",
+			2 AS "LEVEL"
+		FROM TB_DC_PLAN_ROOM
+	</select>
+ -->
+</mapper>

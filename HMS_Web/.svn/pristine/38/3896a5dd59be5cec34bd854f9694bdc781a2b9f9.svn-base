@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Button & Icon Guide | HMS</title>
+<link rel="stylesheet" type="text/css" href="css/guide.css"><!-- //가이드용임 -->
+<link href="../css/jquery/jquery-mdi.css" rel="stylesheet" type="text/css">
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/hms/common.js"></script>
+</head>
+<body>
+<!-- guide-wrap2 -->
+<div id="guide-wrap2">
+	<h1>Button & Icon Guide</h1>
+	<div class="guide-container">
+		<h2>Basic Medium Button  btn-cr, btn-gy : 아이콘없음  / 클래스 추가없이 disabled="disabled" disabled 버튼</h2>
+		<p class="guide-info">btn-cr (대표색상)&nbsp;&nbsp; */24px</p>		
+		<button type="button" class="btn-cr">Sign Up</button>		
+		<button type="button" class="btn-cr">Synchronization</button>
+		<button type="button" class="btn-cr">Apply</button>
+		<button type="button" class="btn-cr">Diff</button>&nbsp;&nbsp;&nbsp;&nbsp;disabled <button type="button" class="btn-cr" disabled="disabled">disabled</button>
+
+		<p class="guide-info">btn-gy (회색)&nbsp;&nbsp; */24px</p>
+		<button type="button" class="btn-gy">Cancel</button>
+		&nbsp;&nbsp;&nbsp;&nbsp;disabled <button type="button" class="btn-gy" disabled="disabled">disabled</button>
+
+		<p class="guide-info">btn-cr2 (색상추가)&nbsp;&nbsp; */24px</p>
+		<button type="button" class="btn-cr2">Start</button>&nbsp;&nbsp;&nbsp;&nbsp;disabled <button type="button" class="btn-cr2" disabled="disabled">disabled</button>
+
+		<p class="guide-info">btn-bk (색상추가 블랙)&nbsp;&nbsp; */24px</p>
+		<button type="button" class="btn-bk">Change</button>&nbsp;&nbsp;&nbsp;&nbsp;disabled <button type="button" class="btn-bk" disabled="disabled">disabled</button>
+
+		<p class="guide-info">btn-(color) + btn-block&nbsp;&nbsp; */24px</p>
+		<button type="button" class="btn-gy btn-block">btn-gy btn-block</button>
+		<button type="button" class="btn-bk btn-block">btn-bk btn-block</button>
+		<button type="button" class="btn-cr btn-block">btn-cr btn-block</button>
+		<button type="button" class="btn-cr2 btn-block">btn-cr2 btn-block</button>
+
+		<h2>Basic Medium Button : 아이콘 종류별로 추가해서 사용</h2>
+		<p class="guide-info">btn-cr (대표색상) + i-(name)&nbsp;&nbsp; */24px</p>
+		<button type="button" class="btn-cr i-check">Apply</button>
+		<button type="button" class="btn-cr i-search">Search</button>
+		<button type="button" class="btn-cr i-search">한글버튼 폰트 테스트</button>
+		<button type="button" class="btn-cr i-search">Search한글과 Test</button>
+		<button type="button" class="btn-cr i-save">Save</button>
+		<button type="button" class="btn-cr i-add">Add</button> 
+		<button type="button" class="btn-cr i-minus">Delete</button>
+		<button type="button" class="btn-cr i-save">Update</button>
+		<button type="button" class="btn-cr i-undo">Password initialization</button>
+		<button type="button" class="btn-cr i-folder-open">Load</button>
+		<button type="button" class="btn-cr i-plus">New</button>
+		<button type="button" class="btn-cr i-pencil">Edit</button>
+		<button type="button" class="btn-cr i-trash">Delete</button>
+		<br><br>disabled <button type="button" class="btn-cr i-cancel" disabled="disabled">disabled</button>
+	
+		<p class="guide-info">btn-gy (회색) + i-(name)&nbsp;&nbsp; */24px</p>
+		<button type="button" class="btn-gy i-cancel">Cancel</button>
+		<button type="button" class="btn-gy i-close">Close All</button>
+		<button type="button" class="btn-gy i-search">Search한글과 같이</button>
+		<button type="button" class="btn-gy i-question">Help</button>
+		<button type="button" class="btn-gy i-upload">Export</button>
+		<button type="button" class="btn-gy i-print">Print</button>
+		<button type="button" class="btn-gy i-repeat">Synchronized</button>
+		<button type="button" class="btn-gy i-repeat">Sync All</button>
+		<button type="button" class="btn-gy i-download">CSV</button>
+		<button type="button" class="btn-gy i-download">Excel</button>
+		<br><br>
+		<button type="button" class="btn-gy i-fitall">Fit all</button>
+		<button type="button" class="btn-gy i-plus-o">Open All</button>
+		<button type="button" class="btn-gy i-minus-c">Close All</button>
+		<button type="button" class="btn-gy i-check-s">Select All</button>
+		<button type="button" class="btn-gy i-check-u">Unselect All</button> (background icon)
+		
+		<br><br>disabled  
+		<button type="button" class="btn-gy i-fitall" disabled="disabled">Fit all</button> 
+		<button type="button" class="btn-gy i-upload" disabled="disabled">Export</button>
+
+		<p class="guide-info">btn-(color) + i-(name) + btn-block&nbsp;&nbsp; */24px</p>
+		<button type="button" class="btn-gy i-plus-o btn-block">btn-gy i-plus-o btn-block</button>
+		<button type="button" class="btn-gy i-minus-c btn-block">btn-gy i-minus-c btn-block</button>
+
+		<h2>Small Button : .btn-sm를 추가  (2017-06-18 ADD) </h2>			
+		<p class="guide-info">btn-(color) + btn-sm + i-(name) + btn-block&nbsp;&nbsp; */20px 주로 Fold (fold-data-head 우측)</p>
+		<button type="button" class="btn-cr btn-sm">수정</button>
+		<button type="button" class="btn-cr btn-sm">장비등록</button>
+		<button type="button" class="btn-gy btn-sm">장비삭제</button>
+		<button type="button" class="btn-cr2 btn-sm">Start</button>
+		<button type="button" class="btn-gy btn-sm">Stop</button>
+
+		<h2>Basic Medium Button 에 아이콘만 있는 버튼 : .ico를 추가</h2>
+		<p class="guide-info">btn-(color) + i-(name) + ico (단독 아이콘 버튼)&nbsp;&nbsp; 30/24px </p>
+		<button type="button" class="btn-cr i-plus ico" title="Plus"></button>
+		<button type="button" class="btn-gy i-minus ico" title="Minus"></button>
+		<button type="button" class="btn-gy i-time ico" title="Time"></button>
+		<button type="button" class="btn-gy i-export ico" title="Export"></button>
+		<button type="button" class="btn-gy i-filter ico" title="Filter"></button>
+		&nbsp;&nbsp; disabled <button type="button" class="btn-gy i-time ico" title="Time" disabled="disabled"></button>		
+
+		<h2>Large Button 에 아이콘만 있는 버튼 : .btn-lg .ico를 추가  (2017-02-17 ADD)</h2>		
+		<!-- 테스트용 임시로 만들어봄 <p class="guide-info">btn-(color) + btn-lg + i-(name)&nbsp;&nbsp; */24px </p>
+		<button type="button" class="btn-cr btn-lg i-search" title="Search">Search</button>
+		<button type="button" class="btn-gy btn-lg i-search" title="Search">Search</button>		 -->
+		<p class="guide-info">btn-(color) + btn-lg + i-(name) + ico (단독 아이콘 버튼)&nbsp;&nbsp; 30/34px </p>
+		<button type="button" class="btn-cr btn-lg i-arrow-right2 ico" title="Send to right">Send to right</button>
+		<button type="button" class="btn-gy btn-lg i-arrow-left2 ico" title="Send to left">Send to left</button>
+		&nbsp;&nbsp;disabled <button type="button" class="btn-cr btn-lg i-arrow-right2 ico" title="Send to right" disabled="disabled">Send to right</button>
+		<button type="button" class="btn-gy btn-lg i-arrow-left2 ico" title="Send to left" disabled="disabled">Send to left</button> (background icon)
+
+		<h2>xLarge Button 에 아이콘만 있는 버튼 : .btn-xl .ico를 추가  (2017-04-27 ADD)</h2>
+		<p class="guide-info">btn-(color) + btn-xl + i-(name) + ico (단독 아이콘 버튼)&nbsp;&nbsp; 40/64px </p>
+		<button type="button" class="btn-cr btn-xl i-arrow-right2 ico" title="Send to right">Send to right</button>
+		<button type="button" class="btn-gy btn-xl i-arrow-left2 ico" title="Send to left">Send to left</button>
+		&nbsp;&nbsp;disabled <button type="button" class="btn-cr btn-xl i-arrow-right2 ico" title="Send to right" disabled="disabled">Send to right</button>
+		<button type="button" class="btn-gy btn-xl i-arrow-left2 ico" title="Send to left" disabled="disabled">Send to left</button> (background icon)
+
+		<h2>배경없이 아이콘만 단독 사용버튼 사이즈별 (Background Transparent)</h2>		
+		<p class="guide-info">ico-md + i-(name)&nbsp;&nbsp; 20/20px (기본) <button type="button" class="ico-md i-pencil" title="Modify" style="background:#ddd"></button>&nbsp;&nbsp;font-size:14px  : **** btn-cr,btn-gy 와 동일한 높이로 수정 2017-06-18 / TROI와 공통이라 수정 보류 ****</p>	
+		"button" Tag <button type="button" class="ico-md i-pencil" title="Modify" style="background:#ddd"></button>&nbsp;&nbsp;&nbsp;&nbsp; disabled="disabled" <button type="button" class="ico-md i-pencil" title="Modify" disabled="disabled" style="background:#ddd"></button><br><br>
+		<ul class="basic-list fl-col5">
+			<li><button type="button" class="ico-md i-bell" title="Alarm"></button> ico-md i-bell </li>
+			<li><button type="button" class="ico-md i-star" title="Keywords List"></button> ico-md i-star </li>
+			<li><button type="button" class="ico-md i-pencil" title="Modify"></button> ico-md i-pencil </li>
+			<li><button type="button" class="ico-md i-save" title="Save"></button> ico-md i-save </li>
+			<li><button type="button" class="ico-md i-export" title="Export"></button> ico-md i-export </li>
+			<li><button type="button" class="ico-md i-upload" title="Upload"></button> ico-md i-upload </li>
+			<li><button type="button" class="ico-md i-download" title="Download"></button> ico-md i-download </li>
+			<li><button type="button" class="ico-md i-compress" title="Compress"></button> ico-md i-compress </li>
+			<li><button type="button" class="ico-md i-expand" title="Expand"></button> ico-md i-expand </li>
+			<li><button type="button" class="ico-md i-close" title="Close"></button> ico-md i-close </li>
+			<li><button type="button" class="ico-md i-recycle" title="Recycle"></button> ico-md i-recycle </li>
+			<li><button type="button" class="ico-md i-trash" title="Trash"></button> ico-md i-trash </li>
+			<li><button type="button" class="ico-md i-large" title="Large"></button> ico-md i-large </li>
+			<li><button type="button" class="ico-md i-setting" title="Setting"></button> ico-md i-setting </li>
+			<li><button type="button" class="ico-md i-folder-close" title="folder close"></button> ico-md i-folder-close </li>
+			<li><button type="button" class="ico-md i-folder-open" title="Load"></button> ico-md i-folder-open </li>
+			<li><button type="button" class="ico-md i-refresh" title="Update"></button> ico-md i-refresh </li>
+			<li><button type="button" class="ico-md i-eye" title="Confirm"></button> ico-md i-eye</li>
+			<li><button type="button" class="ico-md i-eye-slash" title="Acknowledge"></button> ico-md i-eye-slash</li>
+			<li><button type="button" class="ico-md i-lock" title="Lock"></button> ico-md i-lock </li>
+			<li><button type="button" class="ico-md i-unlock" title="Unlock"></button> ico-md i-unlock </li>
+			<li><button type="button" class="ico-md i-picture" title="Picture"></button> ico-md i-picture </li>
+			<li><button type="button" class="ico-md i-sound" title="Sound"></button> ico-md i-sound </li>
+			<li><button type="button" class="ico-md i-copy" title="Copy"></button> ico-md i-copy </li>
+			<li><button type="button" class="ico-md i-arrows" title="Arrows"></button> ico-md i-arrows </li>
+			<li><button type="button" class="ico-md i-color" title="Color"></button> ico-md i-color </li>
+			<li><button type="button" class="ico-md i-tags" title="Tags"></button> ico-md i-tags </li>
+			<li><button type="button" class="ico-md i-user" title="User"></button> ico-md i-user </li>
+			<li><button type="button" class="ico-md i-sort" title="Sort"></button> ico-md i-sort </li>
+			<li><button type="button" class="ico-md i-sort-asc" title="Asc"></button> ico-md i-sort-asc </li>
+			<li><button type="button" class="ico-md i-sort-desc" title="Desc"></button> ico-md i-sort-desc </li>
+			<li><button type="button" class="ico-md i-info" title="Info"></button> ico-md i-info </li>
+			<li><button type="button" class="ico-md i-excel" title="Excel"></button> ico-md i-excel </li>
+			<li><button type="button" class="ico-md i-file" title="File"></button> ico-md i-file </li>
+			<li><button type="button" class="ico-md i-file-alt" title="File"></button> ico-md i-file-alt</li>
+			<li><button type="button" class="ico-md i-off" title="Off"></button> ico-md i-off </li>
+			<li><button type="button" class="ico-md i-warning" title="Warning"></button> ico-md i-warning </li>
+			<li><button type="button" class="ico-md i-backward" title="Backward"></button> ico-md i-backward </li>
+			<li><button type="button" class="ico-md i-play" title="Play"></button> ico-md i-play </li>
+			<li><button type="button" class="ico-md i-forward" title="Forward"></button> ico-md i-forward </li>
+			<li><button type="button" class="ico-md i-cut" title="Cut"></button> ico-md i-cut </li>
+			<li><button type="button" class="ico-md i-comments" title="Comments"></button> ico-md i-comments </li>
+			<li><button type="button" class="ico-md i-crop" title="Crop"></button> ico-md i-crop </li>
+			<li><button type="button" class="ico-md i-exchange" title="Exchange"></button> ico-md i-exchange </li>
+			<li><button type="button" class="ico-md i-move" title="Move"></button> ico-md i-move </li>
+			<li><button type="button" class="ico-md i-search" title="Search"></button> ico-md i-search </li>
+			<li><button type="button" class="ico-md i-zoom-in" title="zoom in"></button> ico-md i-zoom-in </li>
+			<li><button type="button" class="ico-md i-zoom-out" title="zoom out"></button> ico-md i-zoom-out </li>
+			<li><button type="button" class="ico-md i-time" title="Time"></button> ico-md i-time </li>
+			<li><button type="button" class="ico-md i-question" title="Question"></button> ico-md i-question </li>
+			<li><button type="button" class="ico-md i-print" title="Print"></button> ico-md i-print </li>
+			<li><button type="button" class="ico-md i-font" title="Font"></button> ico-md i-font </li>
+			<li><button type="button" class="ico-md i-bar-chart" title="Bar chart"></button> ico-md i-bar-chart </li>
+			<li><button type="button" class="ico-md i-line-chart" title="Line chart"></button> ico-md i-line-chart </li>
+			<li><button type="button" class="ico-md i-pie-chart" title="Pie chart"></button> ico-md i-pie-chart </li>
+			<li><button type="button" class="ico-md i-area-chart" title="Area chart"></button> ico-md i-area-chart </li>
+			<li><button type="button" class="ico-md i-dashboard" title="Dashboard"></button> ico-md i-dashboard </li>
+			<li><button type="button" class="ico-md i-sort" title="Sort"></button> ico-md i-sort </li>
+			<li><button type="button" class="ico-md i-wrench" title="Wrench"></button> ico-md i-wrench </li>
+			<li><button type="button" class="ico-md i-font" title="Font"></button> ico-md i-font</li>
+			<li><button type="button" class="ico-md i-bold" title="Bold"></button> ico-md i-bold</li>
+			<li><button type="button" class="ico-md i-italic" title="Italic"></button> ico-md i-italic</li>
+			<li><button type="button" class="ico-md i-link" title="Link"></button> ico-md i-link</li>
+			<li><button type="button" class="ico-md i-unlink" title="Unlink"></button> ico-md i-unlink</li>
+			<li><button type="button" class="ico-md i-external-link" title="Link"></button> ico-md i-external-link</li>
+			<li><button type="button" class="ico-md i-undo" title="Undo"></button> ico-md i-undo</li>
+			<li><button type="button" class="ico-md i-repeat" title="Repeat"></button> ico-md i-repeat</li>
+			<li><button type="button" class="ico-md i-chevron-up" title="Up"></button> ico-md i-chevron-up</li>
+			<li><button type="button" class="ico-md i-chevron-down" title="Down"></button> ico-md i-chevron-down</li>
+			<li><button type="button" class="ico-md i-filter" title="Filter"></button> ico-md i-filter</li>	
+			<li><button type="button" class="ico-md i-ellipsis-h" title="export alarm"></button> ico-md i-ellipsis-h</li>	
+			<li><button type="button" class="ico-md i-list-alt" title="Node Status"></button> ico-md i-list-alt</li>		
+			<li><button type="button" class="ico-md i-detail" title="Resource"></button> ico-md i-detail  (background icon)</li>
+			<li><button type="button" class="ico-md i-merge" title="Resource Merge"></button> ico-md i-merge  (background icon)</li>
+			<li><button type="button" class="ico-md i-demerge" title="Resource Merge"></button> ico-md i-demerge  (background icon)</li>
+			<li><button type="button" class="ico-md i-fitall" title="Fit all"></button> ico-md i-fitall  (background icon)</li>
+			<li><button type="button" class="ico-md i-detail" title="Resource" disabled="disabled"></button> ico-md i-detail  (background icon)</li>
+			<li><button type="button" class="ico-md i-merge" title="Resource Merge" disabled="disabled"></button> ico-md i-merge  (background icon)</li>
+			<li><button type="button" class="ico-md i-demerge" title="Resource Merge" disabled="disabled"></button> ico-md i-demerge  (background icon)</li>
+			<li><button type="button" class="ico-md ico-md i-arrow-right3" title=""></button> ico-md i-arrow-left3  (background icon)</li>
+			<li><button type="button" class="ico-md ico-md i-arrow-left3" title=""></button> ico-md i-arrow-left3  (background icon)</li>
+			<li><button type="button" class="ico-md i-lamp" title="긴급 알람"></button> ico-md i-lamp  (background icon)</li>
+			
+		</ul>
+		
+		<p class="guide-info">ico-lg + i-(name)&nbsp;&nbsp; 28/28px <button type="button" class="ico-lg i-pencil" title="Modify" style="background:#ddd"></button>&nbsp;&nbsp;font-size:18px</p>
+		<ul class="basic-list fl-col5">
+			<li><button type="button" class="ico-lg i-export" title="Export"></button> ico-lg i-export </li>
+			<li><button type="button" class="ico-lg i-download" title="Download"></button> ico-lg i-download </li>
+			<li><button type="button" class="ico-lg i-compress" title="Compress"></button> ico-lg i-compress </li>
+			<li><button type="button" class="ico-lg i-expand" title="Expand"></button> ico-lg i-expand </li>
+			<li><button type="button" class="ico-lg i-close" title="Close"></button> ico-lg i-close </li>
+			<li><button type="button" class="ico-lg i-recycle" title="Recycle"></button> ico-lg i-recycle </li>
+			<li><button type="button" class="ico-lg i-large" title="Large"></button> ico-lg i-large </li>
+			<li><button type="button" class="ico-lg i-setting" title="Setting"></button> ico-lg i-setting </li>
+			<li><button type="button" class="ico-lg i-refresh" title="Update"></button> ico-lg i-refresh </li>
+			<li><button type="button" class="ico-lg i-folder-open" title="Load"></button> ico-lg i-folder-open </li>
+			<li><button type="button" class="ico-lg i-upload" title="Upload"></button> ico-lg i-upload </li>
+			<li><button type="button" class="ico-lg i-trash" title="Trash"></button> ico-lg i-trash </li>
+		</ul>		
+		<p class="guide-info">ico-sm + i-(name)&nbsp;&nbsp; 14/14px <button type="button" class="ico-sm i-pencil" title="Modify" style="background:#ddd"></button>&nbsp;&nbsp;font-size:12px</p>
+		<ul class="basic-list fl-col5">
+			<li><button type="button" class="ico-sm i-pencil" title="Modify"></button> ico-sm i-pencil </li>
+			<li><button type="button" class="ico-sm i-export" title="Export"></button> ico-sm i-export </li>
+			<li><button type="button" class="ico-sm i-download" title="Download"></button> ico-sm i-download </li>
+			<li><button type="button" class="ico-sm i-compress" title="Compress"></button> ico-sm i-compress </li>
+			<li><button type="button" class="ico-sm i-expand" title="Expand"></button> ico-sm i-expand </li>
+			<li><button type="button" class="ico-sm i-close" title="Close"></button> ico-sm i-close </li>
+			<li><button type="button" class="ico-sm i-recycle" title="Recycle"></button> ico-sm i-recycle </li>
+			<li><button type="button" class="ico-sm i-large" title="Large"></button> ico-sm i-large </li>
+			<li><button type="button" class="ico-sm i-refresh" title="Update"></button> ico-sm i-refresh </li>
+			<li><button type="button" class="ico-sm i-trash" title="Trash"></button> ico-sm i-trash </li>
+		</ul>
+
+		<h2>버튼타입이 아닌 경우 &lt;i&gt; tag 활용 ico-(size) + i-(name) </h2>
+		<i class="ico-sm i-marker"></i><i class="ico-md i-info"></i></i><i class="ico-lg i-folder-open"></i>
+		<h2>Group Icon Button</h2>
+		<p class="guide-info">btn-group > btn-(color) + i-(name) + ico (그룹 아이콘 버튼)&nbsp;&nbsp; 30/24px</p>
+		<div class="btn-group">
+			<button type="button" class="btn-gy i-zoom-in ico" title="Zoom in">Zoom in</button>
+			<button type="button" class="btn-gy i-zoom-out ico" title="Zoom out">Zoom out</button>
+		</div>		
+		<div class="btn-group">
+			<button type="button" class="btn-gy i-arrow-left ico" title="Move left">Move left</button>
+			<button type="button" class="btn-gy i-arrow-right ico" title="Move right">Move right</button>
+		</div>
+		&nbsp;&nbsp; disabled 
+		<div class="btn-group">
+			<button type="button" class="btn-gy i-zoom-in ico" title="Zoom in" disabled="disabled">Zoom in</button>
+			<button type="button" class="btn-gy i-zoom-out ico" title="Zoom out" disabled="disabled">Zoom out</button>
+		</div>		
+		<div class="btn-group">
+			<button type="button" class="btn-gy i-arrow-left ico" title="Move left" disabled="disabled">Move left</button>
+			<button type="button" class="btn-gy i-arrow-right ico" title="Move right" disabled="disabled">Move right</button>
+		</div>
+
+		<p class="guide-info">btn-tool-group > btn-tool-(align,font) default / on&nbsp;&nbsp; 26/24px (border-radius IE11 Bug : background icon (배경과 분리)</p>
+		<div class="btn-tool-group">
+			<button type="button" class="btn-tool-bold" title="Bold"></button>
+			<button type="button" class="btn-tool-italic" title="Italic"></button>
+		</div>
+
+		<div class="btn-tool-group">
+			<button type="button" class="btn-tool-bold" title="Bold"></button>
+			<button type="button" class="btn-tool-italic on" title="Italic"></button>
+		</div>
+
+		<div class="btn-tool-group">
+			<button type="button" class="btn-tool-left" title="Left"></button>
+			<button type="button" class="btn-tool-center on" title="Center"></button>
+			<button type="button" class="btn-tool-right" title="Right"></button>
+		</div>
+
+		<div class="btn-tool-group">
+			<button type="button" class="btn-tool-left" title="Left"></button>
+			<button type="button" class="btn-tool-center" title="Center"></button>
+			<button type="button" class="btn-tool-right on" title="Right"></button>
+		</div>
+		<div class="btn-tool-group">
+			<button type="button" class="btn-tool-view on" title="상면도로 보기"></button>
+			<button type="button" class="btn-tool-list" title="리스트로 보기"></button>
+		</div>
+&nbsp;&nbsp; disabled
+		<div class="btn-tool-group">
+			<button type="button" class="btn-tool-bold" title="Bold" disabled="disabled"></button>
+			<button type="button" class="btn-tool-italic" title="Italic" disabled="disabled"></button>
+		</div>
+
+		<div class="btn-tool-group">
+			<button type="button" class="btn-tool-left" title="Left" disabled="disabled"></button>
+			<button type="button" class="btn-tool-center" title="Center" disabled="disabled"></button>
+			<button type="button" class="btn-tool-right" title="Right" disabled="disabled"></button>
+		</div>
+
+		<p class="guide-info">btn-timeset-group > btn-timeset + (align) + i(Name)&nbsp;&nbsp; 26/24px</p>	
+		backward + play(pause) + forward
+		<div class="btn-timeset-group">		
+			<button type="button" class="btn-timeset left i-backward" title="backward"></button>
+			<button type="button" class="btn-timeset center i-play" title="play"></button>
+			<button type="button" class="btn-timeset right i-forward" title="forward"></button>
+		</div> 		
+ 
+		&nbsp;&nbsp; disabled
+		<div class="btn-timeset-group">		
+			<button type="button" class="btn-timeset left i-backward" title="backward" disabled="disabled"></button>
+			<button type="button" class="btn-timeset center i-pause" title="pause" disabled="disabled"></button>
+			<button type="button" class="btn-timeset right i-forward" title="forward" disabled="disabled"></button>
+		</div> 
+				
+		<h2>Round Icon Button</h2>
+		<p class="guide-info">btn-round-(name)&nbsp;&nbsp; 24/24px (border-radius IE11 Bug : background icon (배경과 분리)</p>
+		btn-round-list <button type="button" class="btn-round-list" title="List"></button>&nbsp;&nbsp;
+		btn-round-plus <button type="button" class="btn-round-plus" title="Plus"></button>&nbsp;&nbsp;
+		btn-round-minus <button type="button" class="btn-round-minus" title="Minus"></button>&nbsp;&nbsp;
+		btn-round-setting <button type="button" class="btn-round-setting" title="Use"></button>
+		btn-round-plus-arrow <button type="button" class="btn-round-plus-arrow" title="보기"></button>&nbsp;&nbsp;
+		<br>
+		btn-round-list disabled <button type="button" class="btn-round-list" title="List" disabled="disabled"></button>&nbsp;&nbsp;
+		btn-round-plus disabled <button type="button" class="btn-round-plus" title="Plus" disabled="disabled"></button>&nbsp;&nbsp;
+		btn-round-minus disabled <button type="button" class="btn-round-minus" title="minus" disabled="disabled"></button>&nbsp;&nbsp;
+		btn-round-setting disabled <button type="button" class="btn-round-setting" title="Use" disabled="disabled"></button>
+		btn-round-plus-arrow disabled <button type="button" class="btn-round-plus-arrow" title="보기" disabled="disabled"></button>
+		
+		<p class="guide-info">btn-round + i-(name)&nbsp;&nbsp; 24/24px 2017-04-06 ADD : Round 유형버튼도 FontAwesome 아이콘 적용가능하게 공통 변경함 </p>
+		btn-round i-ellipsis-h <button type="button" class="btn-round i-ellipsis-h" title="Export Alarm"></button>&nbsp;&nbsp;	
+		btn-round i-search <button type="button" class="btn-round i-search" title="보기"></button>&nbsp;&nbsp;
+		btn-round i-marker <button type="button" class="btn-round i-marker" title="위치설정"></button>&nbsp;&nbsp;
+		btn-round i-copy <button type="button" class="btn-round i-copy" title="Copy"></button>&nbsp;&nbsp;
+		btn-round i-lamp <button type="button" class="btn-round i-lamp" title="긴급 알람"></button>&nbsp;&nbsp;
+		btn-round i-trash <button type="button" class="btn-round i-trash" title="삭제"></button>&nbsp;&nbsp;
+		disabled <button type="button" class="btn-round i-ellipsis-h" title="Export Alarm" disabled="disabled"></button>
+
+		<p class="guide-info">Panel Toogle Select btn-round-select (default, on)&nbsp;&nbsp; 24/24px (border-radius IE11 Bug : background icon (배경과 분리)</p>
+		btn-round-select <button type="button" class="btn-round-select" title="Apply"></button>&nbsp;&nbsp;
+		btn-round-select on <button type="button" class="btn-round-select on" title="Apply"></button>&nbsp;&nbsp;
+		btn-round-select disabled <button type="button" class="btn-round-select" title="Apply" disabled="disabled"></button>
+
+
+		<h2>전체 Search (단독이라 아이콘자체가 추가되어 있음)</h2>
+		<p class="guide-info">btn-search-plus&nbsp;&nbsp; 48/24px / btn-search&nbsp;&nbsp; 62/24px / btn-search-form&nbsp;&nbsp; 50/24px</p>
+		btn-search-plus <button type="submit" class="btn-search-plus" title="More Search"></button>
+		btn-search <button type="submit" class="btn-search" title="Search"></button>
+		btn-search-form <button type="submit" class="btn-search-form" title="Search"></button><br>
+		<p class="guide-info">search-group > btn-search-plus&nbsp;&nbsp; 48/28px / btn-search&nbsp;&nbsp; 62/28px</p>
+<div class="search-group"><button type="submit" class="btn-search-plus" title="More Search"></button> <button type="submit" class="btn-search" title="Search"></button></div>
+		<p class="guide-info">search-group2 > btn-search-plus&nbsp;&nbsp; 48/24px / btn-search&nbsp;&nbsp; 62/24px</p>
+<div class="search-group2"><button type="submit" class="btn-search-plus" title="More Search"></button> <button type="submit" class="btn-search" title="Search"></button></div>
+
+
+		<h2>Button 정렬</h2>		
+		<p class="guide-info">btns-area(align) > btn(종류별) color점선은 영역표시 확인용임 실제 화면은 없음</p>
+		<div class="btns-area" style="border:1px dotted #ee2d31"><!-- style은 영역표시 확인용 -->
+			<button type="button" class="btn-cr">btns-area</button>
+			<button type="button" class="btn-gy">center</button>
+		</div>
+		<br>
+		<div class="btns-area-right" style="border:1px dotted #ee2d31"><!-- style은 영역표시 확인용 -->
+			btns-area-right 기본 padding-right:0&nbsp;&nbsp;&nbsp;&nbsp;
+			<button type="button" class="btn-cr">btns-area-right</button>
+			<button type="button" class="btn-gy">right</button>
+		</div>
+		<br>
+		<div class="btns-area-left" style="border:1px dotted #ee2d31"><!-- style은 영역표시 확인용 -->
+			<button type="button" class="btn-cr">btns-area-left</button>
+			<button type="button" class="btn-gy">left</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;btns-area-left 기본 padding-left:0 
+		</div>
+		<p class="guide-info">layer popup > btns-area > close button  + basic button(close가 중앙에 올때 일반 버튼위치는 오른쪽)</p>
+		<div class="btns-area" style="border:1px dotted #ee2d31"><!-- style은 영역표시 확인용 -->
+			<div class="fr"><button type="button" class="btn-cr fr">btn-cr</button></div>
+			<button type="button" class="btn-gy">close</button>
+		</div><br>
+
+		<div class="setting-box" style="border:1px dotted #ee2d31"><!-- style은 영역표시 확인용 -->
+			<div class="btn-timeset-group">		
+				<button type="button" class="btn-timeset left i-backward" title="backward"></button>
+				<button type="button" class="btn-timeset center i-play" title="play"></button>
+				<button type="button" class="btn-timeset right i-forward" title="forward"></button>
+			</div> 
+			<div class="btns-area-bar">
+				<button type="button" class="btn-switch-data" title="Data Correction"></button>
+			</div>&nbsp;&nbsp;&nbsp;&nbsp; | btns-area-bar 유형, 기능별 버튼 분리
+		</div>
+		<br>
+		<div class="setting-box" style="border:1px dotted #ee2d31"><!-- style은 영역표시 확인용 2016-12-07 ADD : 개발에서 추가함. panel-wrap3에 panel-header에 css수정해서 다시 업데이트함 -->		
+			<em class="txt-info-sm ng-binding">2016-12-07 16:20:57 ~ 16:21:17</em>						
+			<div class="btns-area-bar">
+				<button type="button" class="btn-switch-live" title="Live Update"></button><!-- 2016-12-28 MOD -->
+				<!-- <button type="button" class="btn-switch-live stop"></button> 2016-12-28 MOD stop -->
+			</div>
+		</div>
+		<br><br>
+		<!-- 정렬예시 -->
+		<div class="btns-area-right pr10" style="border:1px dotted #ee2d31"><!-- style은 영역표시 확인용 -->
+			오른쪽에 간격을 추가시 (class추가 pr10 ~ pr50 : 없으면 요청)
+			<div class="btn-group">
+				<button type="button" class="btn-gy i-zoom-in ico" title="Zoom in">Zoom in</button>
+				<button type="button" class="btn-gy i-zoom-out ico" title="Zoom out">Zoom out</button>
+			</div>		
+			<div class="btn-group">
+				<button type="button" class="btn-gy i-arrow-left ico" title="Move left">Move left</button>
+				<button type="button" class="btn-gy i-arrow-right ico" title="Move right">Move right</button>
+			</div>
+			<button type="button" class="btn-gy i-fitall">Fit all</button>
+		</div>	
+		<!-- //정렬예시 -->
+		<br><br>
+		<!-- 정렬예시 -->
+		<div class="btns-area-left pl50" style="border:1px dotted #ee2d31"><!-- style은 영역표시 확인용 -->
+			<div class="btn-group">
+				<button type="button" class="btn-gy i-zoom-in ico" title="Zoom in">Zoom in</button>
+				<button type="button" class="btn-gy i-zoom-out ico" title="Zoom out">Zoom out</button>
+			</div>		
+			<div class="btn-group">
+				<button type="button" class="btn-gy i-arrow-left ico" title="Move left">Move left</button>
+				<button type="button" class="btn-gy i-arrow-right ico" title="Move right">Move right</button>
+			</div>
+			<button type="button" class="btn-gy i-fitall">Fit all</button>			
+			왼쪽에 간격을 추가시(class추가 pl10 ~ pl50 : 없으면 요청)
+		</div>	
+		<!-- //정렬예시 -->
+		<br><br>btns-area(기본 padding:10px) > 100% block 버튼 <br><br>
+		<div class="btns-area" style="border:1px dotted #ee2d31"><!-- style은 영역표시 확인용 -->
+		
+			<button type="button" class="btn-gy btn-block">100% 버튼 btn-gy btn-block</button>
+			<button type="button" class="btn-cr btn-block">100% 버튼 btn-cr btn-block</button>
+		</div>		<br><br>
+		btns-area pd0 > 100% block 버튼 <br><br>
+		<div class="btns-area pd0" style="border:1px dotted #ee2d31"><!-- style은 영역표시 확인용 -->
+			<button type="button" class="btn-gy btn-block">100% 버튼 btn-gy btn-block</button>
+			<button type="button" class="btn-cr btn-block">100% 버튼 btn-cr btn-block</button>
+		</div>
+		<!-- 정렬예시 -->
+
+	</div>
+	<footer id="guide-footer">
+		<p class="copy">Copyright &copy; 2017 Mobigen UX Development. All rights reserved.</p>
+	</footer>
+</div>
+<!-- //guide-wrap2 -->
+
+</body>
+</html>

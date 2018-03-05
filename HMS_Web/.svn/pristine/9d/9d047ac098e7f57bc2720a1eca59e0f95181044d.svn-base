@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Change Management | HMS</title>
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+
+</head>
+
+
+<body>
+<!-- wrap -->
+<div id="wrap">
+	<!-- header -->
+	<header>
+		<div class="header-wrap">
+			<h1 class="logo"><a href="#none">HMS</a></h1>
+			<!-- gnb -->
+			<nav id="gnb">
+				<h2 class="blind">주요 메뉴</h2>
+				<ul>
+					<li><a href="#none">Group management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Plug In</a></li>
+							<li><a href="#none">Task</a></li>
+							<li><a href="#none">Node</a></li>
+						</ul>
+					</li>
+					<li><a href="#none">Plugin management</a></li> 
+					<li><a href="#none">Task management</a></li>
+					<li><a href="#none">Agent status</a></li>
+					<li><a href="#none">Modification management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Hold list modification</a></li>
+							<li><a href="#none">Modification history</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<!-- //gnb -->
+		</div>
+	</header>
+	<!-- //header -->
+
+	<!-- container -->
+	<div id="container">
+		<!-- content -->		
+		<div id="content">
+
+			<!-- panel-wrap -->
+			<div class="panel-wrap">
+				<div class="panel-header">
+					<h3 class="title">Change Management list</h3>
+					<div class="hd-right">
+						<ul class="status-list-sm">
+							<li>								
+								<span>Total</span><strong>1000</strong>
+							</li>
+							<li>
+								<span>Change</span><strong>0000</strong>
+							</li>
+							<li>
+								<span>Hold</span><strong>0000</strong>
+							</li>
+							<li>
+								<span>Cancel</span><strong>0000</strong>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="panel-content">
+					<!-- data-tbl -->
+					<div class="data-tbl wide round-border-type">
+						<table>
+							<tbody>
+							<tr>
+								<th>Host Name</th>
+								<td>
+									<input type="text" class="w155" value="">
+								</td>
+								<th>Serial Number</th>
+								<td>
+									<input type="text" class="w155" value="">
+								</td>
+								<th>Type</th>
+								<td> 
+									<!-- 2017-07-13 ADD --> 
+									<select class="selectbox w84">
+										<option value="0">VM</option>
+										<option value="1">TEST1</option>
+										<option value="2">TEST2</option>
+									</select>
+									<!-- //2017-07-13 ADD --> 
+								</td>
+								<th>IP</th>
+								<td>
+									<input type="text" class="w145" value="">
+								</td>
+								<th>OS Name</th>
+								<td>
+									<input type="text" class="w145" value="">
+								</td>
+								<th>Manufacturer</th>
+								<td>
+									<input type="text" class="w145" value="">
+									<button type="button" class="btn-cr i-search ml05">Search</button>
+									<button type="button" class="btn-cr i-refresh">Reset</button>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- //data-tbl -->
+					<!-- grid-area -->
+					<div class="grid-area mt10 hcalc03" style="border:1px dotted blue">
+					grid-area 실제 영역 style="border:1px dotted blue" 는 영역확인용 입니다. 실제는 없어요 빼주세요
+
+					<br>그리드안에 Compare 들어가는 아이콘버튼은 <button type="button" class="ico-md i-external-link" title="비교"></button>
+					</div>
+					<!-- //grid-area -->
+					<!-- pagination-area-total -->
+					<div class="pagination-area-total">
+						<div class="btns-area-control left">
+							<button type="button" class="btn-cr">Change all</button>
+							<button type="button" class="btn-gy">Hold all</button>
+							<button type="button" class="btn-gy">Cancel all</button>
+						</div>
+						<div class="btns-area-control right">
+							<button type="button" class="btn-cr">Compare all</button>
+						</div>
+						<!-- pagination-area -->									
+						<div class="pagination-area">
+							<ul class="pagination">
+								<li class="pagination-first"><a href="#none" title="First">First</a></li>
+								<li class="pagination-prev"><a href="#none" title="Previous">Previous</a></li>
+								<li class="active"><a href="#none">1</a></li>
+								<li class="disabled"><a href="#none">2</a></li>
+								<li><a href="#none">3</a></li>
+								<li><a href="#none">4</a></li>
+								<li><a href="#none">5</a></li>
+								<li class="pagination-next"><a href="#none" title="Next">Next</a></li>
+								<li class="pagination-last disabled"><a href="#none" title="Last">Last</a></li>
+							</ul>
+						</div>
+						<!-- //pagination-area -->
+					</div>
+					<!-- //pagination-area-total -->
+				</div>
+			</div>
+			<!-- //panel-wrap -->
+
+		</div>
+		<!-- //content -->
+	</div>
+	<!-- //container -->
+</div>
+<!-- //wrap -->
+
+</body>
+</html>
+

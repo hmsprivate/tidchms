@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beansProjectDescription>
+	<version>1</version>
+	<pluginVersion><![CDATA[3.8.4.201703310634-RELEASE]]></pluginVersion>
+	<configSuffixes>
+		<configSuffix><![CDATA[xml]]></configSuffix>
+	</configSuffixes>
+	<enableImports><![CDATA[false]]></enableImports>
+	<configs>
+	</configs>
+	<autoconfigs>
+		<config>java:com.mobigen.MSFApplication</config>
+		<config>java:com.mobigen.framework.exception.GlobalExceptionHandler</config>
+		<config>java:com.mobigen.framework.configuration.WebSecurityConfiguration</config>
+		<config>java:com.mobigen.framework.configuration.MessageConfiguration</config>
+		<config>java:com.mobigen.framework.component.Messages</config>
+		<config>java:com.mobigen.framework.configuration.DatabaseConfiguration</config>
+		<config>java:com.mobigen.framework.exception.ControllerThrowAdvice</config>
+	</autoconfigs>
+	<configSets>
+	</configSets>
+</beansProjectDescription>

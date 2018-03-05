@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.skt.hms.user.AuthMapper">
+	<select id="getUser" parameterType="UserModel" resultType="UserModel">
+		<!-- SELECT USER_ID,
+			EMPNO,
+			NAME,
+			REAL_NAME,
+			PASSWORD,
+			DEPARTMENT,
+			PHONE,
+			EMAIL,
+			DEFAULT_DATACENTER,
+			APPROVED,
+			DATE_FORMAT(CREATE_DATE, '%Y-%m-%d %H:%i:%s') as CREATE_DATE,
+			DATE_FORMAT(UPDATE_DATE, '%Y-%m-%d %H:%i:%s') as UPDATE_DATE,
+			ROLE_ID,
+			ROLE_GRADE,
+			AFFAIRS
+		FROM 
+			TB_USER
+		WHERE
+			NAME = #{name}  -->
+			
+			SELECT '1' AS USER_ID,
+				'12345' AS EMPNO,
+				'admin' AS NAME,
+				'admin' AS REAL_NAME,
+				'admin' AS PASSWORD,
+				'부서' AS DEPARTMENT,
+				'010-0000-0000' AS PHONE,
+				'test@mobigen.com' AS EMAIL,
+				'168' AS DEFAULT_DATACENTER,
+				'1' AS APPROVED,
+				'2017-07-04 00:00:00' AS CREATE_DATE,
+				'2017-07-05 00:00:00' AS UPDATE_DATE,
+				'1' AS ROLE_ID,
+				'1' AS ROLE_GRADE,
+				'종합' AS AFFAIRS
+			FROM DUAL
+	</select>
+</mapper>

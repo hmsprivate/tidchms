@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.skt.hms.task.TaskMgmtMapper">
+
+
+	<select id="getTaskList" parameterType="taskMgmtSearchModel" resultType="taskMgmtModel">
+		/*taskMgmt-mapper.getPluginList*/
+		SELECT
+		     task_file_name
+		    ,task_file_contents
+		    ,DATE_FORMAT(CONVERT_TZ(last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) AS last_up_time
+		FROM cm_manager_task_info
+		WHERE 1=1
+		<if test="@com.mobigen.framework.utility.Comparator@notEmpty(taskFileName)">
+		AND task_file_name LIKE CONCAT('%',#{taskFileName},'%')
+		</if>
+		ORDER BY task_file_name ASC
+	</select>
+
+	<select id="getDuplicationsTaskName" parameterType="taskMgmtSearchModel" resultType="int">
+		/*taskMgmt-mapper.getDuplicationsTaskName*/
+		SELECT COUNT(task_file_name)
+		FROM cm_manager_task_info
+		WHERE 1=1
+		AND task_file_name = #{taskFileName}
+	</select>
+
+</mapper>

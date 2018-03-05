@@ -1,0 +1,9 @@
+{
+	"TEST": {
+		"MSG": "Hello Wolrd"
+	},
+	
+	"EVENT": {
+		"TEST_EVENT": "test-event"
+	}
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="com.mobigen.framework.exception.GlobalExceptionHandler">시스템 오류가 발생 하였습니다. 자세한 내용은 웹 로그를 확인 해 주시기 바랍니다.</entry>
+	<entry key="org.springframework.security.access.AccessDeniedException">해당 권한이 없습니다. 관리자에게 문의하여 주시기 바랍니다.</entry>
+	<entry key="com.skt.hms.user.AuthController.login">로그인을 실패하였습니다. 사용자 정보를 다시 한번 확인 해 주시기 바랍니다.</entry>
+	
+	<!-- <entry key="com.skt.hms.review.ReviewEngine.phaseProcessAction.RunningActionException">현재 다른 사용자가 단계을 진행중입니다. 잠시 후 확인 해 주기기 바랍니다.</entry>
+	<entry key="com.skt.hms.review.ReviewEngine.nextPhaseProcess.NotFoundNextPhase">주어진 정보에서 다음단계를 찾을 수 없습니다. 단계정검이 필요합니다.</entry>
+	<entry key="com.skt.hms.review.ReviewController.getRequestInfo.detail">올바른 요청서 정보 요청이 아닙니다.</entry>
+	<entry key="com.skt.hms.review.ReviewService.saveReviewData">요청서를 저장하지 못하였습니다.</entry> -->
+	
+	<entry key="com.skt.hms.management.AddHardwareController.duplicateCheckHardwareName">중복된 H/W명 입니다.</entry>
+	
+</properties>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Group setting | HMS</title>
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+</head>
+
+<body>
+<!-- wrap -->
+<div id="wrap">
+	<!-- header -->
+	<header>
+		<div class="header-wrap">
+			<h1 class="logo"><a href="#none">HMS</a></h1>
+			<!-- gnb -->
+			<nav id="gnb">
+				<h2 class="blind">주요 메뉴</h2>
+				<ul>
+					<li><a href="#none">Group management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Plug In</a></li>
+							<li><a href="#none">Task</a></li>
+							<li><a href="#none">Node</a></li>
+						</ul>
+					</li>
+					<li><a href="#none">Plugin management</a></li> 
+					<li><a href="#none">Task management</a></li>
+					<li><a href="#none">Agent status</a></li>
+					<li><a href="#none">Modification management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Hold list modification</a></li>
+							<li><a href="#none">Modification history</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<!-- //gnb -->
+		</div>
+	</header>
+	<!-- //header -->
+
+	<!-- container -->
+	<div id="container">
+
+		<!-- content -->
+		<div id="content">
+
+			<!-- pop-wrap -->
+			<div class="pop-wrap w600" style="top:100px;left:50%;margin-left:-300px"><!-- style은 위치예제임 -->				
+				<div class="pop-header"><h3 class="title">Group setting</h3></div>
+				<!-- popContent -->
+				<div class="pop-content">
+					<strong class="drag-mark-title">Name</strong>
+					<ul class="drag-mark-list ui-sortable" id="sortable">
+						<li>						
+							<div class="name">이름도 길게 이름도 길게 이름도 길게 이름도 길게 이름도 길게 이름도 길게이름도 길게 이름도게 이름도게 이게 이름도게 이름게 이름도게 이름름도 길게END </div>
+							<div class="ico-group">
+								<button type="button" class="ico-md i-trash" title="Delete"></button>
+							</div>						
+						</li>
+						<li>						
+							<div class="name">Group 2</div>
+							<div class="ico-group">
+								<button type="button" class="ico-md i-trash" title="Delete"></button>
+							</div>						
+						</li>
+						<li>						
+							<div class="name">Group 3</div>
+							<div class="ico-group">
+								<button type="button" class="ico-md i-trash" title="Delete"></button>
+							</div>						
+						</li>
+						<li>						
+							<div class="name">Group 4</div>
+							<div class="ico-group">
+								<button type="button" class="ico-md i-trash" title="Delete"></button>
+							</div>						
+						</li>
+						<li>						
+							<div class="name">Group 5</div>
+							<div class="ico-group">
+								<button type="button" class="ico-md i-trash" title="Delete"></button>
+							</div>						
+						</li>
+					</ul>
+					<!-- btns-area -->
+					<div class="btns-area">
+						<button type="button" class="btn-cr">Apply</button>
+						<button type="button" class="btn-gy">Cancel</button>
+					</div>
+					<!-- //btns-area -->
+				</div>
+				<!-- //popContent -->	
+				<button type="button" class="btn-close" title="close">close</button>
+			</div>
+			<!-- //popWrap -->
+		</div>
+		<!-- //content -->
+	</div>
+	<!-- //container -->
+</div>
+<!-- //wrap -->
+<script>
+//sortable 디자인확인용 2017-05-18 ADD
+ $( function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+  } );
+</script>
+</body>
+</html>
+

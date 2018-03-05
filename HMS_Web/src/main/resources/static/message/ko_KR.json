@@ -1,0 +1,91 @@
+{
+	"TEST": "MSF",
+	"TITLE": "TEST",
+	"MENU": {
+		"TEST": "Hello World!"
+	},
+	
+	"COMMON" : {
+		"SEARCH" : "Search"
+		,"RESET" : "Reset"
+		,"NAME" : "Name"
+		,"VALUE" : "Value"
+		,"HREF" : "Href"
+		,"LOAD" : "Load"
+		,"UNLOAD" : "Unload"
+		,"ADD" : "Add"
+		,"REMOVE" : "Remove"			
+		,"STOP" : "Stop"
+		,"START" : "Start"
+		,"TIMESTAMP" : "timestamp"
+		,"MODIFY" : "Modify"
+		,"NO" : "No"
+		,"CONTENTS" : "Contents"
+	},
+		
+	"GROUP" : {
+		"SERVER" : "Server"
+		,"AGENT" : "Agent"
+		,"LAST_UPDATE" : "Last Update"
+		,"CHANGE_STATUS" : "Midification status"
+		,"TOTAL" : "Total"
+		,"PM" : "Physical Machine"
+		,"VM" : "Virtual Machine"
+		,"YY/MM/DD" : "YY/MM/DD"
+		,"CHANGE" : "Modification"
+		,"IGNORE" : "Hold"
+		,"HOST_NAME" : "Host Name"
+		,"SERIAL_NUMBER" : "Serial Number"
+		,"ETC_INFO" : "기타정보"
+		,"NODE" : "Node"
+		,"GROUP" : "Group"
+		,"LIST" : "List"
+		,"IP" : "IP"
+		,"OS" : "OS"
+		,"MANUFACTURER" : "Manufacture"
+		,"CPU_COUNT" : "CPU Count"
+		,"MEMORY" : "Memory"
+		,"DISK" : "Disk"
+		,"TYPE" : "Type"
+		,"VERSION" : "Version"
+		,"ARCHITECTURE" : "Architecture"
+		,"CMDB" : "CMDB"	
+		,"HMS" : "HMS"
+		,"TIME" : "Time"
+	},
+	
+	"PLUGIN" : {
+		"SIGNED" : "Signed"
+		,"STATUS" : "Status"
+		,"LOADED" : "Loaded"
+		,"UPDATE_DATE" : "Update Date"
+		,"FILE_NAME" : "File Name"
+	},
+	
+	"TASK" : {
+		"ID" : "ID"
+		,"DEADLINE" : "Deadline"
+		,"CREATION" : "Creation"
+		,"LAST_RUN" : "Last run"
+		,"HIT_COUNT" : "Hit count"
+		,"MISS_COUNT" : "Miss count"
+		,"TASK_STATE" : "Task state"
+		,"SCHEDULE" : "Schedule"			
+		,"INTERVAL" : "Interval"
+		,"ACTION" : "Action"	
+	},
+	
+	"CHANGE":{
+		"COMPARE" : "Compare"
+		,"CI_NO" : "Ci No"
+		,"SERIAL_NUMBER" : "Serial Number"
+		,"VENDOR_NAME" : "Vendor Name"
+		,"MODEL_NAME" : "Model Name"
+		,"HOST_NAME" : "Host Name"
+		,"VIRTUAL_TYPE_NAME" : "Virtual Name"
+		,"OS_VERSION" : "Os Version"
+		,"OS_ARC" : "Os Arc"
+		,"CPU_CNT" : "Cpu Cnt"
+	}
+	
+}

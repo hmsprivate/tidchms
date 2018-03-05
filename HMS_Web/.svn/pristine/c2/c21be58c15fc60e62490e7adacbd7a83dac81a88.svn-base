@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Tooltip Guide | HMS</title>
+<link rel="stylesheet" type="text/css" href="css/guide.css"><!-- //가이드용임 -->
+<link href="../css/jquery/jquery-mdi.css" rel="stylesheet" type="text/css">
+<link href="../css/angular/tooltip/angular-tooltips.css" rel="stylesheet" type="text/css">
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/lib/jquery/spectrum.js"></script>
+<script src="../js/lib/angular/angular.min.js"></script>
+<script src="../js/lib/angular/angular-tooltips.min.js"></script>
+<script src="../js/lib/angular/index.js"></script><!-- angular-tooltips용 -->
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+</head>
+<body>
+<!-- guide-wrap2 -->
+<div id="guide-wrap2">
+	<h1>Tooltip Guide</h1>
+	<div class="guide-container">
+		<h2>Basic Tooltip</h2>
+		<p class="guide-info">Tooltip </p>		
+		<div class="guide-area">
+
+			<!-- tooltip -->
+			<div class="tooltip w310" style="left:10px;top:10px"><!-- style은 예시위치입니다. -->
+				<div class="in-box3">
+					<!-- center-box -->
+					<div class="center-box round-type h100">
+						<div class="center-inner">
+							<p class="info-txt-c bold">There is a node included in the group.<br>You can not delete a group included a node.</p>
+						</div>
+					</div>			
+					<!-- //center-box -->	
+					<div class="btns-area">
+						<button type="button" class="btn-cr">Confirm</button>
+					</div>
+				</div>
+			</div>
+			<!-- //tooltip -->
+			<!-- tooltip -->
+			<div class="tooltip w310" style="left:330px;top:10px"><!-- style은 예시위치입니다. -->
+				<div class="in-box3">
+					<!-- center-box -->
+					<div class="center-box round-type h100">
+						<div class="center-inner">
+							<p class="info-txt-c bold">Are you sure you want to delete it?</p>
+						</div>
+					</div>			
+					<!-- //center-box -->	
+					<div class="btns-area">
+						<button type="button" class="btn-cr">Delete</button>
+						<button type="button" class="btn-gy">Cancel</button>
+					</div>
+				</div>
+			</div>
+			<!-- //tooltip -->
+			<!-- tooltip -->
+			<div class="tooltip w310" style="left:645px;top:10px"><!-- style은 예시위치입니다. -->
+				<div class="in-box3">
+					<!-- center-box -->
+					<div class="center-box round-type h100">
+						<div class="center-inner">
+							<p class="info-txt-c bold">Group has been deleted.</p>
+						</div>
+					</div>			
+					<!-- //center-box -->	
+					<div class="btns-area">
+						<button type="button" class="btn-cr">Confirm</button>
+					</div>
+				</div>
+			</div>
+			<!-- //tooltip -->
+		</div>
+		<h2>Tooltip Tail</h2>
+		<p class="guide-info">tooltip + tail(방향) + w(Size) : 문구에 따라 늘어나지만 고정시킬때는 w(Size) / tooltip + tail(방향) + t-right(화살표정렬 우측) + w(Size)</p>
+		<div class="guide-area" style="height:600px">
+			<!-- tooltip -->
+			<div class="tooltip tail-top w75" style="left:20px;top:20px"><!-- style은 예시위치입니다. -->
+				<ul class="basic-list">
+					<li><a href="#none">tooltip</a></li>
+					<li><a href="#none">tail-top</a></li>
+				</ul>		
+			</div>
+			<!-- //tooltip -->
+			<!-- tooltip -->
+			<div class="tooltip tail-top t-right" style="left:120px;top:20px"><!-- style은 예시위치입니다. -->
+				<ul class="basic-list">
+					<li><a href="#none">tooltip</a></li>
+					<li><a href="#none">tail-top t-right tail-top t-right</a></li>
+				</ul>		
+			</div>
+			<!-- //tooltip -->
+			<!-- tooltip -->
+			<div class="tooltip tail-right" style="left:890px;top:20px"><!-- style은 예시위치입니다. -->
+				<ul class="basic-list">
+					<li><a href="#none">tooltip</a></li>
+					<li><a href="#none">tail-right</a></li>
+				</ul>		
+			</div>
+			<!-- //tooltip -->
+			<!-- tooltip -->
+			<div class="tooltip tail-right t-top" style="left:870px;top:100px"><!-- style은 예시위치입니다. -->
+				<ul class="basic-list">
+					<li><a href="#none">tooltip</a></li>
+					<li><a href="#none">tail-right tail이 위쪽에 위치</a></li>
+					<li><a href="#none">tail-right t-top</a></li>
+					<li><a href="#none">tail-right t-top</a></li>
+				</ul>		
+			</div>
+			<!-- //tooltip -->
+			<!-- tooltip -->
+			<div class="tooltip tail-top t-left" style="left:300px;top:20px"><!-- style은 예시위치입니다. -->
+				<ul class="basic-list">
+					<li><a href="#none">tooltip</a></li>
+					<li><a href="#none">tail-top t-left tail-top t-left</a></li>
+				</ul>		
+			</div>
+			<!-- //tooltip -->
+			<!-- tooltip -->
+			<div class="tooltip tail-bottom" style="left:460px;top:20px"><!-- style은 예시위치입니다. -->
+				<ul class="basic-list">
+					<li><a href="#none">tooltip</a></li>
+					<li><a href="#none">tail-bottom</a></li>
+				</ul>		
+			</div>
+			<!-- //tooltip -->
+			<!-- tooltip -->
+			<div class="tooltip tail-bottom t-right" style="left:560px;top:20px"><!-- style은 예시위치입니다. -->
+				<ul class="basic-list">
+					<li><a href="#none">tooltip</a></li>
+					<li><a href="#none">tail-bottom t-right</a></li>
+				</ul>		
+			</div>
+			<!-- //tooltip -->
+			<!-- tooltip -->
+			<div class="tooltip tail-bottom t-left" style="left:700px;top:20px"><!-- style은 예시위치입니다. -->
+				<ul class="basic-list">
+					<li><a href="#none">tooltip</a></li>
+					<li><a href="#none">tail-bottom t-left</a></li>
+				</ul>		
+			</div>
+			<!-- //tooltip -->
+			<!-- tooltip -->
+			<div class="tooltip tail-left" style="left:820px;top:20px"><!-- style은 예시위치입니다. -->
+				<ul class="basic-list">
+					<li><a href="#none">tooltip</a></li>
+					<li><a href="#none">tail-left</a></li>
+				</ul>		
+			</div>
+			<!-- //tooltip -->
+			<!-- tooltip -->
+			<div class="tooltip tail-left t-top" style="left:1080px;top:130px"><!-- style은 예시위치입니다. -->
+				<ul class="basic-list">
+					<li><a href="#none">tooltip</a></li>
+					<li><a href="#none">tail-left tail이 위쪽에 위치</a></li>
+					<li><a href="#none">tail-left t-top</a></li>
+					<li><a href="#none">tail-left t-top</a></li>
+				</ul>		
+			</div>
+			<!-- //tooltip -->
+			<!-- tooltip -->
+			<div class="tooltip tail-left t-bottom" style="left:1070px;top:240px"><!-- style은 예시위치입니다. -->
+				<ul class="basic-list">
+					<li><a href="#none">tooltip</a></li>
+					<li><a href="#none">tail-left tail이 아래쪽에 위치</a></li>
+					<li><a href="#none">tail-left t-bottom</a></li>
+					<li><a href="#none">tail-left t-bottom</a></li>
+				</ul>		
+			</div>
+			<!-- //tooltip -->
+			<strong style="position:absolute;left:10px;top:250px;color:#241f5e;">통합검색 &gt; Search Keyword 입력
+			<button type="submit" class="btn-search-plus" title="More Search"></button></strong>
+			<!-- tooltip -->
+			<div class="tooltip tail-top t-left w400" style="left:185px;top:280px"><!-- style은 예시위치입니다. top_view.html 참조 -->
+				<div class="in-box">				
+					<strong class="info-title">Search Keyword 입력</strong>
+
+					<!-- basic-list3 -->
+					<ul class="basic-list3 round-border-type mt05">
+						<li>
+							<div class="in-block"><!-- //개발페이지 적용 그대로 코딩적용함 :  mb05 와 나란히 버튼 Plus적용 , 실제 개발은 style="display:inline-block" 으로 적용: 개발팀 -->
+								<div class="selectbox w110">
+									<a class="current" href="javascript:;">Hostname</a>
+									<ul class="selectbox-sm-ul">
+										<li><a href="#">100px</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+									</ul>
+								</div>
+								<input type="text" class="w170" value="" placeholder="">
+								<button type="button" class="btn-gy i-minus ico" title="삭제"></button>
+							</div>
+						</li>
+						<li>
+							<div class="in-block">
+								<div class="selectbox w110">
+									<a class="current" href="javascript:;">Serial number</a>
+									<ul class="selectbox-sm-ul">
+										<li><a href="#">100px</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+									</ul>
+								</div>
+								<input type="text" class="w170" value="" placeholder="">
+								<button type="button" class="btn-gy i-minus ico" title="삭제"></button>
+							</div>
+						</li>
+						<li>
+							<div class="in-block"><!-- //개발페이지 적용 그대로 코딩적용함 :  mb05 와 나란히 버튼 Plus적용 , 실제 개발은 style="display:inline-block" 으로 적용: 개발팀 -->
+								<div class="selectbox w110">
+									<a class="current" href="javascript:;">Type</a>
+									<ul class="selectbox-sm-ul">
+										<li><a href="#">100px</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+									</ul>
+								</div>
+								<div class="selectbox w170">
+									<a class="current" href="javascript:;">All</a>
+									<ul class="selectbox-sm-ul">
+										<li><a href="#">100px</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+									</ul>
+								</div>
+								<button type="button" class="btn-gy i-minus ico" title="삭제"></button>
+							</div>
+						</li>
+						<li>
+							<div class="in-block">
+								<div class="selectbox w110">
+									<a class="current" href="javascript:;">IP</a>
+									<ul class="selectbox-sm-ul">
+										<li><a href="#">100px</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+									</ul>
+								</div>
+								<input type="text" class="w170" value="" placeholder="">
+								<button type="button" class="btn-gy i-minus ico" title="삭제"></button>
+							</div>
+						</li>
+						<li>
+							<div class="in-block">
+								<div class="selectbox w110">
+									<a class="current" href="javascript:;">OS Name</a>
+									<ul class="selectbox-sm-ul">
+										<li><a href="#">100px</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+									</ul>
+								</div>
+								<input type="text" class="w170" value="" placeholder="">
+								<button type="button" class="btn-gy i-minus ico" title="삭제"></button>
+							</div>
+						</li>
+						<li>
+							<div class="in-block">
+								<div class="selectbox w110">
+									<a class="current" href="javascript:;">Manufacturer</a>
+									<ul class="selectbox-sm-ul">
+										<li><a href="#">100px</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+										<li><a href="#">2테스트</a></li>
+										<li><a href="#">3테스트</a></li>
+									</ul>
+								</div>
+								<input type="text" class="w170" value="" placeholder="">
+								<button type="button" class="btn-gy i-minus ico" title="삭제"></button>
+							</div>
+							<button type="button" class="btn-cr i-plus ico" title="추가"></button>
+						</li>
+					</ul>
+					<!-- //basic-list3 -->	
+				
+					<!-- btns-area -->
+					<div class="btns-area">
+						<button type="button" class="btn-cr">Apply</button>
+						<button type="button" class="btn-gy">Cancel</button>
+					</div>
+					<!-- //btns-area -->
+				</div>	
+			</div>
+			<!-- //tooltip -->
+
+		</div>
+	</div>
+
+	<footer id="guide-footer">
+		<p class="copy">Copyright &copy; 2017 Mobigen UX Development. All rights reserved.</p>
+	</footer>
+</div>
+<!-- //guide-wrap2 -->
+
+<script>
+//sortable 디자인확인용
+ $( function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+  } );
+</script>
+</body>
+</html>
+
+
+

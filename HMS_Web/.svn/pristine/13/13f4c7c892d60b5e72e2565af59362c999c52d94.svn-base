@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Unknown node list | HMS</title>
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+</head>
+
+<body>
+<!-- wrap -->
+<div id="wrap">
+	<!-- header -->
+	<header>
+		<div class="header-wrap">
+			<h1 class="logo"><a href="#none">HMS</a></h1>
+			<!-- gnb -->
+			<nav id="gnb">
+				<h2 class="blind">주요 메뉴</h2>
+				<ul>
+					<li><a href="#none">Group management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Plug In</a></li>
+							<li><a href="#none">Task</a></li>
+							<li><a href="#none">Node</a></li>
+						</ul>
+					</li>
+					<li><a href="#none">Plugin management</a></li> 
+					<li><a href="#none">Task management</a></li>
+					<li><a href="#none">Agent status</a></li>
+					<li><a href="#none">Modification management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Hold list modification</a></li>
+							<li><a href="#none">Modification history</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<!-- //gnb -->
+		</div>
+	</header>
+	<!-- //header -->
+
+	<!-- container -->
+	<div id="container">
+
+		<!-- content -->
+		<div id="content">
+
+			<!-- pop-wrap 검토대상 장비등록 -->
+			<div class="pop-wrap w1500" style="top:100px;left:50%;margin-left:-750px"><!-- style은 위치예제임 -->				
+				<div class="pop-header"><h3 class="title">Unknown node list</h3></div>
+				<!-- popContent -->
+				<div class="pop-content">							
+					<!-- data-tbl -->
+					<div class="data-tbl wide round-border-type">
+						<table>
+							<tbody>
+							<tr>
+								<th>Host Name</th>
+								<td>
+									<input type="text" class="w155" value="">
+								</td>
+								<th>Serial Number</th>
+								<td>
+									<input type="text" class="w155" value="">
+								</td>
+								<th>Type</th>
+								<td>
+									<!--<div class="selectbox w84">
+										<a class="current" href="javascript:;">VM</a>
+										<ul class="selectbox-sm-ul">
+											<li><a href="#">100px</a></li>
+											<li><a href="#">2테스트</a></li>
+											<li><a href="#">3테스트</a></li>
+											<li><a href="#">2테스트</a></li>
+											<li><a href="#">3테스트</a></li>
+											<li><a href="#">2테스트</a></li>
+											<li><a href="#">3테스트</a></li>
+											<li><a href="#">2테스트</a></li>
+											<li><a href="#">3테스트</a></li>
+										</ul>
+									</div>  2017-07-13 DEL -->  
+										<!-- 2017-07-13 ADD --> 
+										<select class="selectbox w84">
+											<option value="0">VM</option>
+											<option value="1">TEST1</option>
+											<option value="2">TEST2</option>
+										</select>
+										<!-- //2017-07-13 ADD --> 
+								</td>
+								<th>IP</th>
+								<td>
+									<input type="text" class="w145" value="">
+								</td>
+								<th>OS Name</th>
+								<td>
+									<input type="text" class="w145" value="">
+								</td>
+								<th>Manufacturer</th>
+								<td>
+									<input type="text" class="w145" value="">
+									<button type="button" class="btn-cr i-search ml05">Search</button>
+									<button type="button" class="btn-cr i-refresh">Reset</button>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- //data-tbl -->
+					<!-- //grid-area  -->
+					<div class="grid-area mt10 h300">	
+					</div>
+					<!-- //grid-area -->
+					<div class="pagination-area-total">
+						<!-- pagination-area -->									
+						<div class="pagination-area">
+							<ul class="pagination">
+								<li class="pagination-first"><a href="#none" title="First">First</a></li>
+								<li class="pagination-prev"><a href="#none" title="Previous">Previous</a></li>
+								<li class="active"><a href="#none">1</a></li>
+								<li class="disabled"><a href="#none">2</a></li>
+								<li><a href="#none">3</a></li>
+								<li><a href="#none">4</a></li>
+								<li><a href="#none">5</a></li>
+								<li><a href="#none">6</a></li>
+								<li><a href="#none">...</a></li>
+								<li class="pagination-next"><a href="#none" title="Next">Next</a></li>
+								<li class="pagination-last disabled"><a href="#none" title="Last">Last</a></li>
+							</ul>
+						</div>
+						<!-- //pagination-area -->
+					</div>
+					<!-- btns-area -->
+					<div class="btns-area">
+						<button type="button" class="btn-cr">Apply</button>
+						<button type="button" class="btn-gy">Cancel</button>
+					</div>
+					<!-- //btns-area -->
+				</div>
+				<!-- //popContent -->	
+				<button type="button" class="btn-close" title="close">close</button>
+			</div>
+			<!-- //popWrap -->
+		</div>
+		<!-- //content -->
+	</div>
+	<!-- //container -->
+</div>
+<!-- //wrap -->
+
+</body>
+</html>
+

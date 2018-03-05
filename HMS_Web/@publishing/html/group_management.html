@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Group Management | HMS</title>
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+
+</head>
+
+
+<body>
+<!-- wrap -->
+<div id="wrap">
+	<!-- header -->
+	<header>
+		<div class="header-wrap">
+			<h1 class="logo"><a href="#none">HMS</a></h1>
+			<!-- gnb -->
+			<nav id="gnb">
+				<h2 class="blind">주요 메뉴</h2>
+				<ul>
+					<li><a href="#none">Group management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Plug In</a></li>
+							<li><a href="#none">Task</a></li>
+							<li><a href="#none">Node</a></li>
+						</ul>
+					</li>
+					<li><a href="#none">Plugin management</a></li> 
+					<li><a href="#none">Task management</a></li>
+					<li><a href="#none">Agent status</a></li>
+					<li><a href="#none">Modification management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Hold list modification</a></li>
+							<li><a href="#none">Modification history</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<!-- //gnb -->
+		</div>
+	</header>
+	<!-- //header -->
+
+	<!-- container -->
+	<div id="container">
+		<!-- content -->		
+		<div id="content">
+
+			<!-- 검색 + Grid -->
+			<div class="cont-wrap">
+				<!-- tab-cont-group -->
+				<div class="tab-cont-group">
+					<ul class="tab-menu group-type"><!-- 2017-08-16 ADD group-type -->
+						<li><a href="#none">No group</a></li>
+						<li class="on"><a href="#none">Group 1</a></li>
+						<li><a href="#none">Group 2</a></li>
+						<li><a href="#none">아주길게 쓸경우에는 한줄 말줄임</a></li>
+					</ul>
+					<!-- 2017-08-02 ADD : btns-area-control -->
+					<div class="btns-area-control group">
+						<button type="button" class="btn-gy btn-block i-plus">Group Create</button>
+						<button type="button" class="btn-gy btn-block i-minus">Group Delete</button>
+					</div>
+					<!-- btns-area-control -->
+					<div class="tab-cont scroll-y"><!-- tab-cont scroll -->
+						<!-- fold-data-area -->
+						<div class="fold-data-area">
+							<div class="fold-data-head">
+								<h4 class="title">Plugin</h4> 
+								<div class="hd-right">
+									<div class="form-group mr15">	
+										<span class="label mr15"><i class="ico-md i-filter"></i>Selected type</span>
+										<input type="checkbox" id="Collector" checked="checked"><label for="Collector">Collector</label>	
+										<input type="checkbox" id="Processor"><label for="Processor">Processor</label>	
+										<input type="checkbox" id="Publisher"><label for="Publisher">Publisher</label>
+									</div>
+									<button type="button" class="btn-cr btn-sm i-plus">Load</button>
+									<button type="button" class="btn-cr btn-sm i-minus">Unload</button>
+									<button type="button" class="ico-md i-download" title="다운로드"></button>
+									<button type="button" class="ico-md i-compress" title="닫힘"></button>
+								</div>
+							</div>
+							<div class="fold-data-cont">
+								<!-- grid-area -->
+								<div class="grid-area max-h230">
+grid-area
+								</div>
+								<!-- //grid-area -->
+							</div>
+						</div>
+						<!-- //fold-data-area -->
+						<!-- fold-data-area -->
+						<div class="fold-data-area">
+							<div class="fold-data-head">
+								<h4 class="title">Task</h4> 
+								<div class="hd-right">
+									<button type="button" class="btn-cr btn-sm i-plus">Create</button>
+									<button type="button" class="btn-cr btn-sm i-minus">Remove</button>
+									<button type="button" class="ico-md i-download" title="다운로드"></button>
+									<!-- <button type="button" class="ico-md i-compress" title="닫힘"></button> -->
+									<button type="button" class="ico-md i-expand" title="열림"></button>
+								</div>
+							</div>
+							<div class="fold-data-cont none"><!-- none -->
+								<!-- grid-area -->
+								<div class="grid-area max-h230">
+grid-area
+								</div>
+								<!-- //grid-area -->
+							</div>
+						</div>
+						<!-- //fold-data-area -->
+						<!-- fold-data-area -->
+						<div class="fold-data-area">
+							<div class="fold-data-head">
+								<h4 class="title">Node</h4> 
+								<div class="hd-right">
+									<button type="button" class="btn-cr btn-sm i-plus">Include</button>
+									<button type="button" class="btn-cr btn-sm i-minus">Exclude</button>
+									<button type="button" class="ico-md i-download" title="다운로드"></button>
+									<button type="button" class="ico-md i-compress" title="닫힘"></button>
+								</div>
+							</div>
+							<div class="fold-data-cont">
+								<!-- data-tbl -->
+								<div class="data-tbl wide round-border-type">
+									<table>
+										<tbody>
+										<tr>
+											<th>Host Name</th>
+											<td>
+												<input type="text" class="w155" value="">
+											</td>
+											<th>Serial Number</th>
+											<td>
+												<input type="text" class="w155" value="">
+											</td>
+											<th>Type</th>
+											<td> 
+												<!-- 2017-07-13 ADD --> 
+												<select class="selectbox w84">
+													<option value="0">VM</option>
+													<option value="1">TEST1</option>
+													<option value="2">TEST2</option>
+												</select>
+												<!-- //2017-07-13 ADD --> 
+											</td>
+											<th>IP</th>
+											<td>
+												<input type="text" class="w145" value="">
+											</td>
+											<th>OS Name</th>
+											<td>
+												<input type="text" class="w145" value="">
+											</td>
+											<th>Manufacturer</th>
+											<td>
+												<input type="text" class="w145" value="">
+												<button type="button" class="btn-cr i-search ml05">Search</button>
+												<button type="button" class="btn-cr i-refresh">Reset</button>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+								<!-- //data-tbl -->
+								<!-- grid-area -->
+								<div class="grid-area mt10 max-h230" style="border:1px dotted blue;height:230px">
+grid-area 테스트용 영역
+								</div>
+								<!-- //grid-area -->
+								<!-- pagination-area-total -->
+								<div class="pagination-area-total">
+									<div class="node-total">
+										Total :<strong>1000</strong>
+									</div>
+									<!-- pagination-area -->									
+									<div class="pagination-area">
+										<ul class="pagination">
+											<li class="pagination-first"><a href="#none" title="First">First</a></li>
+											<li class="pagination-prev"><a href="#none" title="Previous">Previous</a></li>
+											<li class="active"><a href="#none">1</a></li>
+											<li class="disabled"><a href="#none">2</a></li>
+											<li><a href="#none">3</a></li>
+											<li><a href="#none">4</a></li>
+											<li><a href="#none">5</a></li>
+											<li class="pagination-next"><a href="#none" title="Next">Next</a></li>
+											<li class="pagination-last disabled"><a href="#none" title="Last">Last</a></li>
+										</ul>
+									</div>
+									<!-- //pagination-area -->
+								</div>
+								<!-- //pagination-area-total -->
+							</div>
+						</div>
+						<!-- //fold-data-area -->
+					</div>
+					<div class="tab-cont">
+						<div class="grid-area calc-h42">grid-area 2</div>
+					</div>
+					<div class="tab-cont">
+						<div class="grid-area calc-h42">grid-area 3</div>
+					</div>
+					<div class="tab-cont">
+						<div class="grid-area calc-h42">grid-area 4</div>
+					</div>
+				
+				</div>
+				<!-- //tab-cont-group -->
+
+			</div>
+			<!-- //검색 + Grid -->
+
+		</div>
+		<!-- //content -->
+	</div>
+	<!-- //container -->
+</div>
+<!-- //wrap -->
+
+</body>
+</html>
+

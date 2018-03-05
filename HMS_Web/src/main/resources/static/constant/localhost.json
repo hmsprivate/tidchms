@@ -1,0 +1,27 @@
+{
+	"TEST": {
+		"MSG": "Hello Wolrd"
+	},
+	
+	"EVENT": {
+		"TEST_EVENT": "test-event"
+	},
+		
+	
+	"MESSAGE": {
+		"IS_DELETE" : "정말 삭젝하시겠습니까?",
+		"MORE_ZERO" : "하나 이상 선택되어야 합니다.",
+		"SEARCH_KEYWORD_MANDATORY" : "검색어 입력은 필수입니다."
+	},
+	
+	"REPORT": {
+		"ITEMS": [
+			{"TYPE":"Network 회선", "CHECK": "연동 IP대역, 케이블 Type수량, 장비위치", "DEPART": "NS 팀"},
+			{"TYPE":"전", "CHECK": "해당 Rack Max 전원 확보, UPS사용율, Rack PDU 포트수, 락전원 사용율, 전원이중화", "DEPART": "IS 1팀"},
+			{"TYPE":"상면 공간", "CHECK": "서비스별 연속배치, Hot Zone 발생여부 확인", "DEPART": "IS 1팀"},
+			{"TYPE":"Rack 공간", "CHECK": "Rack 사용율", "DEPART": "IS 1팀"},
+			{"TYPE":"종합 의견", "CHECK": "각 센터별 필수 여유 공간 확보(30% 이상)", "DEPART": "IS 1팀"}
+		]
+	}
+	
+}

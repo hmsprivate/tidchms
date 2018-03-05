@@ -1,0 +1,69 @@
+@charset "utf-8";
+
+/* ---------------------------------------
+	Filename: rack-diagram.css
+	Description : DCMS
+	Author	: mobigen
+	date	: 2017-06 / 2017-07-07(UX팀 수정)
+	비고 : CR (IE 제외)
+   --------------------------------------- */ 
+   
+/** rack-diagram directive 선언 **/
+.rack-diagram {padding:30px 5px 14px; font-family:"Roboto"; font-size:11px;}
+.rack-diagram:before {content:""; position:absolute; bottom:-24px; left:-1px; width:38px; height:9px; border:1px solid #a9a9a9; background:#aaadae;}
+.rack-diagram:after {content:""; position:absolute; bottom:-24px; right:-1px; width:38px; height:9px; border:1px solid #a9a9a9; background:#aaadae;}
+
+/** rack-diagram의 외각 **/
+.rack-container {padding:5px; border:1px solid #a9a9a9;}
+
+
+/**
+	rack-diagram의 depth1을 구성 하는 요소 
+	number와 실제 rack의 빈칸을 처리 한다
+**/
+.rack-container-child {margin-top:2px; margin-left:2px; border:1px solid #a9a9a9;}
+.rack-numbering {background:#dcdcdc; line-height:18px; text-align:center;}
+.rack-space {background:#bdbdbd;}
+
+/**
+	rack안쪽에 다수의 node를 배치하는 hole이 존재하는 경우에 hole의 위치를 지정
+**/
+.node-layout {border:1px solid #a9a9a9; background-color:#e4e2e2;}
+
+/* node-layou에 drag 했을때, style 변경 */
+.node-layout-over {border:2px solid #6076cb; background-color:#b5c0ea;}
+
+/**
+	node 요소를 표현
+**/
+.node {border:1px solid #a9a9a9; background:#ececec; box-shadow:inset 0 1px 0 0 rgba(255,255,255,1); word-wrap:break-word; word-break:break-all;}
+.node-blade-server {padding:0 0 0 23px; background:#ececec url(../../images/rack-diagram/ico_blade.png) no-repeat 4px 1px;}/* Blade-Enclosure server */
+.node-bm-server {padding:0 0 0 23px; background:#ececec url(../../images/rack-diagram/ico_bm.png) no-repeat 4px 1px;}/* 일반 Node형 server */
+.node-switch {padding:0 0 0 23px; background:#ececec url(../../images/rack-diagram/ico_switch.png) no-repeat 4px 1px;}/* Switch형 server */
+.node-storage {padding:0 0 0 23px; background:#ececec url(../../images/rack-diagram/ico_storage.png) no-repeat 4px 1px;}/* Storage형 server */
+.node-etc {}/* 기타 아직 없음 */
+
+/* node에 drag 했을때, style 변경 */
+.node-over {border:2px solid #6076cb; background-color:#ececec;}
+.node-select {border: 2px solid #80ffff;}
+
+/**
+	rack-enclouser 요소
+	실제 rack은 blade type 외에는 enclouser 요소가 없지만
+	같은 단계로 그림을 표현하기 위해 구성
+**/
+.rack-node {padding:0px; border: 1px solid #a9a9a9; background-color:#fff;}
+.rack-blade-enclosure {padding:1px 1px 1px 10px; border:1px solid #5a75c4 !important; background-color:#f8f8f8;}
+.rack-disable {border:1px solid #ff0d22 !important; background:#fff url(../../images/rack-diagram/bg_rack_disable.png) repeat 0 0;}
+.rack-reserved {border:1px solid #00a9fb !important; background:#fff url(../../images/rack-diagram/bg_rack_reserved.png) repeat 0 0;}
+
+/* rack-layout에 drag 했을때, style 변경 */
+.rack-space-over {border:2px solid #6076cb; background-color:#b5c0ea;}
+
+/* etc는 추후에 뭔가 추가 될지도 모름. 현재는 별다른 스타일이 필요 없음 */
+.rack-etc {}
+.rack-group {border: 1px solid #a9a9a9; padding: 1px 1px 1px 5px;}
+
+/* rack-enclosure에 drag 했을때, style 변경 */
+.rack-group-over {border:2px solid #ff0000;}
+.rack-group-select {border: 2px solid #0080ff}

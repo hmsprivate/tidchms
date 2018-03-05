@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.skt.hms.change.ChangeMgmtMapper">
+
+	<select id="getChangeList" parameterType="changeMgmtSearchModel" resultType="changeModel">
+		/*changeMgmt-mapper.getChangeList*/
+		SELECT
+		    DATE_FORMAT(CONVERT_TZ(NODE_INFO.last_change_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) AS last_change_time
+		    ,GROUP_INFO.agreement_name
+		    ,NODE_INFO.node_seq
+		    ,NODE_INFO.host_name
+		    ,NODE_INFO.serialnumber
+		    ,NODE_INFO.ip
+		    ,format(NODE_INFO.cpu_cnt,0) AS cpu_cnt
+		    ,NODE_INFO.cpu_type
+		    ,NODE_INFO.memory
+		    ,NODE_INFO.disk
+		    ,NODE_INFO.node_type
+		    ,NODE_INFO.os_name
+		    ,NODE_INFO.os_version
+		    ,NODE_INFO.os_architecture
+		    ,NODE_INFO.manufacture
+		    ,NODE_INFO.agreement_seq
+		    ,NODE_INFO.influx_collect_time
+		FROM CM_NODE_INFO NODE_INFO
+		INNER JOIN CM_AGREEMENT_INFO GROUP_INFO
+		    ON NODE_INFO.agreement_seq = GROUP_INFO.agreement_seq
+		WHERE 1=1
+		<choose>
+			<when test='isDefault == "1" '>
+				AND ( 
+						GROUP_INFO.AGREEMENT_NAME LIKE CONCAT('%',#{agreementSeq},'%')
+						OR
+						NODE_INFO.host_name LIKE CONCAT('%',#{hostName},'%')
+						OR
+						NODE_INFO.serialnumber LIKE CONCAT('%',#{serialNumber},'%')
+						OR
+						NODE_INFO.node_type = #{nodeType}
+						OR
+						NODE_INFO.ip LIKE CONCAT('%',#{ip},'%')
+						OR
+						NODE_INFO.os_name LIKE CONCAT('%',#{osName},'%')
+						OR
+						NODE_INFO.manufacture LIKE CONCAT('%',#{manufacture},'%')
+					)
+			</when>
+			<when test='isDefault == "-1" '>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(agreementSeq) and agreementSeq != 0">
+				AND NODE_INFO.agreement_seq = #{agreementSeq}
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(hostName)">
+				AND NODE_INFO.host_name LIKE CONCAT('%',#{hostName},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(serialNumber)">
+				AND NODE_INFO.serialnumber LIKE CONCAT('%',#{serialNumber},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(nodeType)">
+				AND NODE_INFO.node_type = #{nodeType}
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(ip)">
+				AND NODE_INFO.ip LIKE CONCAT('%',#{ip},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(osName)">
+				AND NODE_INFO.os_name LIKE CONCAT('%',#{osName},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(manufacture)">
+				AND NODE_INFO.manufacture LIKE CONCAT('%',#{manufacture},'%')
+				</if>
+			</when>
+		</choose>
+		
+		<choose>
+			<when test="@com.mobigen.framework.utility.Comparator@notEmpty(order)">
+				ORDER BY ${order} ${exp}
+			</when>
+			<otherwise>
+				ORDER BY NODE_INFO.last_change_time DESC
+			</otherwise>
+		</choose>
+		LIMIT #{pageIndex }, #{pageCount}
+	</select>
+	
+	<select id="getChangeCount" parameterType="changeMgmtSearchModel" resultType="int">
+		/*changeMgmt-mapper.getChangeCount*/
+		SELECT COUNT(1)
+		FROM CM_NODE_INFO NODE_INFO
+		INNER JOIN CM_AGREEMENT_INFO GROUP_INFO
+		    ON NODE_INFO.agreement_seq = GROUP_INFO.agreement_seq
+		WHERE 1=1
+		<choose>
+			<when test='isDefault == "1" '>
+				AND ( 
+						GROUP_INFO.AGREEMENT_NAME = #{agreementSeq}
+						OR
+						NODE_INFO.host_name LIKE CONCAT('%',#{hostName},'%')
+						OR
+						NODE_INFO.serialnumber LIKE CONCAT('%',#{serialNumber},'%')
+						OR
+						NODE_INFO.node_type = #{nodeType}
+						OR
+						NODE_INFO.ip LIKE CONCAT('%',#{ip},'%')
+						OR
+						NODE_INFO.os_name LIKE CONCAT('%',#{osName},'%')
+						OR
+						NODE_INFO.manufacture LIKE CONCAT('%',#{manufacture},'%')
+					)
+			</when>
+			<when test='isDefault == "-1" '>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(agreementSeq) and agreementSeq != 0">
+				AND NODE_INFO.agreement_seq = #{agreementSeq}
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(hostName)">
+				AND NODE_INFO.host_name LIKE CONCAT('%',#{hostName},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(serialNumber)">
+				AND NODE_INFO.serialnumber LIKE CONCAT('%',#{serialNumber},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(nodeType)">
+				AND NODE_INFO.node_type = #{nodeType}
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(ip)">
+				AND NODE_INFO.ip LIKE CONCAT('%',#{ip},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(osName)">
+				AND NODE_INFO.os_name LIKE CONCAT('%',#{osName},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(manufacture)">
+				AND NODE_INFO.manufacture LIKE CONCAT('%',#{manufacture},'%')
+				</if>
+			</when>
+		</choose>
+	</select>
+
+</mapper>

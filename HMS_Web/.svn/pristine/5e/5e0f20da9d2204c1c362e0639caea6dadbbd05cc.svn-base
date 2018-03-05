@@ -1,0 +1,274 @@
+spring:
+  profiles: local
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix:  .jsp
+    locale: ko_KR
+    
+  datasource:
+    type: org.apache.tomcat.jdbc.pool.DataSource
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    #url: jdbc:log4jdbc:mysql://211.214.168.102:13306/hms_20171120
+    url: jdbc:log4jdbc:mysql://211.214.168.102:33060/hms
+    username: hms
+    password: afnas123
+    tomcat:
+      default-auto-commit: false
+      initial-size: 10
+      max-active: 100
+      min-idle: 10
+      max-idle: 30
+      max-wait: 10000
+      test-on-borrow: true
+      test-on-return: true
+      test-while-idle: true
+      time-between-eviction-runs-millis: 130000
+      min-evictable-idle-time-millis: 120000
+      num-tests-per-eviction-run: 20
+      remove-abandoned-timeout: 30
+      remove-abandoned: true
+      log-abandoned: false
+      validation-query: select 1 from dual
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+      
+  resources:
+    chain:
+      gzipped: true
+      cache: true
+      
+  http:
+    encoding:
+      charset: UTF-8
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB  
+  
+mybatis:
+  mapper-locations: mybatis/mapper/**/*.xml
+  type-aliases-package: com.mobigen, com.skt
+  configuration:
+    cache-enabled: true
+    lazy-loading-enabled: false
+    multiple-result-sets-enabled: true
+    use-column-label: true
+    use-generated-keys: false
+    auto-mapping-behavior: PARTIAL
+    default-executor-type: SIMPLE
+    default-statement-timeout: 180
+    safe-row-bounds-enabled: false
+    map-underscore-to-camel-case: true
+    local-cache-scope: SESSION
+    jdbc-type-for-null: OTHER
+    
+logging:
+  level:
+    root: info
+    com:
+      mobigen: debug
+  #file: msf2.log
+      
+server:
+    port: 9090
+    session:
+      timeout: -1
+      cookie:
+        name: hms-session-id
+    compression:
+      enabled: true
+    tomcat:
+      uri-encoding: UTF-8
+    error:
+      whitelabel:
+        enabled: true
+        
+config:
+  taskSync-ip: 211.214.168.102:19030
+---
+
+spring:
+  profiles: test
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix:  .jsp
+    locale: ko_KR
+    
+  datasource:
+    type: org.apache.tomcat.jdbc.pool.DataSource
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mysql://127.0.0.1:3306/hms
+    username: hms
+    password: afnas123
+    tomcat:
+      default-auto-commit: false
+      initial-size: 10
+      max-active: 100
+      min-idle: 10
+      max-idle: 30
+      max-wait: 10000
+      test-on-borrow: true
+      test-on-return: true
+      test-while-idle: true
+      time-between-eviction-runs-millis: 130000
+      min-evictable-idle-time-millis: 120000
+      num-tests-per-eviction-run: 20
+      remove-abandoned-timeout: 30
+      remove-abandoned: true
+      log-abandoned: false
+      validation-query: select 1 from dual
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+      
+  resources:
+    chain:
+      gzipped: true
+      cache: true
+      
+  http:
+    encoding:
+      charset: UTF-8
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB  
+  
+mybatis:
+  mapper-locations: mybatis/mapper/**/*.xml
+  type-aliases-package: com.mobigen, com.skt
+  configuration:
+    cache-enabled: true
+    lazy-loading-enabled: false
+    multiple-result-sets-enabled: true
+    use-column-label: true
+    use-generated-keys: false
+    auto-mapping-behavior: PARTIAL
+    default-executor-type: SIMPLE
+    default-statement-timeout: 180
+    safe-row-bounds-enabled: false
+    map-underscore-to-camel-case: true
+    local-cache-scope: SESSION
+    jdbc-type-for-null: OTHER
+    
+logging:
+  level:
+    root: info
+    com:
+      mobigen: debug
+  #file: msf2.log
+      
+server:
+    port: 8087
+    session:
+      timeout: -1
+      cookie:
+        name: hms-session-id
+    compression:
+      enabled: true
+    tomcat:
+      uri-encoding: UTF-8
+    error:
+      whitelabel:
+        enabled: true
+
+config:
+  taskSync-ip: 211.214.168.102:19030
+---
+spring:
+  profiles: dev
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix:  .jsp
+    locale: ko_KR
+    
+  datasource:
+    type: org.apache.tomcat.jdbc.pool.DataSource
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mysql://172.27.109.63:3306/hms
+    username: hms
+    password: tidchms123
+    tomcat:
+      default-auto-commit: false
+      initial-size: 10
+      max-active: 100
+      min-idle: 10
+      max-idle: 30
+      max-wait: 10000
+      test-on-borrow: true
+      test-on-return: true
+      test-while-idle: true
+      time-between-eviction-runs-millis: 130000
+      min-evictable-idle-time-millis: 120000
+      num-tests-per-eviction-run: 20
+      remove-abandoned-timeout: 30
+      remove-abandoned: true
+      log-abandoned: false
+      validation-query: select 1 from dual
+     
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+      
+  resources:
+    chain:
+      gzipped: true
+      cache: true
+      
+  http:
+    encoding:
+      charset: UTF-8
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB  
+
+mybatis:
+  mapper-locations: mybatis/mapper/**/*.xml
+  type-aliases-package: com.mobigen, com.skt
+  configuration:
+    cache-enabled: true
+    lazy-loading-enabled: false
+    multiple-result-sets-enabled: true
+    use-column-label: true
+    use-generated-keys: false
+    auto-mapping-behavior: PARTIAL
+    default-executor-type: SIMPLE
+    default-statement-timeout: 180
+    safe-row-bounds-enabled: false
+    map-underscore-to-camel-case: true
+    local-cache-scope: SESSION
+    jdbc-type-for-null: OTHER
+    
+logging:
+  level:
+    root: info
+    com:
+      mobigen: debug
+  #file: msf2.log
+      
+server:
+    port: 8080
+    session:
+      timeout: -1
+      cookie:
+        name: hms-session-id
+    compression:
+      enabled: true
+    tomcat:
+      uri-encoding: UTF-8
+    error:
+      whitelabel:
+        enabled: true
+
+config:
+  taskSync-ip: localhost:9030

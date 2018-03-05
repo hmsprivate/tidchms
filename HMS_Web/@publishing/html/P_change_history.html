@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Change history | HMS</title>
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+</head>
+
+<body>
+<!-- wrap -->
+<div id="wrap">
+	<!-- header -->
+	<header>
+		<div class="header-wrap">
+			<h1 class="logo"><a href="#none">HMS</a></h1>
+			<!-- gnb -->
+			<nav id="gnb">
+				<h2 class="blind">주요 메뉴</h2>
+				<ul>
+					<li><a href="#none">Group management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Plug In</a></li>
+							<li><a href="#none">Task</a></li>
+							<li><a href="#none">Node</a></li>
+						</ul>
+					</li>
+					<li><a href="#none">Plugin management</a></li> 
+					<li><a href="#none">Task management</a></li>
+					<li><a href="#none">Agent status</a></li>
+					<li><a href="#none">Modification management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Hold list modification</a></li>
+							<li><a href="#none">Modification history</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<!-- //gnb -->
+		</div>
+	</header>
+	<!-- //header -->
+
+	<!-- container -->
+	<div id="container">
+
+		<!-- content -->
+		<div id="content">
+
+			<!-- pop-wrap -->
+			<div class="pop-wrap w1200" style="top:100px;left:50%;margin-left:-600px"><!-- style은 위치예제임 -->				
+				<div class="pop-header"><h3 class="title">Change history</h3></div>
+				<!-- popContent -->
+				<div class="pop-content">				
+					<!-- data-tbl -->
+					<div class="data-tbl wide round-border-type">
+						<table>
+							<tbody>
+							<tr>
+								<th>Data time</th>
+								<td>
+									<div class="calendar">
+									<span class="hidden-input"><input type="text"></span><!-- 2017-08-29 ADD : ngdialog Focus숨기기용 -->
+									<input type="text" class="date" value=""></div>
+									<!-- timebox -->
+									<div class="timebox"> 
+										<input type="text" class="time"  value="24">
+										<span class="colon">:</span>
+										<input type="text" class="time"  value="44">
+										<span class="colon">:</span>
+										<input type="text" class="time"  value="09">
+										<button class="btn-timebox-up" title="up">up</button> 
+										<button class="btn-timebox-down" title="down">down</button>
+									</div>	
+									<!-- //timebox -->									
+									<span class="and">~</span>
+									<div class="calendar"><input type="text" class="date" value=""></div>
+									<!-- timebox -->
+									<div class="timebox"> 
+										<input type="text" class="time"  value="24">
+										<span class="colon">:</span>
+										<input type="text" class="time"  value="44">
+										<span class="colon">:</span>
+										<input type="text" class="time"  value="09">
+										<button class="btn-timebox-up" title="up">up</button> 
+										<button class="btn-timebox-down" title="down">down</button>
+									</div>	
+									<!-- //timebox -->
+									<button type="button" class="btn-cr i-search ml05">Search</button>
+									<button type="button" class="btn-cr i-refresh">Reset</button>
+								</td>
+							</tbody>
+						</table>
+					</div>
+					<!-- //data-tbl -->
+					<div class="row gap6">
+						<div class="col-2">
+							<!-- grid-area -->
+							<div class="grid-area mt10 h500" style="border:1px dotted blue">grid-area 실제 영역 style="border:1px dotted blue" 는 영역확인용 입니다. Data Time영역</div>	
+							<!-- //grid-area -->
+						</div>
+						<div class="col-10">
+						
+							<!-- grid-area -->
+							<div class="grid-area mt10 h500" style="border:1px dotted blue">grid-area 실제 영역 style="border:1px dotted blue" 는 영역확인용 입니다. 실제는 없어요 빼주세요</div>	
+							<!-- //grid-area -->
+						
+						</div>
+					
+					</div>
+					<!-- btns-area -->
+					<div class="btns-area">
+						<button type="button" class="btn-gy">Close</button>
+					</div>
+					<!-- //btns-area -->
+				</div>
+				<!-- //popContent -->	
+				<button type="button" class="btn-close" title="close">close</button>
+			</div>
+			<!-- //popWrap -->
+		</div>
+		<!-- //content -->
+	</div>
+	<!-- //container -->
+</div>
+<!-- //wrap -->
+<script>
+//sortable 디자인확인용 2017-05-18 ADD
+ $( function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+  } );
+</script>
+</body>
+</html>
+

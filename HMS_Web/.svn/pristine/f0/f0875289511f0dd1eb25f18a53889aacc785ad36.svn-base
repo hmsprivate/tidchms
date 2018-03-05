@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Comparer HMS width CMDB | HMS</title>
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+</head>
+
+<body>
+<!-- wrap -->
+<div id="wrap">
+	<!-- header -->
+	<header>
+		<div class="header-wrap">
+			<h1 class="logo"><a href="#none">HMS</a></h1>
+			<!-- gnb -->
+			<nav id="gnb">
+				<h2 class="blind">주요 메뉴</h2>
+				<ul>
+					<li><a href="#none">Group management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Plug In</a></li>
+							<li><a href="#none">Task</a></li>
+							<li><a href="#none">Node</a></li>
+						</ul>
+					</li>
+					<li><a href="#none">Plugin management</a></li> 
+					<li><a href="#none">Task management</a></li>
+					<li><a href="#none">Agent status</a></li>
+					<li><a href="#none">Modification management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Hold list modification</a></li>
+							<li><a href="#none">Modification history</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<!-- //gnb -->
+		</div>
+	</header>
+	<!-- //header -->
+
+	<!-- container -->
+	<div id="container">
+
+		<!-- content -->
+		<div id="content">
+
+			<!-- pop-wrap -->
+			<div class="pop-wrap w1400" style="top:150px;left:50%;margin-left:-700px"><!-- style은 위치예제임 -->				
+				<div class="pop-header"><h3 class="title">Comparer HMS width CMDB</h3></div>
+				<!-- popContent -->
+				<div class="pop-content">
+					<div class="data-cont-gy i-arrow-center">
+						<div class="row gap76">
+							<div class="col-6">
+								<div class="header-box">
+									<h4 class="title">HMS</h4> 		
+								</div>
+								<!-- grid-area -->
+								<div class="grid-area h300" style="border:1px dotted blue">grid-area 실제 영역 style="border:1px dotted blue" 는 영역확인용 입니다. 실제는 없어요 빼주세요
+								<br><br>cell에 다른정보 ---> class="txt-cell-info" <br><br><div class="txt-cell-info">다른정보</div>
+
+								</div>	
+								<!-- //grid-area -->						
+							</div>
+							<div class="col-6">
+								<div class="header-box">
+									<h4 class="title">CMDB</h4> 		
+								</div>
+								<!-- grid-area -->
+								<div class="grid-area h300" style="border:1px dotted blue">grid-area 실제 영역 style="border:1px dotted blue" 는 영역확인용 입니다. 실제는 없어요 빼주세요</div>	
+								<!-- //grid-area -->
+							</div>
+						</div>
+						<!-- btns-area -->
+						<div class="btns-area">
+							<button type="button" class="btn-bk">Change</button>
+							<button type="button" class="btn-bk">Hold</button>
+							<button type="button" class="btn-bk">Cancel</button>
+						</div>
+						<!-- //btns-area -->
+					</div>
+					<!-- btns-area -->
+					<div class="btns-area">
+						<button type="button" class="btn-gy">Close</button>
+					</div>
+					<!-- //btns-area -->
+				</div>
+				<!-- //popContent -->	
+				<button type="button" class="btn-close" title="close">close</button>
+			</div>
+			<!-- //popWrap -->
+		</div>
+		<!-- //content -->
+	</div>
+	<!-- //container -->
+</div>
+<!-- //wrap -->
+<script>
+//sortable 디자인확인용 2017-05-18 ADD
+ $( function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+  } );
+</script>
+</body>
+</html>
+

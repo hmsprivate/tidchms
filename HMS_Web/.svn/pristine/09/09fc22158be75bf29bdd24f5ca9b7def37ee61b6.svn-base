@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.skt.hms.popup.PopupMapper">
+
+	<select id="getCategoryList" resultType="map">
+		/*popup-mapper.getCategoryList*/
+		SELECT 
+			'' AS value
+			,'All' AS label
+		UNION ALL	
+		SELECT 
+	              DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL.metric_name, '/', 2), '/',-1) AS value
+	              ,SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL.metric_name, '/', 2), '/',-1) AS label
+		FROM CM_NODE_INFO NODE_INFO , CM_NODE_INFO_DETAIL NODE_DETAIL
+		WHERE 1=1
+		AND NODE_INFO.node_seq = NODE_DETAIL.node_seq
+		AND NODE_INFO.node_seq = #{nodeSeq}
+	</select>
+	
+	<select id="getCategoryList2" resultType="map">
+		/*popup-mapper.getCategoryList2*/
+		SELECT 
+			'' AS value
+			,'All' AS label
+		UNION ALL	
+		SELECT 
+	              DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL.metric_name, '/', 3), '/',-1) AS value
+	              ,SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL.metric_name, '/', 3), '/',-1) AS label
+		FROM CM_NODE_INFO NODE_INFO , CM_NODE_INFO_DETAIL NODE_DETAIL
+		WHERE 1=1
+		AND NODE_INFO.node_seq = NODE_DETAIL.node_seq
+		AND NODE_INFO.node_seq = #{nodeSeq}
+		<if test="@com.mobigen.framework.utility.Comparator@notEmpty(mainCatInfo)">
+		AND SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL.metric_name, '/', 2), '/',-1) = #{mainCatInfo}
+		</if>
+	</select>
+	
+	<select id="getNodeDetailList" parameterType="popupSearchModel" resultType="popupModel">
+		/*popup-mapper.getNodeDetailList*/
+		SELECT @RNUM := @RNUM + 1 AS row_num
+				,(SELECT COUNT(SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL2.metric_name, '/', 2), '/',-1)) 
+                    FROM CM_NODE_INFO_DETAIL NODE_DETAIL2
+            		WHERE 1=1
+            		AND NODE_INFO.node_seq = NODE_DETAIL2.node_seq
+                    AND SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL.metric_name, '/', 2), '/',-1) = SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL2.metric_name, '/', 2), '/',-1)
+                    AND NODE_INFO.node_seq = #{nodeSeq}
+                    GROUP BY SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL2.metric_name, '/', 2), '/',-1)) AS row_cnt
+				,(SELECT COUNT(SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL2.metric_name, '/', 3), '/',-2)) 
+                    FROM CM_NODE_INFO_DETAIL NODE_DETAIL2
+            		WHERE 1=1
+            		AND NODE_INFO.node_seq = NODE_DETAIL2.node_seq
+                    AND SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL.metric_name, '/', 3), '/',-2) = SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL2.metric_name, '/', 3), '/',-2)
+                    AND NODE_INFO.node_seq = #{nodeSeq}
+                    GROUP BY SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL2.metric_name, '/', 3), '/',-2)) AS row_cnt2
+               ,SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL.metric_name, '/', 2), '/',-1) AS metric_dir
+               ,SUBSTRING_INDEX(SUBSTRING_INDEX(NODE_DETAIL.metric_name, '/', 3), '/',-1) AS metric_dir2
+		       ,NODE_DETAIL.metric_name
+		       ,NODE_DETAIL.metric_value
+		FROM CM_NODE_INFO NODE_INFO , CM_NODE_INFO_DETAIL NODE_DETAIL, (SELECT @RNUM := -1) no_seq
+		WHERE 1=1
+		AND NODE_INFO.node_seq = NODE_DETAIL.node_seq
+		AND NODE_INFO.node_seq = #{nodeSeq}
+	</select>
+	
+	
+	<select id="getPluginPopupList" parameterType="popupSearchModel" resultType="popupModel">
+		/*popup-mapper.getPluginPopupList*/
+		SELECT
+		    plugin_name
+		    ,plugin_version
+		    ,plugin_type
+		    ,DATE_FORMAT(CONVERT_TZ(plugin_loaded_timestamp, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) AS plugin_loaded_timestamp
+		    ,DATE_FORMAT(CONVERT_TZ(last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) AS last_up_time
+		    ,file_name
+		FROM cm_manager_plugin_info MGMT_PLUGIN
+		WHERE 1=1
+		<choose>
+			<when test="@com.mobigen.framework.utility.Comparator@notEmpty(pluginType)">
+				AND plugin_type IN (
+			<foreach collection="pluginType" item="item" separator=" , ">
+				#{item}
+			</foreach>
+				)
+			</when>
+			<otherwise>
+				AND plugin_type = ''
+			</otherwise>
+		</choose>
+		<if test="@com.mobigen.framework.utility.Comparator@notEmpty(agreementSeq)">
+		AND NOT EXISTS ( 
+	                                    SELECT * 
+	                                    FROM cm_plugin_info PLUGIN 
+	                                    WHERE 1=1
+	                                    AND PLUGIN.agreement_seq = #{agreementSeq}
+	                                    AND PLUGIN.plugin_name = MGMT_PLUGIN.plugin_name
+	                                    AND PLUGIN.plugin_version = MGMT_PLUGIN.plugin_version
+	                                    AND PLUGIN.plugin_type = MGMT_PLUGIN.plugin_type
+                                   	 )
+		</if>
+		ORDER BY plugin_type ASC
+	</select>
+	
+	
+	<select id="getTaskPopupList" parameterType="popupSearchModel" resultType="popupModel">
+		/*popup-mapper.getTaskPopupList*/
+		SELECT
+		     task_file_name
+		    ,task_file_contents
+		    ,DATE_FORMAT(CONVERT_TZ(last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) AS last_up_time
+		FROM cm_manager_task_info
+		WHERE 1=1
+		<if test="@com.mobigen.framework.utility.Comparator@notEmpty(taskFileName)">
+		AND task_file_name LIKE CONCAT('%',#{taskFileName},'%')
+		</if>
+		ORDER BY task_file_name ASC
+	</select>
+	
+	
+	
+	
+	<select id="getNodePopupList" parameterType="popupSearchModel" resultType="popupModel">
+		/*popup-mapper.getNodePopupList*/
+		SELECT GROUP_INFO.agreement_name,
+			   MEMBER_INFO.member_seq AS node_seq,
+		       MEMBER_INFO.member_name AS host_name,
+		       NODE_INFO.serialnumber,
+		       MEMBER_INFO.member_host AS ip,
+		       MEMBER_INFO.rest_api_port,
+		       NODE_INFO.cpu_cnt,
+		       NODE_INFO.cpu_type,
+		       NODE_INFO.memory,
+		       NODE_INFO.disk,
+		       NODE_INFO.node_type,
+		       NODE_INFO.os_name,
+		       NODE_INFO.os_version,
+		       NODE_INFO.os_architecture,
+		       NODE_INFO.manufacture
+		FROM CM_MEMBER_INFO MEMBER_INFO
+			INNER JOIN CM_AGREEMENT_INFO GROUP_INFO
+	        	ON GROUP_INFO.agreement_seq = MEMBER_INFO.agreement_seq
+	      	LEFT OUTER JOIN CM_NODE_INFO NODE_INFO
+	        	ON MEMBER_INFO.member_seq = NODE_INFO.node_seq
+		WHERE 1=1
+		AND MEMBER_INFO.agreement_seq = 1
+		AND MEMBER_INFO.USE_FLAG = '1'
+		<choose>
+			<when test='isDefault != null and isDefault != "-1" '>
+				AND ( 
+						MEMBER_INFO.member_name LIKE CONCAT('%',#{hostName},'%')
+						OR
+						NODE_INFO.serialnumber LIKE CONCAT('%',#{serialNumber},'%')
+						OR
+						NODE_INFO.node_type = #{nodeType}
+						OR
+						MEMBER_INFO.member_host LIKE CONCAT('%',#{ip},'%')
+						OR
+						NODE_INFO.os_name LIKE CONCAT('%',#{osName},'%')
+						OR
+						NODE_INFO.manufacture LIKE CONCAT('%',#{manufacture},'%')
+					)
+			</when>
+			<otherwise>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(hostName)">
+				AND MEMBER_INFO.member_name LIKE CONCAT('%',#{hostName},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(serialNumber)">
+				AND NODE_INFO.serialnumber LIKE CONCAT('%',#{serialNumber},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(nodeType)">
+				AND NODE_INFO.node_type = #{nodeType}
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(ip)">
+				AND MEMBER_INFO.member_host LIKE CONCAT('%',#{ip},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(osName)">
+				AND NODE_INFO.os_name LIKE CONCAT('%',#{osName},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(manufacture)">
+				AND NODE_INFO.manufacture LIKE CONCAT('%',#{manufacture},'%')
+				</if>
+			</otherwise>
+		</choose>
+		
+		<choose>
+			<when test="@com.mobigen.framework.utility.Comparator@notEmpty(order)">
+				ORDER BY ${order} ${exp}
+			</when>
+			<otherwise>
+				ORDER BY MEMBER_INFO.member_seq DESC
+			</otherwise>
+		</choose>
+		LIMIT #{pageIndex }, #{pageCount}
+	</select>
+	
+	
+	<select id="getNodePopupCount" parameterType="popupSearchModel" resultType="int">
+		/*popup-mapper.getNodePopupCount*/
+		SELECT COUNT(1)
+		FROM CM_MEMBER_INFO MEMBER_INFO
+			INNER JOIN CM_AGREEMENT_INFO GROUP_INFO
+	        	ON GROUP_INFO.agreement_seq = MEMBER_INFO.agreement_seq
+	      	LEFT OUTER JOIN CM_NODE_INFO NODE_INFO
+	        	ON MEMBER_INFO.member_seq = NODE_INFO.node_seq
+		WHERE 1=1
+		AND MEMBER_INFO.agreement_seq = 1
+		AND MEMBER_INFO.USE_FLAG = '1'
+		<choose>
+			<when test='isDefault != null and isDefault != "-1" '>
+				AND ( 
+						MEMBER_INFO.member_name LIKE CONCAT('%',#{hostName},'%')
+						OR
+						NODE_INFO.serialnumber LIKE CONCAT('%',#{serialNumber},'%')
+						OR
+						NODE_INFO.node_type = #{nodeType}
+						OR
+						MEMBER_INFO.member_host LIKE CONCAT('%',#{ip},'%')
+						OR
+						NODE_INFO.os_name LIKE CONCAT('%',#{osName},'%')
+						OR
+						NODE_INFO.manufacture LIKE CONCAT('%',#{manufacture},'%')
+					)
+			</when>
+			<otherwise>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(hostName)">
+				AND MEMBER_INFO.member_name LIKE CONCAT('%',#{hostName},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(serialNumber)">
+				AND NODE_INFO.serialnumber LIKE CONCAT('%',#{serialNumber},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(nodeType)">
+				AND NODE_INFO.node_type = #{nodeType}
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(ip)">
+				AND MEMBER_INFO.member_host LIKE CONCAT('%',#{ip},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(osName)">
+				AND NODE_INFO.os_name LIKE CONCAT('%',#{osName},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(manufacture)">
+				AND NODE_INFO.manufacture LIKE CONCAT('%',#{manufacture},'%')
+				</if>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getGroupList" resultType="groupModel">
+		/*popup-mapper.getGroupList*/
+		SELECT 
+		      GROUP_INFO.agreement_seq
+		      ,GROUP_INFO.agreement_name
+		      ,(SELECT COUNT(1) FROM CM_MEMBER_INFO MEMBER_INFO WHERE 1=1 AND GROUP_INFO.agreement_seq = MEMBER_INFO.agreement_seq) node_cnt
+		FROM CM_AGREEMENT_INFO GROUP_INFO
+	    WHERE 1=1
+	    <![CDATA[	
+	    AND GROUP_INFO.agreement_seq <> 1
+	    ]]> 
+		ORDER BY GROUP_INFO.agreement_name
+	</select>
+	
+	<select id="getHmsCompareList" parameterType="popupSearchModel" resultType="popupModel">
+		/*popup-mapper.getHmsCompareList*/
+		SELECT GROUP_INFO.agreement_name,
+			   GROUP_INFO.agreement_seq,
+			   NODE_INFO.node_seq,
+		       NODE_INFO.host_name,
+		       NODE_INFO.serialnumber,
+		       NODE_INFO.ip,
+		       MEMBER_INFO.rest_api_port,
+		       NODE_INFO.cpu_cnt,
+		       NODE_INFO.cpu_type,
+		       NODE_INFO.memory,
+		       NODE_INFO.disk,
+		       NODE_INFO.node_type,
+		       NODE_INFO.os_name,
+		       NODE_INFO.os_version,
+		       NODE_INFO.os_architecture,
+		       NODE_INFO.manufacture
+		FROM CM_AGREEMENT_INFO GROUP_INFO
+		    ,CM_NODE_INFO NODE_INFO
+		    ,CM_MEMBER_INFO MEMBER_INFO
+		WHERE 1=1
+		AND GROUP_INFO.agreement_seq = NODE_INFO.agreement_seq
+		AND NODE_INFO.node_seq = MEMBER_INFO.member_seq
+		<if test="@com.mobigen.framework.utility.Comparator@notEmpty(nodeSeq)">
+		AND NODE_INFO.node_seq = #{nodeSeq}
+		</if>
+		<if test="@com.mobigen.framework.utility.Comparator@notEmpty(nodeSeqList)">
+		AND NODE_INFO.node_seq IN (
+		<foreach collection="nodeSeqList"  item="item" separator=" , ">
+		          #{item}
+		 </foreach>
+		 )
+		</if>
+	</select>
+	
+	
+	<select id="getCmdbCompareList" parameterType="popupSearchModel" resultType="popupModel">
+		/*popup-mapper.getCmdbCompareList*/
+		SELECT GROUP_INFO.agreement_name,
+			   GROUP_INFO.agreement_seq,
+			   NODE_INFO.node_seq,
+		       NODE_INFO.host_name,
+		       NODE_INFO.serialnumber,
+		       NODE_INFO.ip,
+		       MEMBER_INFO.rest_api_port,
+		       NODE_INFO.cpu_cnt,
+		       NODE_INFO.cpu_type,
+		       NODE_INFO.memory,
+		       NODE_INFO.disk,
+		       NODE_INFO.node_type,
+		       NODE_INFO.os_name,
+		       NODE_INFO.os_version,
+		       NODE_INFO.os_architecture,
+		       NODE_INFO.manufacture
+		FROM CM_AGREEMENT_INFO GROUP_INFO
+		    ,CM_NODE_INFO NODE_INFO
+		    ,CM_MEMBER_INFO MEMBER_INFO
+		WHERE 1=1
+		AND GROUP_INFO.agreement_seq = NODE_INFO.agreement_seq
+		AND NODE_INFO.node_seq = MEMBER_INFO.member_seq
+		<if test="@com.mobigen.framework.utility.Comparator@notEmpty(nodeSeq)">
+		AND NODE_INFO.node_seq = #{nodeSeq}
+		</if>
+		<if test="@com.mobigen.framework.utility.Comparator@notEmpty(nodeSeqList)">
+		AND NODE_INFO.node_seq IN (
+		<foreach collection="nodeSeqList"  item="item" separator=" , ">
+		          #{item}
+		 </foreach>
+		 )
+		</if>
+	</select>
+	
+	
+	
+	<select id="getNodeInfo" resultType="popupModel">
+		/*popup-mapper.getNodeInfo*/
+		SELECT
+			member_name
+			,member_host
+			,rest_api_port
+		FROM cm_member_info
+		WHERE 1=1
+		LIMIT 1
+	</select>
+	
+	<select id="getNodeHistoryDataTime" parameterType="popupSearchModel" resultType="popupModel">
+		/*popup-mapper.getChangeHistoryTimeList*/
+		SELECT
+		     DISTINCT DATE_FORMAT(CONVERT_TZ(influx_collect_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) AS influx_collect_time
+		     ,node_seq
+		     ,change_flag
+		FROM cm_node_info_history
+		WHERE 1=1
+		AND node_seq = #{nodeSeq}
+		AND change_flag = 1
+		<if test="@com.mobigen.framework.utility.Comparator@notEmpty(firstLastUpTime)">
+		<![CDATA[	
+		AND DATE_FORMAT(CONVERT_TZ(influx_collect_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) >= #{firstLastUpTime}
+		]]>
+		</if>
+		<if test="@com.mobigen.framework.utility.Comparator@notEmpty(endLastUpTime)">
+		<![CDATA[
+		AND DATE_FORMAT(CONVERT_TZ(influx_collect_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) <= #{endLastUpTime}
+		]]> 
+		</if>
+		ORDER BY influx_collect_time DESC
+	</select>
+	
+	
+	<select id="searchHistoryInfo" parameterType="popupSearchModel" resultType="popupModel">
+		/*popup-mapper.getChangeHistoryInfoList*/
+		SELECT
+		  metric_name
+		  ,metric_value
+		  ,before_value
+		  ,change_flag
+		FROM cm_node_info_history
+		WHERE 1=1
+		AND node_seq = #{nodeSeq}
+		AND change_flag = 1
+		<if test="@com.mobigen.framework.utility.Comparator@notEmpty(influxCollectTime)">
+		AND DATE_FORMAT(CONVERT_TZ(influx_collect_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) = #{influxCollectTime}
+		</if>
+		ORDER BY metric_name
+	</select>
+	
+	
+	<select id="selectTaskStatusNodeInfo" parameterType="popupSearchModel" resultType="popupModel">
+		/*popup-mapper.selectTaskStatusNodeInfo*/
+		SELECT
+		     TASK.agreement_seq
+		    ,GROUP_INFO.agreement_name
+		    ,TASK.node_seq
+		    ,MEMBER_INFO.member_name AS host_name
+		    ,MEMBER_INFO.member_host AS ip
+		    ,MEMBER_INFO.rest_api_port
+		    ,TASK.task_id
+		    ,TASK.task_name
+		    ,TASK.task_status AS task_state
+		    ,TASK.task_last_failure_message
+		    ,DATE_FORMAT(TASK.insert_time,'%Y/%m/%d %H:%i:%s') AS collect_time
+		FROM TASK_STATUS TASK
+		    INNER JOIN CM_AGREEMENT_INFO GROUP_INFO
+		    	ON GROUP_INFO.agreement_seq = TASK.agreement_seq
+		  	INNER JOIN CM_MEMBER_INFO MEMBER_INFO
+		    	ON TASK.node_seq = MEMBER_INFO.member_seq
+		WHERE 1=1
+		<choose>
+			<when test='isDefault == "1" '>
+				AND ( 
+						GROUP_INFO.agreement_name LIKE CONCAT('%',#{agreementSeq},'%')
+						OR
+						MEMBER_INFO.member_name LIKE CONCAT('%',#{hostName},'%')
+						OR
+						TASK.task_name LIKE CONCAT('%',#{taskName},'%')
+						OR
+						TASK.task_status  LIKE CONCAT('%',#{taskState},'%')
+					)
+			</when>
+			<when test='isDefault == "-1" '>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(agreementSeq) and agreementSeq != 0">
+				AND TASK.agreement_seq = #{agreementSeq}
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(hostName)">
+				AND MEMBER_INFO.member_name LIKE CONCAT('%',#{hostName},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(taskName)">
+				AND TASK.task_name LIKE CONCAT('%',#{taskName},'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(taskState)">
+				AND TASK.task_status = #{taskState}
+				</if>
+			</when>
+		</choose>
+		ORDER BY GROUP_INFO.agreement_name, MEMBER_INFO.member_name
+	</select>
+	
+	
+	<delete id="deleteNodeChange" parameterType="popupSearchModel">
+	/*popup-mapper.deleteNodeChange*/
+		DELETE FROM CM_CHANGE_MANAGEMENT_NAMESPACE
+		WHERE 1=1 
+		AND NODE_SEQ = #{nodeSeq}
+	</delete>
+	
+	
+	<insert id="insertNodeChange" parameterType="popupSearchModel">
+	/*popup-mapper.insertNodeChange*/
+		INSERT INTO CM_CHANGE_MANAGEMENT_NAMESPACE
+		VALUES 
+		   <foreach collection="dataList" item="info" separator=",">
+     				${info}
+	  		</foreach>
+	</insert>
+	
+</mapper>

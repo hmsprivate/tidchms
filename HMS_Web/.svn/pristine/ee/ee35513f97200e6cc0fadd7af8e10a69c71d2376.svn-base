@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Panel, Heading, Tab, Text Guide | HMS</title>
+<link rel="stylesheet" type="text/css" href="css/guide.css"><!-- //가이드용임 -->
+<link href="../css/jquery/jquery-mdi.css" rel="stylesheet" type="text/css">
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- HMS기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+</head>
+<body>
+<!-- guide-wrap2 -->
+<div id="guide-wrap2">
+	<h1>Panel, Heading, Tab, Text Guide</h1>
+	
+	<div class="guide-container">
+
+		<h2>panel</h2>
+		<p class="guide-info">panel-wrap > panel-header > title + hd-right</p>		
+		<div class="guide-area">
+			<div class="panel-wrap" style="top:20px;width:100%;height:200px;min-height:200px">
+				<div class="panel-header">
+					<h3 class="title">title</h3>
+					<div class="hd-right">
+						<button type="button" class="btn-cr btn-sm i-plus">Create</button>
+						<button type="button" class="btn-cr btn-sm i-minus">Delete</button>
+					</div>
+				</div>
+				<div class="panel-content">
+					panel-content			
+				</div>
+			</div>
+		</div>
+		<p class="guide-info">panel-wrap left + right</p>	
+		<div class="guide-area">
+			<div class="row ph100 gap10">
+				<div class="col-3">
+					<div class="panel-wrap">
+						<div class="panel-header">
+							<h3 class="title">col-3</h3>
+						</div>
+						<div class="panel-content">
+							<div class="grid-area ph100" style="border:1px dotted blue">grid-area 실제 영역 style="border:1px dotted blue" 는 영역확인용 입니다. 실제는 없어요 빼주세요</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-9">
+					<div class="panel-wrap">
+						<div class="panel-header">
+							<h3 class="title">col-9</h3>
+						</div>
+						<div class="panel-content">
+							<div class="grid-area ph100" style="border:1px dotted blue">grid-area 실제 영역 style="border:1px dotted blue" 는 영역확인용 입니다. 실제는 없어요 빼주세요</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<h2>fold-data-area</h2>
+		<p class="guide-info">fold-data-area > fold-data-head + fold-data-cont</p>	
+		<div class="guide-area">
+
+			<div class="fold-data-area">
+				<div class="fold-data-head">
+					<h4 class="title">fold-data-head title</h4> 
+					<div class="hd-right">
+						<div class="form-group mr15">	
+							<span class="label mr15"><i class="ico-md i-filter"></i>Selected type</span>
+							<input type="checkbox" id="Collector" checked="checked"><label for="Collector">Collector</label>	
+							<input type="checkbox" id="Processor"><label for="Processor">Processor</label>	
+							<input type="checkbox" id="Publisher"><label for="Publisher">Publisher</label>
+						</div>
+						<button type="button" class="btn-cr btn-sm i-plus">Load</button>
+						<button type="button" class="btn-cr btn-sm i-minus">Unload</button>
+						<button type="button" class="ico-md i-download" title="다운로드"></button>
+						<button type="button" class="ico-md i-compress" title="닫힘"></button>
+					</div>
+				</div>
+				<div class="fold-data-cont">
+					<!-- grid-area -->
+					<div class="grid-area max-h230" style="height:200px"><!-- //style="height:200px" 는 예시임 실제없음 -->
+					grid-area
+					</div>
+					<!-- //grid-area -->
+				</div>
+			</div>
+			<div class="fold-data-area">
+				<div class="fold-data-head">
+					<h4 class="title">fold-data-head title</h4> 
+					<div class="hd-right">
+						<button type="button" class="btn-cr btn-sm i-plus">Include</button>
+						<button type="button" class="btn-cr btn-sm i-minus">Exclude</button>
+						<button type="button" class="ico-md i-download" title="다운로드"></button>
+						<button type="button" class="ico-md i-compress" title="닫힘"></button>
+					</div>
+				</div>
+				<div class="fold-data-cont none">
+					<!-- grid-area -->
+					<div class="grid-area max-h230" style="height:200px"><!-- //style="height:200px" 는 예시임 실제없음 -->
+					grid-area
+					</div>
+					<!-- //grid-area -->
+				</div>
+			</div>
+		</div>
+
+		<div class="header-box">
+			<h4 class="title">title</h4>
+			<div class="hd-right">
+				<button type="button" class="ico-md i-trash" title="Trash"></button>
+			</div>
+		</div>
+
+
+		<p class="guide-info">strong title (주로 list 상단 제목)</p>
+		<strong class="info-title">info-title</strong>
+		<strong class="info-title2">info-title2</strong>
+
+		<h2>TAB</h2>
+		<p class="guide-info">tab-menu</p>
+		<div class="guide-area">
+			<div class="tab-cont-group">
+				<ul class="tab-menu group-type">
+					<li class="on"><a href="#none">No group</a></li>
+					<li><a href="#none">tab-menu2</a></li>
+					<li><a href="#none">tab-menu3</a></li>
+				</ul>
+				<div class="tab-cont">group-type No group style</div>
+				<div class="tab-cont">tab-cont2</div>
+				<div class="tab-cont">tab-cont3</div>
+			</div>
+		</div>
+
+
+		<h2>TEXT</h2>
+		
+		<p class="guide-info">fn(size)</p>		
+		<ul class="basic-list fl-col5">
+			<li class="fn11">fn11 font-size:11px</li>
+			<li class="fn12">fn12 font-size:12px</li>  
+			<li class="fn13">fn13 font-size:13px</li>
+			<li class="fn14">fn14 font-size:14px</li>
+			<li class="fn16">fn16 font-size:16px</li>
+			<li class="fn18">fn18 font-size:18px</li>
+		</ul>
+
+		<p class="guide-info">txt-(color)</p>	
+		<ul class="basic-list fl-col5">
+			<li class="txt-purple">txt-purple #5c5291</li>
+			<li class="txt-gray">txt-gray #333</li>
+			<li class="txt-purple bold">txt-purple bold</li>
+			<li class="txt-gray bold">txt-gray bold</li>
+			<li class="dead">dead</li>
+		</ul>
+		<p class="guide-info">info</p>
+		<div class="guide-area">		
+			<em class="txt-info-sm">txt-info-sm #333 font-size:11px</em>
+			<p style="background:#000"><em class="txt-info-wh">txt-info-wh #fff font-size:11px</em></p><br><br>
+			<p class="info-txt">info-txt left  안내 문구 길게 <br>안내 문구 길게 </p><br><br>
+			<p class="info-txt-l">info-txt-l left #5c5291</p>
+			<p class="info-txt-r">info-txt-r right #5c5291</p>
+			<em class="edit-mode"></em>
+		</div>
+
+
+		<p class="guide-info">align : txt-(l / c / r)  * color점선은 영역표시 확인용임 실제 화면은 없음</p>
+		<div class="txt-l" style="border:1px dotted red;height:100%">txt-l left</div> <br>
+		<div class="txt-c" style="border:1px dotted red;height:100%">txt-c center</div> <br>
+		<div class="txt-r" style="border:1px dotted red;height:100%">txt-r right</div>
+
+	</div>
+	<footer id="guide-footer">
+		<p class="copy">Copyright &copy; 2017 Mobigen UX Development. All rights reserved.</p>
+	</footer>
+</div>
+<!-- //guide-wrap2 -->
+
+</body>
+</html>

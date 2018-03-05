@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="720kb">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Form Guide | HMS</title>
+<link rel="stylesheet" type="text/css" href="css/guide.css"><!-- //가이드용임 -->
+<link href="../css/jquery/jquery-mdi.css" rel="stylesheet" type="text/css">
+<link href="../css/angular/tooltip/angular-tooltips.css" rel="stylesheet" type="text/css">
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/lib/jquery/spectrum.js"></script>
+<script src="../js/lib/angular/angular.min.js"></script>
+<script src="../js/lib/angular/angular-tooltips.min.js"></script>
+<script src="../js/lib/angular/index.js"></script><!-- angular-tooltips용 -->
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+
+</head>
+<body>
+<!-- guide-wrap2 -->
+<div id="guide-wrap2">
+	<h1>Form Guide</h1>
+	<div class="guide-container">
+		<h2>Basic Checkbox</h2>
+		<p class="guide-info">type="checkbox"</p>			
+		<input type="checkbox" id="ch11" checked="checked"><label for="ch11">basic checkbox</label>	
+		<input type="checkbox" id="dis" disabled="disabled"><label for="dis">checkbox[disabled]</label>
+		<br>label없이 단독으로 쓰일경우 label 에 class="no-txt" : 
+		<input type="checkbox" id="ch3"><label for="ch3" class="no-txt">select</label>
+		<br>
+		check시에 회색으로 color표시(개발팀요청) : <input type="checkbox" id="ch111" class="part" checked="checked"><label for="ch111">part checkbox</label>
+
+		<p class="guide-info">type="checkbox" + checkbox-sm </p>
+		<input type="checkbox" id="ch1111" checked="checked"><label class="checkbox-sm" for="ch1111">checkbox-sm</label>	
+		<input type="checkbox" id="dis2" disabled="disabled"><label class="checkbox-sm" for="dis2">checkbox-sm[disabled]</label>
+
+
+		<h2>Basic Radio</h2>
+		<p class="guide-info">type="radio"</p>
+		<input type="radio" id="rad1" name="dayYn" value="Y" checked="checked"><label for="rad1">radio1</label>
+		<input type="radio" id="rad2" name="dayYn" value="N"><label for="rad2">radio2</label>
+		<input type="radio" id="rad3" name="dayYn" value="N" disabled="disabled"><label for="rad3">radio[disabled]</label>
+		<br>label없이 단독으로 쓰일경우 label 에 class="no-txt" :
+		<input type="radio" id="rad4" name="dayYn" value="Y"><label for="rad4" class="no-txt">select</label>
+		<br>merge / demerge	: 	
+		<input type="radio" id="merge1" name="merge" checked="checked"><label for="merge1"><span class="merge1">Merge</span></label>
+		<input type="radio" id="merge2" name="merge"><label for="merge2"><span class="merge2">Demerge</span></label>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;descending / asending : 
+		<input type="radio" id="sort1" name="sort" checked="checked"><label for="sort1"><span class="sort1">Descending</span></label>
+		<input type="radio" id="sort2" name="sort"><label for="sort2"><span class="sort2">Asending</span></label>
+
+		<p class="guide-info">type="radio"+ radio-sm</p>
+		<input type="radio" id="rad-sm1" name="rad-sm" value="Y" checked="checked"><label class="radio-sm" for="rad-sm1">작은 라디오사이즈</label>
+		<input type="radio" id="rad-sm2" name="rad-sm" value="N"><label class="radio-sm" for="rad-sm2">radio-sm</label>
+		<input type="radio" id="rad-sm3" name="rad-sm" value="N" disabled="disabled"><label class="rad-sm3" for="rad3">radio-sm[disabled]</label>
+
+		<h2>Basic Select</h2>
+		<p class="guide-info">select.selectbox > option</p>	
+					
+		<select class="selectbox w100">
+			<option value="0">selectbox</option>
+			<option value="1">TEST1</option>
+			<option value="2">TEST2</option>
+		</select> 					
+		<select class="selectbox w200">
+			<option value="0">selectbox</option>
+			<option value="1">TEST1</option>
+			<option value="2">TEST2</option>
+		</select>					
+		<select class="selectbox w300" disabled="disabled">
+			<option value="0">selectbox disabled</option>
+			<option value="1">TEST1</option>
+			<option value="2">TEST2</option>
+		</select>	
+		<p class="guide-info">select.selectbox-sm > option</p>	
+					
+		<h2>Basic Selectbox(ul은 실제 개발에서는 분리함 2017-12-13 ADD)</h2>
+		<p class="guide-info">selectbox + w(Size) > a > ul > li</p>		
+		<div class="selectbox">
+			<a class="current" href="javascript:;">selectbox</a>
+			<ul class="selectbox-sm-ul">
+				<li><a href="#">100px</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+			</ul>
+		</div>
+		<div class="selectbox w150">
+			<a class="current" href="javascript:;">selectbox w150</a>
+			<ul class="selectbox-sm-ul">
+				<li><a href="#">100px</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+			</ul>
+		</div>
+		<div class="selectbox w180 dis">
+			<a class="current" href="javascript:;">selectbox w180 dis</a>
+			<ul class="selectbox-sm-ul">
+				<li><a href="#">100px</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+			</ul>
+		</div>
+		<div class="selectbox w180 shadow focus">
+			<a class="current" href="javascript:;">selectbox shadow focus</a>
+			<ul class="selectbox-sm-ul">
+				<li><a href="#">100px</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+			</ul>
+		</div>
+		<p class="guide-info">selectbox-sm + w(Size) > a > ul > li</p>		
+		<div class="selectbox-sm">
+			<a class="current" href="javascript:;">selectbox-sm</a>
+			<ul class="selectbox-sm-ul">
+				<li><a href="#">100px</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+			</ul>
+		</div>
+		<div class="selectbox-sm w150">
+			<a class="current" href="javascript:;">selectbox-sm w150</a>
+			<ul class="selectbox-sm-ul">
+				<li><a href="#">100px</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+			</ul>
+		</div>
+		<div class="selectbox-sm w180 dis">
+			<a class="current" href="javascript:;">selectbox-sm w180 dis</a>
+			<ul class="selectbox-sm-ul">
+				<li><a href="#">100px</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+			</ul>
+		</div>
+		<div class="selectbox-sm w350 shadow focus">
+			<a class="current" href="javascript:;">selectbox-sm w350</a>
+			<ul class="selectbox-sm-ul">
+				<li><a href="#">100px</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+				<li><a href="#">2테스트</a></li>
+				<li><a href="#">3테스트</a></li>
+			</ul>
+		</div>
+
+		<h2>Basic Input</h2>
+		<p class="guide-info">w(Size) - 길이는 w50부터 다양한 사이즈</p>
+		<input type="text" class="w50" value="w50">
+		<input type="text" class="w100" value="w100">
+		<input type="text" class="w150" value="ww150">
+		<input type="text" class="w200" value="w200 disabled" disabled="disabled">
+		<input type="text" class="w200" value="w200 readonly 기본" readonly="readonly">
+		<input type="text" class="w200 input-read" value="w200 class(input-read)" readonly="readonly"><!-- 2017-02-21 ADD 개발팀 요청 : readonly에 class따로 ) -->
+		<p class="guide-info">help 추가시 : input-box > input(Size) + help</p>			
+		<div class="input-box">
+			<span class="icon-group"><a href="#none" class="ico-md i-question color1" title="Help"></a></span>
+			<input type="text" class="input-sm w150" value="input-sm 20px">
+		</div>		
+		<div class="input-box">
+			<span class="icon-group"><a href="#none" class="ico-md i-question color1" title="Help"></a></span>
+			<input type="text" class="w150" value="기본 24px">
+		</div>
+		<div class="input-box">
+			<span class="icon-group"><a href="#none" class="ico-md i-question color1" title="Help"></a></span>
+			<input type="text" class="input-lg w150" value="input-lg 31px">
+		</div>
+
+
+		<h2>Input Search Total</h2>
+		<p class="guide-info">search-group > input-srh-cr 상단검색 */28px</p>
+		<div class="search-group">
+			<button type="submit" class="btn-search-plus" title="More Search"></button>
+			<div class="input-srh-cr">
+				<!-- 2016-06-29 MOD -->
+				<span class="icon-group">
+					<a href="#none" class="ico-md i-plus color1" title="Select Menu"></a>
+					<a href="#none" class="ico-md i-star color1" title="Keywords List"></a>
+					<a href="#none" class="ico-md i-info color1" title="Help"></a>
+				</span>
+				<!-- //2016-06-29 MOD -->
+				<input type="text" placeholder="Search for...">
+			</div>
+			<button type="submit" class="btn-search" title="Search"></button>					
+		</div>
+
+		<p class="guide-info">search-group2 > input-srh-cr TREE 상단검색 */24px</p>
+		<div class="search-group2">
+			<button type="submit" class="btn-search-plus" title="More Search"></button>
+			<div class="input-srh-cr">
+				<span class="icon-group">
+					<a href="#none" class="ico-md i-close-sm" title="Close"></a>
+				</span>
+				<input type="text" placeholder="Search for...">
+			</div>
+			<button type="submit" class="btn-search" title="Search"></button>					
+		</div>
+
+		<h2>Basic Textarea</h2>
+		<p class="guide-info">text-box  + h(Size)</p>
+		<textarea rows="10" cols="50" class="text-box h50"></textarea>
+
+		<h2>calendar , spinner</h2>
+		<p class="guide-info">calendar > date(width고정값) datepicker jquery-ui용</p>
+
+		<div class="calendar"><input type="text" class="date" value=""></div><span class="and">~</span><div class="calendar"><input type="text" class="date" value=""></div>
+	   &nbsp;&nbsp;&nbsp;기본 disabled="disabled" <div class="calendar"><input type="text" class="date" value="2015-02-02" disabled="disabled"></div>
+       &nbsp;&nbsp;&nbsp;mask 형식 calendar disabled-mask  <div class="calendar disabled-mask"><input type="text" class="date" value="2015-02-02"></div>
+
+	   	<p class="guide-info">timebox</p>
+
+
+		<!-- spinner - timebox -->
+		timebox 
+		<div class="timebox"> 
+			<input type="text" class="time"  value="24">
+			<span class="colon">:</span>
+			<input type="text" class="time"  value="44">
+			<span class="colon">:</span>
+			<input type="text" class="time"  value="09">
+			<button class="btn-timebox-up" title="up">up</button> 
+			<button class="btn-timebox-down" title="down">down</button>
+		</div>	
+		<!-- //timebox -->
+		&nbsp;&nbsp;&nbsp;
+		timebox disabled-mask
+		<!-- 2016-09-21 ADD : spinner - timebox -->
+		<div class="timebox disabled-mask"> 
+			<input type="text" class="time"  value="24">
+			<span class="colon">:</span>
+			<input type="text" class="time"  value="44">
+			<span class="colon">:</span>
+			<input type="text" class="time"  value="09">
+			<button class="btn-timebox-up" title="up">up</button> 
+			<button class="btn-timebox-down" title="down">down</button>
+		</div>	
+		<!-- //timebox -->
+	
+		<h2>기본 입력 Table</h2>
+		<p class="guide-info">data-tbl > table</p>
+		<div class="header-box mt12">
+			<h4 class="title2">일반 정보</h4>
+			<div class="hd-right"><p class="txt-req"><strong class="req">필수</strong>표시는 필수 입력 항목 입니다.</p></div>
+		</div>
+		<!-- data-tbl -->
+		<div class="data-tbl">
+			<table>
+				<colgroup>
+					<col style="width:20%">
+					<col style="width:auto">
+				</colgroup>
+				<tbody>
+				<tr>
+					<th>text</th>
+					<td>Only Text</td>
+				</tr>					
+				<tr>
+					<th>input<strong class="req">필수</strong> <---- 필수</th>
+					<td><input type="text" class="w200" value="basic"> 
+					<input type="text" class="w200" value="disabled" disabled="disabled"> 
+					<input type="text" class="w200" value="w200 readonly 기본" readonly="readonly">
+					<input type="text" class="w200 input-read" value="w200 class(input-read)" readonly="readonly"><!-- 2017-02-21 ADD 개발팀 요청 : readonly에 class따로 ) -->
+					<em class="txt-ib">em.txt-ib 예) 오른쪽에 오는 문구</em>
+					<em class="txt-b">em.txt-b 예) em아래나 위에 오는 형태</em>
+					</td>
+				</tr>					
+				<tr>
+					<th>select.selectbox > option</th>
+					<td>						
+						<select class="selectbox w85">
+							<option value="0">Y</option>
+							<option value="1">TEST1</option>
+							<option value="2">TEST2</option>
+						</select>					
+						<select class="selectbox w200">
+							<option value="0">Y</option>
+							<option value="1">TEST1</option>
+							<option value="2">TEST2</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>type="radio"</th>
+					<td>
+						<input type="radio" id="Yes2" name="Appr"><label for="Yes2">Yes</label>
+						<input type="radio" id="No2" name="Appr"><label for="No2">No</label>
+					</td>
+				</tr>				
+				<tr>
+					<th>type="checkbox"</th>
+					<td>
+						<input type="checkbox" id="sel1"><label for="sel1">select1</label>
+						<input type="checkbox" id="sel2"><label for="sel2">select2</label>
+					</td>
+				</tr>				
+				<tr>
+					<th>td안에 여러줄 올때(mb05)</th>
+					<td>
+						<div class="mb05">
+							<select class="selectbox w200">
+								<option value="0">Y</option>
+								<option value="1">TEST1</option>
+								<option value="2">TEST2</option>
+							</select>
+							<select class="selectbox w200">
+								<option value="0">Y</option>
+								<option value="1">TEST1</option>
+								<option value="2">TEST2</option>
+							</select>
+							<button type="button" class="btn-gy i-minus ico" title="Minus"></button> &nbsp;&nbsp; * color점선은 영역표시 확인용임 실제 화면은 없음
+						</div> 
+						<div class="mb05 in-block" style="border:1px dotted #ee2d31"><!-- //개발페이지 적용 그대로 코딩적용함 :  mb05 와 나란히 버튼 Plus적용 , 실제 개발은 style="display:inline-block" 으로 적용: 개발팀 -->
+							<select class="selectbox w200">
+								<option value="0">Y</option>
+								<option value="1">TEST1</option>
+								<option value="2">TEST2</option>
+							</select>
+							<select class="selectbox w200">
+								<option value="0">Y</option>
+								<option value="1">TEST1</option>
+								<option value="2">TEST2</option>
+							</select>
+							<button type="button" class="btn-gy i-minus ico" title="Minus"></button>
+						</div>
+						<button type="button" class="btn-cr i-plus ico" title="Plus"></button> &nbsp;&nbsp; * Plus 버튼은 div와 나란히 배치
+
+					</td>
+				</tr>					
+				<tr>
+					<th>textarea text-box</th>
+					<td>
+						<textarea rows="10" cols="50" class="text-box w370 h50"></textarea>
+					</td>
+				</tr>					
+				<tr>
+					<th>textarea text-box-gy</th>
+					<td>
+						<textarea rows="10" cols="50" class="text-box-gy w370 h50"></textarea>
+					</td>
+				</tr>					
+				<tr>
+					<th>textarea text-box-gy</th>
+					<td>
+						<div class="file-attach">
+							<input type="text" id="fileName" readonly="readonly">
+							<div class="file-btn">
+								<button type="button" class="btn-cr">Find file</button>
+								<input type="file" class="btn-hide" onchange="javascript: document.getElementById('fileName').value = this.value">
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tbody>
+			</table>
+		</div>			
+		<!-- //data-tbl -->	
+		<p class="guide-info">data-tbl + th-right > table : th right로 정렬변경</p>
+		<!-- data-tbl -->
+		<div class="data-tbl th-right">
+			<table>
+				<colgroup>
+					<col style="width:20%">
+					<col style="width:auto">
+				</colgroup>
+				<tbody>
+				<tr>
+					<th>text</th>
+					<td>text</td>
+				</tr>					
+				<tr>
+					<th>input</th>
+					<td><input type="text" class="w200" value="basic"></td>
+				</tr>					
+				<tbody>
+			</table>
+		</div>			
+		<!-- //data-tbl -->	
+		<p class="guide-info">data-tbl + round-type > table : round + gray bg</p>
+		<!-- data-tbl -->
+		<div class="data-tbl round-type">
+			<table>
+				<colgroup>
+					<col style="width:20%">
+					<col style="width:auto">
+				</colgroup>
+				<tbody>
+				<tr>
+					<th>text</th>
+					<td>Only Text</td>
+				</tr>					
+				<tr>
+					<th>input</th>
+					<td><input type="text" class="w200" value="basic"></td>
+				</tr>					
+				<tbody>
+			</table>
+		</div>			
+		<!-- //data-tbl -->		
+		<p class="guide-info">data-tbl + round-border-type > table : round + gray bg + gray border</p>
+		<!-- data-tbl -->
+		<div class="data-tbl round-border-type">
+			<table>
+				<colgroup>
+					<col style="width:20%">
+					<col style="width:auto">
+				</colgroup>
+				<tbody>
+				<tr>
+					<th>text가 길어질 경우에는 text가 길어질 경우에는text가 길어질 경우에는text가 길어질 경우에는</th>
+					<td>Only Text</td>
+				</tr>					
+				<tr>
+					<th>basic</th>
+					<td><input type="text" class="w200" value="basic"></td>
+				</tr>					
+				<tbody>
+			</table>
+		</div>			
+		<!-- //data-tbl -->
+		<p class="guide-info">data-tbl + round-border-type + th-right > table : round + gray bg + gray border + th right로 정렬변경</p>
+		<!-- data-tbl -->
+		<div class="data-tbl round-border-type th-right">
+			<table>
+				<colgroup>
+					<col style="width:20%">
+					<col style="width:auto">
+				</colgroup>
+				<tbody>
+				<tr>
+					<th>Only Text</th>
+					<td>Only Text</td>
+				</tr>					
+				<tr>
+					<th>input</th>
+					<td><input type="text" class="w200" value="input"></td>
+				</tr>					
+				<tbody>
+			</table>
+		</div>			
+		<!-- //data-tbl -->		
+		<p class="guide-info">data-tbl + border-type > table : gray bg + gray border</p>
+		<!-- data-tbl -->
+		<div class="data-tbl border-type">
+			<table>
+				<colgroup>
+					<col style="width:20%">
+					<col style="width:auto">
+				</colgroup>
+				<tbody>
+				<tr>
+					<th>text</th>
+					<td>text</td>
+				</tr>
+				<tr>
+					<th>한글 text</th>
+					<td>한글 text</td>
+				</tr>					
+				<tr>
+					<th>input</th>
+					<td><input type="text" class="w200" value="input"></td>
+				</tr>					
+				<tbody>
+			</table>
+		</div>			
+		<!-- //data-tbl -->	
+		<p class="guide-info">data-tbl + wide + round-border-type > table</p>
+		<!-- data-tbl -->
+		<div class="data-tbl wide round-border-type">
+			<table>
+				<tbody>
+				<tr>
+					<th>Group</th>
+					<td>
+						<select class="selectbox w84">
+							<option value="0">All</option>
+							<option value="1">Group 1</option>
+							<option value="2">Group 2</option>
+							<option value="2">Unknown</option>
+						</select>
+					</td>
+					<th>Host Name</th>
+					<td>
+						<input type="text" class="w155" value="">
+					</td>
+					<th>Last time</th>
+					<td>
+						<div class="calendar"><input type="text" class="date" value=""></div>
+						<!-- timebox -->
+						<div class="timebox"> 
+							<input type="text" class="time"  value="24">
+							<span class="colon">:</span>
+							<input type="text" class="time"  value="44">
+							<span class="colon">:</span>
+							<input type="text" class="time"  value="09">
+							<button class="btn-timebox-up" title="up">up</button> 
+							<button class="btn-timebox-down" title="down">down</button>
+						</div>	
+						<!-- //timebox -->									
+						<span class="and">~</span>
+						<div class="calendar"><input type="text" class="date" value=""></div>
+						<!-- timebox -->
+						<div class="timebox"> 
+							<input type="text" class="time"  value="24">
+							<span class="colon">:</span>
+							<input type="text" class="time"  value="44">
+							<span class="colon">:</span>
+							<input type="text" class="time"  value="09">
+							<button class="btn-timebox-up" title="up">up</button> 
+							<button class="btn-timebox-down" title="down">down</button>
+						</div>	
+						<!-- //timebox -->
+						<button type="button" class="btn-cr i-search ml05">Search</button>
+						<button type="button" class="btn-cr i-refresh">Reset</button>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- //data-tbl -->
+
+		<h2>Grid</h2>
+		<p class="guide-info">ui-grid.css 개발 소스 추출 common.css에 재정리 : 실제 적용 Grid는 개발서버 확인 <br>2) grid-tbl<br>3) grid-tbl-top + grid-tbl-body(overflow-y:scroll)</p>
+		<p class="guide-info">2) grid-tbl</p>
+		<div class="grid-tbl">
+			<table>
+				 <colgroup>
+					<col style="width:23%">
+					<col style="width:auto" span="4">
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">Server</th>
+						<th scope="col">Store files</th>
+						<th scope="col">Files Size</th>
+						<th scope="col">Index</th>
+						<th scope="col">Remaining</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>TROI-001-01</td>
+						<td>8</td>
+						<td>2173MB</td>
+						<td>2096KB</td>
+						<td>167KB</td>
+					</tr>
+					<tr>
+						<td>TROI-001-01</td>
+						<td>8</td>
+						<td>2173MB</td>
+						<td>2096KB</td>
+						<td>167KB</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<p class="guide-info">3) grid-tbl-top + grid-tbl-body(overflow-y:scroll)</p>
+		<div class="grid-scroll-area" style="height:200px">
+			<div class="grid-tbl-top">
+				<table>
+					<colgroup>
+						<col style="width:10%">
+						<col style="width:25%">
+						<col style="width:15%">
+						<col style="width:auto">		
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col">1</th>
+							<th scope="col">Creat Date</th>
+							<th scope="col">Update Date</th>
+							<th scope="col">name</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div class="grid-tbl-body max-h100">
+				<table>
+					<colgroup>
+						<col style="width:10%">
+						<col style="width:25%">
+						<col style="width:15%">
+						<col style="width:auto">		
+					</colgroup>
+					<tbody>
+					<tr>										
+						<td>기본은 center</td>
+						<td>111</td>
+						<td>2016-11-07 15:33:30</td>
+						<td class="txt-l">txt-l --> text-align:left</td>
+					</tr>
+					<tr>										
+						<td>1</td>
+						<td>2016-11-07 15:33:30</td>
+						<td>2016-11-07 15:33:30</td>
+						<td>CPU</td>
+					</tr>
+					<tr>										
+						<td>1</td>
+						<td>2016-11-07 15:33:30</td>
+						<td>2016-11-07 15:33:30</td>
+						<td>CPU</td>
+					</tr>
+					<tr>										
+						<td>1</td>
+						<td>2016-11-07 15:33:30</td>
+						<td>2016-11-07 15:33:30</td>
+						<td>CPU</td>
+					</tr>
+					<tr>										
+						<td>1</td>
+						<td>2016-11-07 15:33:30</td>
+						<td>2016-11-07 15:33:30</td>
+						<td>CPU</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<h2>dl, ul</h2>
+		
+		<div class="row gap20">
+			<div class="col-2">
+				<p class="guide-info">ul.basic-list</p>
+				<!-- basic-list -->	
+				<ul class="basic-list"><!-- tooltip안에 주로 쓰임 + pd10 line-bottom -->
+					<li><input type="checkbox" id="Name"><label for="Name">basic-list basic-listbasic-listbasic-listbasic-list</label></li>
+					<li><input type="checkbox" id="Date"><label for="Date">Event Occur Date</label></li>
+					<li><input type="checkbox" id="Metric"><label for="Metric">Metric</label></li>
+					<li><input type="checkbox" id="Severity"><label for="Severity">Severity</label></li>
+				</ul>
+				<!-- //basic-list -->
+			</div>
+			<div class="col-2">
+				<p class="guide-info">ul.basic-list2</p>
+				<!-- basic-list2 -->
+				<ul class="basic-list2">
+					<li><a href="#none">Last 1 Minute</a></li>
+					<li><a href="#none">Last 5 Minute</a></li>
+					<li><a href="#none">Last 10 Minute</a></li>
+					<li><a href="#none">Select Range</a></li>
+				</ul>
+				<!-- //basic-list2 -->
+			</div>			
+			<div class="col-8">
+				<p class="guide-info">drag-mark-list (sortable)</p>
+				<strong class="drag-mark-title">Name</strong>
+				<ul class="drag-mark-list ui-sortable" id="sortable">
+					<li>						
+						<div class="name">이름도 길게 이름도 길게 이름도 길게 이름도 길게 이름도 길게 이름도 길게이름도 길게 이름도게 이름도게 이게 이름도게 이름게 이름도게 이름름도 길게END </div>
+						<div class="ico-group">
+							<button type="button" class="ico-md i-trash" title="Delete"></button>
+						</div>						
+					</li>
+					<li>						
+						<div class="name">Group 2</div>
+						<div class="ico-group">
+							<button type="button" class="ico-md i-trash" title="Delete"></button>
+						</div>						
+					</li>
+					<li>						
+						<div class="name">Group 3</div>
+						<div class="ico-group">
+							<button type="button" class="ico-md i-trash" title="Delete"></button>
+						</div>						
+					</li>
+				</ul>
+			</div>
+		</div>
+
+
+		
+		<h2>정중앙 정렬</h2>		
+		<p class="guide-info">center-box + h(높이) > center-inner </p>
+		<!-- center-box -->
+		<div class="center-box h120">
+			<div class="center-inner">
+				center-box h120 > center-inner = 정중앙
+			</div>
+		</div>
+		<!-- //center-box -->
+		<br>
+		<!-- center-box -->
+		<div class="center-box round-type h120">
+			<div class="center-inner">
+				center-box round-type h120 > center-inner = 정중앙
+			</div>
+		</div>
+		<!-- //center-box --><br>
+		<div class="center-box round-border-type h120">
+			<div class="center-inner">
+				center-box round-border-type h120 > center-inner = 정중앙
+			</div>
+		</div>
+		<!-- //center-box -->
+		<h2>Pagination</h2>
+		<p class="guide-info">pagination-area-total > pagination-area + result-page-group (Pagination bootstrap.css용 개발 소스 추출 common.css에 재정리) &nbsp;&nbsp; * color점선은 영역표시 확인용임 실제 화면은 없음</p>
+		<div class="pagination-area-total" style="border:1px dotted #ee2d31">
+			<div class="node-total">
+				Total :<strong>1000</strong>
+			</div>
+			<!-- pagination-area -->									
+			<div class="pagination-area">
+				<ul class="pagination">
+					<li class="pagination-first"><a href="#none" title="First">First</a></li>
+					<li class="pagination-prev"><a href="#none" title="Previous">Previous</a></li>
+					<li class="active"><a href="#none">1</a></li>
+					<li class="disabled"><a href="#none">2</a></li>
+					<li><a href="#none">3</a></li>
+					<li><a href="#none">4</a></li>
+					<li><a href="#none">5</a></li>
+					<li class="pagination-next"><a href="#none" title="Next">Next</a></li>
+					<li class="pagination-last disabled"><a href="#none" title="Last">Last</a></li>
+				</ul>
+			</div>
+			<!-- //pagination-area -->
+		</div>
+		<p class="guide-info">pagination-area-total > Total + 버튼배치일때</p>		
+		<div class="pagination-area-total" style="border:1px dotted #ee2d31">
+			<div class="node-total">
+				Total :<strong>1000</strong>
+			</div>
+			<div class="btns-area-control right">
+				<button type="button" class="btn-cr i-trash">Move To Trash</button>
+			</div>
+			<!-- pagination-area -->									
+			<div class="pagination-area">
+				<ul class="pagination">
+					<li class="pagination-first"><a href="#none" title="First">First</a></li>
+					<li class="pagination-prev"><a href="#none" title="Previous">Previous</a></li>
+					<li class="active"><a href="#none">1</a></li>
+					<li class="disabled"><a href="#none">2</a></li>
+					<li><a href="#none">3</a></li>
+					<li><a href="#none">4</a></li>
+					<li><a href="#none">5</a></li>
+					<li class="pagination-next"><a href="#none" title="Next">Next</a></li>
+					<li class="pagination-last disabled"><a href="#none" title="Last">Last</a></li>
+				</ul>
+			</div>
+			<!-- //pagination-area -->
+		</div>
+		<p class="guide-info">pagination-area-total > 버튼이 양쪽에 배치일때</p>
+		<div class="pagination-area-total" style="border:1px dotted #ee2d31">
+			<div class="btns-area-control left">
+				<button type="button" class="btn-cr">Change all</button>
+				<button type="button" class="btn-gy">Hold all</button>
+				<button type="button" class="btn-gy">Cancel all</button>
+			</div>
+			<div class="btns-area-control right">
+				<button type="button" class="btn-cr">Compare all</button>
+			</div>
+			<!-- pagination-area -->									
+			<div class="pagination-area">
+				<ul class="pagination">
+					<li class="pagination-first"><a href="#none" title="First">First</a></li>
+					<li class="pagination-prev"><a href="#none" title="Previous">Previous</a></li>
+					<li class="active"><a href="#none">1</a></li>
+					<li class="disabled"><a href="#none">2</a></li>
+					<li><a href="#none">3</a></li>
+					<li><a href="#none">4</a></li>
+					<li><a href="#none">5</a></li>
+					<li class="pagination-next"><a href="#none" title="Next">Next</a></li>
+					<li class="pagination-last disabled"><a href="#none" title="Last">Last</a></li>
+				</ul>
+			</div>
+			<!-- //pagination-area -->
+		</div>
+
+	</div>
+	<footer id="guide-footer">
+		<p class="copy">Copyright &copy; 2017 Mobigen UX Development. All rights reserved.</p>
+	</footer>
+</div>
+<!-- //guide-wrap2 -->
+
+<script>
+//sortable 디자인확인용
+ $( function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+  } );
+</script>
+</body>
+</html>

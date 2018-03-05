@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Trash Bin | HMS</title>
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+</head>
+
+<body>
+<!-- wrap -->
+<div id="wrap">
+	<!-- header -->
+	<header>
+		<div class="header-wrap">
+			<h1 class="logo"><a href="#none">HMS</a></h1>
+			<!-- gnb -->
+			<nav id="gnb">
+				<h2 class="blind">주요 메뉴</h2>
+				<ul>
+					<li><a href="#none">Group management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Plug In</a></li>
+							<li><a href="#none">Task</a></li>
+							<li><a href="#none">Node</a></li>
+						</ul>
+					</li>
+					<li><a href="#none">Plugin management</a></li> 
+					<li><a href="#none">Task management</a></li>
+					<li><a href="#none">Agent status</a></li>
+					<li><a href="#none">Modification management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Hold list modification</a></li>
+							<li><a href="#none">Modification history</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<!-- //gnb -->
+		</div>
+	</header>
+	<!-- //header -->
+
+	<!-- container -->
+	<div id="container">
+
+		<!-- content -->
+		<div id="content">
+
+			<!-- pop-wrap 검토대상 장비등록 -->
+			<div class="pop-wrap w1500" style="top:100px;left:50%;margin-left:-750px"><!-- style은 위치예제임 -->				
+				<div class="pop-header"><h3 class="title">Trash Bin</h3></div>
+				<!-- popContent -->
+				<div class="pop-content">						
+					<!-- search-group-area 2017-12-13 ADD -->
+					<div class="search-group-area round-border-type">
+						<div class="search-group2">
+							<button type="submit" class="btn-search-plus" title="More Search"></button>																		
+							<!-- Search Keyword 입력 -->
+							<div class="tooltip tail-top t-left w400" style="left:14px;top:45px"><!-- style은 예시위치입니다. -->
+								<div class="in-box">				
+									<strong class="info-title">Search Keyword 입력</strong>
+									<!-- basic-list3 -->
+									<ul class="basic-list3 round-border-type mt05">
+										<li>
+											<div class="in-block"><!-- //개발페이지 적용 그대로 코딩적용함 :  mb05 와 나란히 버튼 Plus적용 , 실제 개발은 style="display:inline-block" 으로 적용: 개발팀 -->
+												<div class="selectbox w110">
+													<a class="current" href="javascript:;">Hostname</a>
+													<ul class="selectbox-sm-ul">
+														<li><a href="#">100px</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+													</ul>
+												</div>
+												<input type="text" class="w170" value="" placeholder="">
+												<button type="button" class="btn-gy i-minus ico" title="삭제"></button>
+											</div>
+										</li>
+										<li>
+											<div class="in-block">
+												<div class="selectbox w110">
+													<a class="current" href="javascript:;">Serial number</a>
+													<ul class="selectbox-sm-ul">
+														<li><a href="#">100px</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+													</ul>
+												</div>
+												<input type="text" class="w170" value="" placeholder="">
+												<button type="button" class="btn-gy i-minus ico" title="삭제"></button>
+											</div>
+										</li>
+										<li>
+											<div class="in-block"><!-- //개발페이지 적용 그대로 코딩적용함 :  mb05 와 나란히 버튼 Plus적용 , 실제 개발은 style="display:inline-block" 으로 적용: 개발팀 -->
+												<div class="selectbox w110">
+													<a class="current" href="javascript:;">Type</a>
+													<ul class="selectbox-sm-ul">
+														<li><a href="#">100px</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+													</ul>
+												</div>
+												<div class="selectbox w170">
+													<a class="current" href="javascript:;">All</a>
+													<ul class="selectbox-sm-ul">
+														<li><a href="#">100px</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+													</ul>
+												</div>
+												<button type="button" class="btn-gy i-minus ico" title="삭제"></button>
+											</div>
+										</li>
+										<li>
+											<div class="in-block">
+												<div class="selectbox w110">
+													<a class="current" href="javascript:;">IP</a>
+													<ul class="selectbox-sm-ul">
+														<li><a href="#">100px</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+													</ul>
+												</div>
+												<input type="text" class="w170" value="" placeholder="">
+												<button type="button" class="btn-gy i-minus ico" title="삭제"></button>
+											</div>
+										</li>
+										<li>
+											<div class="in-block">
+												<div class="selectbox w110">
+													<a class="current" href="javascript:;">OS Name</a>
+													<ul class="selectbox-sm-ul">
+														<li><a href="#">100px</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+													</ul>
+												</div>
+												<input type="text" class="w170" value="" placeholder="">
+												<button type="button" class="btn-gy i-minus ico" title="삭제"></button>
+											</div>
+										</li>
+										<li>
+											<div class="in-block">
+												<div class="selectbox w110">
+													<a class="current" href="javascript:;">Manufacturer</a>
+													<ul class="selectbox-sm-ul">
+														<li><a href="#">100px</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+														<li><a href="#">2테스트</a></li>
+														<li><a href="#">3테스트</a></li>
+													</ul>
+												</div>
+												<input type="text" class="w170" value="" placeholder="">
+												<button type="button" class="btn-gy i-minus ico" title="삭제"></button>
+											</div>
+											<button type="button" class="btn-cr i-plus ico" title="추가"></button>
+										</li>
+									</ul>
+									<!-- //basic-list3 -->	
+								
+									<!-- btns-area -->
+									<div class="btns-area">
+										<button type="button" class="btn-cr">Apply</button>
+										<button type="button" class="btn-gy">Cancel</button>
+									</div>
+									<!-- //btns-area -->
+								</div>	
+							</div>
+							<!-- //Search Keyword 입력 -->
+							<div class="input-srh-cr"><!-- 2017-08-29 MOD : search-group-area에 상속시킴 -->
+								<span class="icon-group">
+									<a href="#none" class="ico-md i-close-sm" title="Close"></a>
+								</span>
+								<input type="text" placeholder="Search for...">
+							</div>
+							<button type="submit" class="btn-search" title="Search"></button>	
+						</div>
+					</div>
+					<!-- //search-group-area -->
+					<!-- grid-area -->
+					<div class="grid-area mt10 h600" style="border:1px dotted blue;">
+						grid-area 테스트용 영역
+					</div>
+					<!-- //grid-area -->
+					<!-- btns-area -->
+					<div class="btns-area">
+						<div class="fr"><button type="button" class="btn-cr i-undo">Put back</button></div>
+						<button type="button" class="btn-gy">Close</button>
+					</div>
+					<!-- //btns-area -->
+				</div>
+				<!-- //popContent -->	
+				<button type="button" class="btn-close" title="close">close</button>
+			</div>
+			<!-- //popWrap -->
+		</div>
+		<!-- //content -->
+	</div>
+	<!-- //container -->
+</div>
+<!-- //wrap -->
+
+</body>
+</html>
+

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Plugin management | HMS</title>
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+
+</head>
+
+
+<body>
+<!-- wrap -->
+<div id="wrap">
+	<!-- header -->
+	<header>
+		<div class="header-wrap">
+			<h1 class="logo"><a href="#none">HMS</a></h1>
+			<!-- gnb -->
+			<nav id="gnb">
+				<h2 class="blind">주요 메뉴</h2>
+				<ul>
+					<li><a href="#none">Group management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Plug In</a></li>
+							<li><a href="#none">Task</a></li>
+							<li><a href="#none">Node</a></li>
+						</ul>
+					</li>
+					<li><a href="#none">Plugin management</a></li> 
+					<li><a href="#none">Task management</a></li>
+					<li><a href="#none">Agent status</a></li>
+					<li><a href="#none">Modification management</a>
+						<ul class="gnb-menu">
+							<li><a href="#none">Hold list modification</a></li>
+							<li><a href="#none">Modification history</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<!-- //gnb -->
+		</div>
+	</header>
+	<!-- //header -->
+
+	<!-- container -->
+	<div id="container">
+		<!-- content -->		
+		<div id="content">
+
+			<!-- panel-wrap -->
+			<div class="panel-wrap">
+				<div class="panel-header">
+					<h3 class="title">Plugin List</h3>
+					<div class="hd-right">
+						<button type="button" class="btn-cr btn-sm i-plus">Add</button>
+						<button type="button" class="btn-cr btn-sm i-minus">Remove</button>
+					</div>
+				</div>
+				<div class="panel-content">
+					<!-- data-tbl -->
+					<div class="data-tbl wide round-border-type">
+						<table>
+							<tbody>
+							<tr>
+								<th><i class="ico-md i-filter"></i>Selected type</th>
+								<td>
+									<input type="checkbox" id="Collector" checked="checked"><label for="Collector">Collector</label>	
+									<input type="checkbox" id="Processor"><label for="Processor">Processor</label>	
+									<input type="checkbox" id="Publisher"><label for="Publisher">Publisher</label>
+								</td>
+								<th>Name</th>
+								<td>
+									<input type="text" class="w155" value="">
+								</td>
+								<th>Signed</th>
+								<td>
+									<select class="selectbox w100">
+										<option value="0">TEST0</option>
+										<option value="1">TEST1</option>
+										<option value="2">TEST2</option>
+									</select>
+								</td>
+								<th>Status</th>
+								<td>
+									<select class="selectbox w100">
+										<option value="0">TEST0</option>
+										<option value="1">TEST1</option>
+										<option value="2">TEST2</option>
+									</select>
+									<button type="button" class="btn-cr i-search ml05">Search</button>
+									<button type="button" class="btn-cr i-refresh">Reset</button>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- //data-tbl -->
+					<div class="grid-area mt10 hcalc02" style="border:1px dotted blue">grid-area 실제 영역 style="border:1px dotted blue" 는 영역확인용 입니다. 실제는 없어요 빼주세요</div>
+				</div>
+			</div>
+			<!-- //panel-wrap -->
+
+		</div>
+		<!-- //content -->
+	</div>
+	<!-- //container -->
+</div>
+<!-- //wrap -->
+
+</body>
+</html>
+

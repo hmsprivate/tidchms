@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.skt.hms.agent.AgentStatusMapper">
+
+	<select id="getGroupList" resultType="agentStatusModel">
+		/*agentStatus-mapper.getGroupList*/
+		SELECT 
+		      0 AS agreement_seq
+		      ,'All' AS agreement_name
+		FROM DUAL
+		UNION ALL
+		SELECT 
+		      agreement_seq
+		      ,agreement_name
+		FROM CM_AGREEMENT_INFO
+		ORDER BY FIELD(agreement_seq, 1), FIELD(agreement_seq, 0) DESC, agreement_name
+	</select>
+
+
+	<select id="getAgentStatusList" parameterType="agentStatusSearchModel" resultType="agentStatusModel">
+		/*agentStatus-mapper.getAgentStatusList*/
+		SELECT <!-- @RNUM := @RNUM - 1 AS row_num, -->  
+		            agent.insert_time,
+		            group_info.agreement_seq,
+		            group_info.agreement_name,
+		            agent.host_name,
+		            agent.ip,
+		            agent.status,
+		            DATE_FORMAT(CONVERT_TZ(agent.last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) AS last_up_time
+		FROM AGENT_STATUS agent
+		          ,CM_AGREEMENT_INFO group_info
+		          <!-- ,(SELECT @RNUM := (
+															SELECT COUNT(1) +1 
+								                            FROM AGENT_STATUS sub_agent
+								                                      ,CM_AGREEMENT_INFO sub_group_info
+															WHERE 1=1
+								                            AND sub_group_info.agreement_seq = sub_agent.agreement_seq
+								                            <if test="@com.mobigen.framework.utility.Comparator@notEmpty(agreementSeq) and agreementSeq != 0">
+															AND sub_group_info.agreement_seq = #{agreementSeq}
+															</if>
+								                            <if test="@com.mobigen.framework.utility.Comparator@notEmpty(hostName)">
+								                            AND sub_agent.host_name LIKE CONCAT('%', #{hostName} ,'%')
+								                            </if>
+								                            <if test="@com.mobigen.framework.utility.Comparator@notEmpty(ip)">
+								                            AND sub_agent.ip LIKE CONCAT('%', #{ip} ,'%')
+								                            </if>
+								                            <if test="@com.mobigen.framework.utility.Comparator@notEmpty(status)">
+								                            AND sub_agent.status = #{status}
+								                            </if>
+								                            
+								                            <if test="@com.mobigen.framework.utility.Comparator@notEmpty(firstLastUpTime)">
+								                            <![CDATA[	
+								                            AND DATE_FORMAT(CONVERT_TZ(sub_agent.last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) >= #{firstLastUpTime}
+								                             ]]> 
+															</if>
+															<if test="@com.mobigen.framework.utility.Comparator@notEmpty(endLastUpTime)">
+								                            <![CDATA[	
+															AND DATE_FORMAT(CONVERT_TZ(sub_agent.last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) <= #{endLastUpTime}
+															]]> 
+															</if>
+
+															ORDER BY FIELD(sub_group_info.agreement_seq, 1), sub_group_info.agreement_name, sub_agent.host_name
+														)) no_seq -->
+		WHERE 1=1
+		AND group_info.agreement_seq = agent.agreement_seq
+		<choose>
+			<when test='isDefault != null and isDefault != "-1" '>
+				AND ( 
+						group_info.agreement_name LIKE CONCAT('%',#{agreementSeq},'%')
+						OR
+						agent.host_name LIKE CONCAT('%', #{hostName} ,'%')
+						OR
+						agent.ip LIKE CONCAT('%', #{ip} ,'%')
+						OR
+						agent.status LIKE CONCAT('%', #{status} ,'%')
+						OR
+						DATE_FORMAT(CONVERT_TZ(agent.last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) >= #{firstLastUpTime}
+					)
+			</when>
+			<otherwise>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(agreementSeq) and agreementSeq != 0">
+				AND group_info.agreement_seq = #{agreementSeq}
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(hostName)">
+				AND agent.host_name LIKE CONCAT('%', #{hostName} ,'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(ip)">
+				AND agent.ip LIKE CONCAT('%', #{ip} ,'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(status)">
+				AND agent.status = #{status}
+				</if>
+										                            
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(firstLastUpTime)">
+				<![CDATA[	
+				AND DATE_FORMAT(CONVERT_TZ(agent.last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) >= #{firstLastUpTime}
+				 ]]> 
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(endLastUpTime)">
+		        <![CDATA[	
+				AND DATE_FORMAT(CONVERT_TZ(agent.last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) <= #{endLastUpTime}
+				]]> 
+				</if>
+			</otherwise>
+		</choose>
+		
+		ORDER BY FIELD(group_info.agreement_seq, 1), group_info.agreement_name, agent.host_name
+		LIMIT #{pageIndex }, #{pageCount}
+	</select>
+	
+	
+	<select id="getAgentStatusCount" parameterType="agentStatusSearchModel" resultType="int">
+		/*agentStatus-mapper.getAgentStatusCount*/
+		SELECT COUNT(1)
+		FROM AGENT_STATUS agent
+		          ,CM_AGREEMENT_INFO group_info
+		WHERE 1=1
+		AND group_info.agreement_seq = agent.agreement_seq
+		<choose>
+			<when test='isDefault != null and isDefault != "-1" '>
+				AND ( 
+						group_info.agreement_name LIKE CONCAT('%',#{agreementSeq},'%')
+						OR
+						agent.host_name LIKE CONCAT('%', #{hostName} ,'%')
+						OR
+						agent.ip LIKE CONCAT('%', #{ip} ,'%')
+						OR
+						agent.status LIKE CONCAT('%', #{status} ,'%')
+						OR
+						DATE_FORMAT(CONVERT_TZ(agent.last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) >= #{firstLastUpTime}
+					)
+			</when>
+			<otherwise>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(agreementSeq) and agreementSeq != 0">
+				AND group_info.agreement_seq = #{agreementSeq}
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(hostName)">
+				AND agent.host_name LIKE CONCAT('%', #{hostName} ,'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(ip)">
+				AND agent.ip LIKE CONCAT('%', #{ip} ,'%')
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(status)">
+				AND agent.status = #{status}
+				</if>
+										                            
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(firstLastUpTime)">
+				<![CDATA[	
+				AND DATE_FORMAT(CONVERT_TZ(agent.last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) >= #{firstLastUpTime}
+				 ]]> 
+				</if>
+				<if test="@com.mobigen.framework.utility.Comparator@notEmpty(endLastUpTime)">
+		        <![CDATA[	
+				AND DATE_FORMAT(CONVERT_TZ(agent.last_up_time, '+00:00','+09:00'),'%Y-%m-%d %H:%i:%s' ) <= #{endLastUpTime}
+				]]> 
+				</if>
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="getCommonGroupList" resultType="agentStatusModel">
+		/*agentStatus-mapper.getCommonGroupList*/
+		SELECT 
+		      0 AS value
+		      ,'All' AS label
+		FROM DUAL
+		UNION ALL
+		SELECT 
+		      agreement_seq AS value
+		      ,agreement_name AS label
+		FROM CM_AGREEMENT_INFO
+		ORDER BY FIELD(value, 1), FIELD(value, 0) DESC, label
+	</select>
+
+</mapper>

@@ -1,0 +1,17 @@
+.dashboard-panel {
+	border: none !important;
+}
+
+.dashboard-panel-select  {
+	border: 1px solid #4c66d9 !important;
+}
+
+.dashboard-drag-panel-background {
+    background-color: #eeeeee;
+    border: solid 1px #eeeeee;
+    z-index:-1;	
+}
+
+.dashboard-drag-over {
+	border: solid 2px darkred;  	
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="Test">테스트 입니다.</entry>
+  <!-- <entry key="UserAccount.userModel.username">아이디가 형식에 맞지 않습니다.</entry> -->
+  <!-- <entry key="Size.loginVo.password">비밀번호는 {2} 부터 {1} 사이로 입력 해야 합니다.</entry> -->
+  <!-- <entry key="UserRSAAccount.userModel.username">아이디가 형식에 맞지 않습니다.</entry> -->
+  <!-- <entry key="UserRSAAccount.userModel.userpass">비밀번호가 형식에 맞지 않습니다.</entry> -->
+  
+  <entry key="file.directory"></entry>
+  <entry key="file.EXL"></entry>
+</properties>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Popup Guide | HMS</title>
+<link rel="stylesheet" type="text/css" href="css/guide.css"><!-- //가이드용임 -->
+<link href="../css/jquery/jquery-mdi.css" rel="stylesheet" type="text/css">
+<link href="../css/hms/common.css" rel="stylesheet" type="text/css"><!-- hms기본 -->
+<script src="../js/jquery/jquery-1.11.2.min.js"></script>
+<script src="../js/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="../js/jquery/jquery.mousewheel.js"></script>
+<script src="../js/jquery/globalize.js"></script>
+<script src="../js/hms/common.js"></script>
+</head>
+<body>
+<!-- guide-wrap2 -->
+<div id="guide-wrap2">
+	<h1>Popup Guide</h1>
+	<div class="guide-container">
+		<h2>Basic Popup</h2>
+		<p class="guide-info">pop-wrap</p>
+		<div class="guide-area h600">
+			<!-- pop-wrap -->
+			<div class="pop-wrap w400" style="top:10px;left:10px;"><!-- style은 위치예제임 -->
+				<div class="pop-header"><h3 class="title">pop-header</h3></div>
+				<!-- popContent -->
+				<div class="pop-content">	
+					<!-- btns-area-right -->
+					<div class="btns-area-right">
+						<button type="button" class="btn-cr i-plus">New</button>
+					</div>
+					<!-- //btns-area-right -->
+					<!-- grid-tbl -->						
+					<div class="grid-area" style="border:1px dotted blue;height:100px">grid-area 실제 영역 style="border:1px dotted blue;height:100px" 는 영역확인용 입니다. 실제는 없어요 빼주세요</div>
+					<!-- //grid-tbl -->	
+				</div>
+				<!-- //popContent -->
+				<button type="button" class="btn-close" title="close">close</button>	
+			</div>
+			<!-- //pop-wrap -->
+
+			<!-- pop-wrap -->
+			<div class="pop-wrap w1200" style="top:220px;left:10px"><!-- style은 위치예제임 -->				
+				<div class="pop-header"><h3 class="title">pop-header</h3></div>
+				<!-- popContent -->
+				<div class="pop-content">				
+					<!-- data-tbl -->
+					<div class="data-tbl wide round-border-type">
+						<table>
+							<tbody>
+							<tr>
+								<th>data-tbl wide</th>
+								<td>
+									test
+								</td>
+							</tr></tbody>
+						</table>
+					</div>
+					<!-- //data-tbl -->
+					<div class="row gap6">
+						<div class="col-2">
+							<!-- grid-area -->
+							<div class="grid-area mt10 h200" style="border:1px dotted blue">grid-area 실제 영역 style="border:1px dotted blue" 는 영역확인용 입니다. Data Time영역</div>	
+							<!-- //grid-area -->
+						</div>
+						<div class="col-10">
+						
+							<!-- grid-area -->
+							<div class="grid-area mt10 h200" style="border:1px dotted blue">grid-area 실제 영역 style="border:1px dotted blue" 는 영역확인용 입니다. 실제는 없어요 빼주세요</div>	
+							<!-- //grid-area -->
+						
+						</div>
+					
+					</div>
+					<!-- btns-area -->
+					<div class="btns-area">
+						<button type="button" class="btn-gy">Close</button>
+					</div>
+					<!-- //btns-area -->
+				</div>
+				<!-- //popContent -->	
+				<button type="button" class="btn-close" title="close">close</button>
+			</div>
+			<!-- //pop-wrap -->
+		</div>
+
+	</div>
+	<footer id="guide-footer">
+		<p class="copy">Copyright &copy; 2017 Mobigen UX Development. All rights reserved.</p>
+	</footer>
+</div>
+<!-- //guide-wrap2 -->
+
+</body>
+</html>
